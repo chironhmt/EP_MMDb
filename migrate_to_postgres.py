@@ -1,6 +1,6 @@
 """
 One-time migration: copy the local SQLite database into the Postgres database used by the
-Vercel deployment (api/index.py).
+Vercel deployment.
 
 This talks to a real, presumably remote Postgres instance and writes real patient records to
 it -- run it deliberately, not as part of any automated workflow. It is NOT invoked by
@@ -17,12 +17,12 @@ Usage:
          python migrate_to_postgres.py
 
     On Vercel itself, the same variable (POSTGRES_URL, or DATABASE_URL) must be set as a
-    Project -> Settings -> Environment Variables entry so api/index.py can connect at runtime.
+    Project -> Settings -> Environment Variables entry so the app can connect at runtime.
 
 What it does:
-    - Creates the Postgres schema (same tables api/index.py creates on first request).
+    - Creates the Postgres schema (same tables app.py creates on first request, via db.init_db).
     - Copies every row from the local eunpyeong_mm_patients table, mapping only the columns
-      the API actually reads/writes (see api/index.py's PATIENT_FIELDS) -- unused legacy
+      the API actually reads/writes (see db.py's PATIENT_FIELDS) -- unused legacy
       columns in the local table (diagnosis_date, heavy_chain, created_at, ...) are skipped.
     - Copies chemo_lines / chemo_cycles / chemo_cycle_agents / chemo_cycle_agent_day_overrides
       if any exist locally, preserving the line/cycle/agent relationships (Postgres assigns
@@ -32,14 +32,12 @@ What it does:
 """
 
 import os
-import sys
 import sqlite3
 
 import psycopg2
 import psycopg2.extras
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'api'))
-from index import init_db, PATIENT_FIELDS  # noqa: E402
+from db import IS_POSTGRES, init_db, PATIENT_FIELDS
 
 SQLITE_DB_PATH = "Eunpyeong_Myeloma Center_Database.db"
 
@@ -152,8 +150,11 @@ def main():
     if not os.path.exists(SQLITE_DB_PATH):
         raise SystemExit(f"Local SQLite database not found at: {SQLITE_DB_PATH}")
 
-    sqlite_conn = sqlite3.connect(SQLITE_DB_PATH)
     pg_conn = get_postgres_conn()
+    # db.init_db() targets whichever backend db.py picked at import time -- make sure that
+    # is Postgres, or it would just re-run the schema against the local SQLite file.
+    assert IS_POSTGRES
+    sqlite_conn = sqlite3.connect(SQLITE_DB_PATH)
 
     print("Creating Postgres schema (if not already present)...")
     init_db()

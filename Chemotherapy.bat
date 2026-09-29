@@ -4,6 +4,6 @@ pip install flask flask-cors
 
 echo.
 echo 서버를 시작합니다...
-python Eunpyeong_Myeloma_Center_Server.py
+python app.py
 
 pause
