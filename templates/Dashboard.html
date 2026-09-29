@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="/static/styles.css?v=8">
     <style>
         /* Smooth scrolling with invisible scrollbars */
         html,
@@ -443,7 +443,7 @@
                                 </select>
                             </div>
 
-                            <button class="btn-secondary" onclick="window.location.href='Add_New_Patient.html'">
+                            <button class="btn-secondary" onclick="window.location.href='/add-new-patient'">
                                 <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -494,11 +494,6 @@
     </div>
 
     <script>
-        // Locally the API is the standalone Flask dev server on :5001; on Vercel it's
-        // same-origin serverless functions under /api, so the base is empty there.
-        const API_BASE = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
-            ? 'http://127.0.0.1:5001'
-            : '';
         let allPatients = [];
         
         const mockPatients = [
@@ -2551,11 +2546,11 @@
         }
 
         function editPatient(patientId) {
-            window.location.href = `Edit_Patient.html?upn=${patientId}`;
+            window.location.href = `/edit-patient?upn=${patientId}`;
         }
 
         function openChemotherapy(patientId) {
-            window.location.href = `Chemotherapy.html?upn=${patientId}`;
+            window.location.href = `/chemotherapy?upn=${patientId}`;
         }
 
         function toggleDetails(upn) {
@@ -2568,7 +2563,7 @@
         // Initialize table
         document.addEventListener('DOMContentLoaded', () => {
             // Fetch from local Python server
-            fetch(`${API_BASE}/api/patients`)
+            fetch(`/api/patients`)
                 .then(res => {
                     if (!res.ok) throw new Error('Network response was not ok');
                     return res.json();

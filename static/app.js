@@ -1,10 +1,5 @@
-﻿// Locally (via Chemotherapy.bat) the API is the standalone Flask dev server on :5001.
-// Deployed on Vercel, the API is same-origin serverless functions under /api, so the base is empty.
-const API_BASE = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
-    ? 'http://127.0.0.1:5001'
-    : '';
-const urlParams = new URLSearchParams(window.location.search);
-// Falls back to a placeholder patient when the page isn't opened from Dashboard.html with ?upn=<UPN>
+﻿const urlParams = new URLSearchParams(window.location.search);
+// Falls back to a placeholder patient when the page isn't opened from the Dashboard with ?upn=<UPN>
 const DEFAULT_PATIENT_UPN = urlParams.get('upn') || '12345678';
 // TODO: fetch the real patient's name from /api/patients/<upn> once this page shows patient context in its header
 const DEFAULT_PATIENT_NAME = '홍길동';
@@ -39,9 +34,9 @@ const loadingText = document.getElementById('loading-text');
 async function loadData() {
     try {
         const [agentsRes, daysRes, regimensRes] = await Promise.all([
-            fetch('Eunpyeong_Myeloma_Center_Agents.json?v=' + Date.now()),
-            fetch('Eunpyeong_Myeloma_Center_Drug_Dosing.json?v=' + Date.now()),
-            fetch('Eunpyeong_Myeloma_Center_Regimens.json?v=' + Date.now())
+            fetch('/static/Eunpyeong_Myeloma_Center_Agents.json?v=' + Date.now()),
+            fetch('/static/Eunpyeong_Myeloma_Center_Drug_Dosing.json?v=' + Date.now()),
+            fetch('/static/Eunpyeong_Myeloma_Center_Regimens.json?v=' + Date.now())
         ]);
         if (!agentsRes.ok || !daysRes.ok || !regimensRes.ok) {
             throw new Error('Failed to fetch JSON files. Ensure you are running via a local web server (eg, 실행하기.bat).');
@@ -76,7 +71,7 @@ async function loadData() {
         await init();
     } catch (err) {
         console.error(err);
-        loadingText.textContent = 'Failed to load data. Do not open index.html directly in a web browser. Please run the local server by double-clicking the provided .bat file (eg, HemaCDS2.0_Mutiple Myeloma_Chemotherapy.bat).';
+        loadingText.textContent = 'Failed to load data. Do not open the HTML file directly in a web browser. Please run the local server by double-clicking Chemotherapy.bat and use the page it opens.';
         loadingText.style.color = '#ef4444'; // danger color
         const spinner = document.querySelector('.spinner');
         if (spinner) spinner.style.display = 'none';
@@ -524,7 +519,7 @@ function setFieldValue(id, value) {
 }
 async function findLatestChemoLineId(upn) {
     try {
-        const response = await fetch(`${API_BASE}/api/chemo/patient/${encodeURIComponent(upn)}/lines`);
+        const response = await fetch(`/api/chemo/patient/${encodeURIComponent(upn)}/lines`);
         if (!response.ok) return null;
         const lines = await response.json();
         if (!Array.isArray(lines) || lines.length === 0) return null;
@@ -629,7 +624,7 @@ function applyLineData(line) {
 }
 async function loadExistingChemoLine(lineId) {
     try {
-        const response = await fetch(`${API_BASE}/api/chemo/lines/${lineId}`);
+        const response = await fetch(`/api/chemo/lines/${lineId}`);
         if (!response.ok) {
             currentLineId = null;
             return;
@@ -720,13 +715,13 @@ async function saveChemoLine() {
     try {
         let response;
         if (currentLineId) {
-            response = await fetch(`${API_BASE}/api/chemo/lines/${currentLineId}`, {
+            response = await fetch(`/api/chemo/lines/${currentLineId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
         } else {
-            response = await fetch(`${API_BASE}/api/chemo/patient/${encodeURIComponent(DEFAULT_PATIENT_UPN)}/lines`, {
+            response = await fetch(`/api/chemo/patient/${encodeURIComponent(DEFAULT_PATIENT_UPN)}/lines`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

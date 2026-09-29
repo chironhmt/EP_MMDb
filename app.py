@@ -1,9 +1,13 @@
 """
 Eunpyeong Myeloma Center Database API -- the single Flask app for every environment.
 
-    Local:  Chemotherapy.bat -> `python app.py` (SQLite, port 5001, also serves the pages)
-    Vercel: api/index.py imports `app` from here (Postgres via POSTGRES_URL; Vercel serves
-            the static pages itself and only routes /api/* to this app)
+    Local:  Chemotherapy.bat -> `python app.py` (SQLite, port 5001)
+    Vercel: api/index.py imports `app` from here (Postgres via POSTGRES_URL). vercel.json
+            sends every request that isn't an existing file to this app, so /static/* is
+            served by Vercel's CDN and pages + /api/* come here.
+
+Pages are templates/*.html rendered through the PAGES routes below; styles.css, app.js and
+the reference JSON files live in static/ and are served at /static/<file>.
 
 Which database is used is decided in db.py from the environment, not here.
 """
@@ -11,17 +15,48 @@ Which database is used is decided in db.py from the environment, not here.
 import json
 import os
 
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
+from flask import Flask, request, jsonify, redirect, render_template
 from werkzeug.exceptions import HTTPException
 
 import db
 from db import CHEMO_LINE_FIELDS, PATIENT_FIELDS
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 app = Flask(__name__)
-CORS(app)
+
+# URL path -> template. Query strings (?upn=, &line_id=) are read by each page's own JS.
+PAGES = {
+    '/': 'Dashboard.html',
+    '/add-new-patient': 'Add_New_Patient.html',
+    '/edit-patient': 'Edit_Patient.html',
+    '/baseline-characteristics': 'Baseline_Charateristics.html',
+    '/chemotherapy': 'Chemotherapy.html',
+    '/cd34-collection': 'CD34+_Collection.html',
+    '/transplant': 'Transplant.html',
+    '/gvhd': 'GVHD.html',
+    '/radiotherapy': 'Radiotherapy.html',
+    '/imaging': 'Imaging.html',
+    '/engraftment': 'Engraftment.html',
+}
+LEGACY_PAGE_URLS = {template: path for path, template in PAGES.items()}
+
+
+def _page_view(template):
+    return lambda: render_template(template)
+
+
+for _path, _template in PAGES.items():
+    app.add_url_rule(_path, endpoint=_template, view_func=_page_view(_template))
+
+
+@app.route('/<legacy_name>.html')
+def legacy_page(legacy_name):
+    # Old bookmarks / links from before the pages moved into templates/ (e.g.
+    # Edit_Patient.html?upn=...) -- send them to the new path, keeping the query string.
+    path = LEGACY_PAGE_URLS.get(f'{legacy_name}.html')
+    if not path:
+        return jsonify({"error": "Page not found"}), 404
+    query = request.query_string.decode()
+    return redirect(f'{path}?{query}' if query else path, code=301)
 
 _initialized = False
 
@@ -222,26 +257,13 @@ def get_patients():
     return jsonify(patients), 200
 
 
-def serve_static(filename):
-    return send_from_directory(BASE_DIR, filename)
-
-
-def index():
-    return send_from_directory(BASE_DIR, 'Chemotherapy.html')
-
-
 if __name__ == '__main__':
-    # Local development only: this process also serves the HTML/JS/CSS/JSON files. On Vercel
-    # those are served as static assets and these routes are never registered.
-    app.add_url_rule('/<path:filename>', view_func=serve_static)
-    app.add_url_rule('/', view_func=index)
-
     print("Starting Eunpyeong Myeloma Center Database API Server on port 5001...")
     print("Note: Port 5001 is used because Port 5000 is often reserved by AirPlay Receiver on macOS.")
 
-    # Open Chemotherapy.html in the default web browser via localhost
+    # Open the Chemotherapy page in the default web browser via localhost
     if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
         import webbrowser
-        webbrowser.open("http://127.0.0.1:5001/Chemotherapy.html")
+        webbrowser.open("http://127.0.0.1:5001/chemotherapy")
 
     app.run(debug=True, port=5001)
