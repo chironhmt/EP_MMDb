@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HemaCDS 2.0 Multiple Myeloma - Dashboard</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?v=8">
+{% extends "base.html" %}
+{% from "_macros.html" import app_header %}
+{% block title %}HemaCDS 2.0 Multiple Myeloma - Dashboard{% endblock %}
+{% block head %}
     <style>
         /* Smooth scrolling with invisible scrollbars */
         html,
@@ -387,18 +380,11 @@
             }
         }
     </style>
-</head>
-
-<body>
+{% endblock %}
+{% block body %}
     <div class="app-container" style="flex-direction: column;">
         <!-- Top Navigation Bar -->
-        <header class="app-header" style="justify-content: space-between;">
-            <div class="logo">
-                <h1
-                    style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">
-                    Eunpyeong St. Mary's Myeloma Center Database</h1>
-            </div>
-        </header>
+        {{ app_header(back_link=False) }}
 
         <!-- Main Content Area -->
         <main class="app-main" style="flex-direction: column; padding: 2rem;">
@@ -2583,5 +2569,4 @@
                 });
         });
     </script>
-</body>
-</html>
+{% endblock %}

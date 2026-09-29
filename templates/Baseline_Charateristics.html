@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HemaCDS 2.0_Multiple myeloma - Demographics and Disease-related characteristics</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css?v=4">
+{% extends "base.html" %}
+{% block title %}HemaCDS 2.0_Multiple myeloma - Demographics and Disease-related characteristics{% endblock %}
+{% block head %}
     <style>
         .custom-text-input {
             background: rgba(255, 255, 255, 0.05);
@@ -45,8 +37,8 @@
             margin: 0;
         }
     </style>
-</head>
-<body>
+{% endblock %}
+{% block body %}
     <div class="app-container">
         <header class="app-header">
             <div class="logo">
@@ -304,5 +296,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

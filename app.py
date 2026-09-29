@@ -15,7 +15,7 @@ Which database is used is decided in db.py from the environment, not here.
 import json
 import os
 
-from flask import Flask, request, jsonify, redirect, render_template
+from flask import Flask, request, jsonify, redirect, render_template, url_for
 from werkzeug.exceptions import HTTPException
 
 import db
@@ -38,6 +38,16 @@ PAGES = {
     '/engraftment': 'Engraftment.html',
 }
 LEGACY_PAGE_URLS = {template: path for path, template in PAGES.items()}
+
+
+@app.context_processor
+def _template_helpers():
+    def static_url(filename):
+        # Cache-busting URL for a file in static/: the ?v= changes whenever the file does,
+        # so browsers never keep a stale styles.css / app.js after an edit.
+        mtime = int(os.path.getmtime(os.path.join(app.static_folder, filename)))
+        return url_for('static', filename=filename, v=mtime)
+    return {'static_url': static_url}
 
 
 def _page_view(template):

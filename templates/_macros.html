@@ -1,0 +1,19 @@
+{# Shared page fragments. Import with: {% from "_macros.html" import app_header %} #}
+
+{# Standard glassmorphic top bar: center title + optional "Back to Dashboard" button. #}
+{% macro app_header(back_link=True) %}
+<header class="app-header" style="justify-content: space-between;">
+    <div class="logo">
+        <h1 style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">Eunpyeong St. Mary's Myeloma Center Database</h1>
+    </div>
+    {% if back_link %}
+    <a href="/" class="btn-secondary">
+        <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Dashboard
+    </a>
+    {% endif %}
+</header>
+{% endmacro %}

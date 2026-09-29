@@ -17,11 +17,11 @@ Chemotherapy.bat
 This runs `python app.py`, which serves on `http://127.0.0.1:5001`. **Pages must be loaded through this server, not opened directly via `file://`** — they reference assets and the API by absolute path (`/static/...`, `/api/...`), and `app.js` fetches the reference JSON files, none of which works under `file://`.
 
 Project layout:
-- `templates/` — one HTML file per page, rendered by Flask (`render_template`). They are currently plain HTML with no Jinja syntax; don't introduce `{{`/`{%`/`{#` in inline JS by accident.
-- `static/` — `styles.css`, `app.js` and the three reference JSON files, served at `/static/<file>`. Reference them by absolute path (`/static/styles.css`), since pages live at paths like `/edit-patient`.
+- `templates/` — one Jinja2 template per page, rendered by Flask (`render_template`). Every page `{% extends "base.html" %}`, which owns the `<!DOCTYPE>`/`<head>` boilerplate (meta tags, Google Fonts `Outfit`, `styles.css`) and exposes blocks `title`, `stylesheet` (Add/Edit Patient override it empty — they use their own inline stylesheet, not `styles.css`), `head` (page `<style>`) and `body`. `_macros.html` holds `app_header(back_link=True)`, the standard top bar ("Eunpyeong St. Mary's Myeloma Center Database" + "Back to Dashboard"); Add/Edit Patient and Baseline/Imaging keep their own, differently styled headers. Since templates are parsed by Jinja, a literal `{{`, `{%` or `{#` in inline JS/CSS must be wrapped in `{% raw %}…{% endraw %}`.
+- `static/` — `styles.css`, `app.js` and the three reference JSON files, served at `/static/<file>`. In templates, reference them with `{{ static_url('styles.css') }}` — it appends a `?v=<file mtime>` cache-buster, so there's no version number to bump by hand. From JS (e.g. `app.js`'s `fetch`) use the absolute path `/static/...`, since pages live at paths like `/edit-patient`.
 - `app.py` — page routes (`PAGES` dict: URL path → template) and the `/api/...` routes. `db.py` — database connection/schema.
 
-Page URLs: `/` (Dashboard), `/add-new-patient`, `/edit-patient?upn=<id>`, `/baseline-characteristics`, `/chemotherapy?upn=<id>`, `/cd34-collection`, `/transplant`, `/gvhd`, `/radiotherapy`, `/imaging`, `/engraftment`. The old file names (`/Dashboard.html`, `/Edit_Patient.html?upn=...`, ...) 301-redirect to these, keeping the query string. Links between pages use these paths, not `.html` file names; a new page needs a `PAGES` entry in `app.py`. Only files under `static/` are served — project-root files (`app.py`, the `.db`, ...) are not reachable over HTTP.
+Page URLs: `/` (Dashboard), `/add-new-patient`, `/edit-patient?upn=<id>`, `/baseline-characteristics`, `/chemotherapy?upn=<id>`, `/cd34-collection`, `/transplant`, `/gvhd`, `/radiotherapy`, `/imaging`, `/engraftment`. The old file names (`/Dashboard.html`, `/Edit_Patient.html?upn=...`, ...) 301-redirect to these, keeping the query string. Links between pages use these paths, not `.html` file names; a new page needs a template extending `base.html` and a `PAGES` entry in `app.py`. Only files under `static/` are served — project-root files (`app.py`, the `.db`, ...) are not reachable over HTTP.
 
 There is no linter, formatter, or test runner configured for this repo.
 
@@ -43,7 +43,7 @@ This is a clinical database handling real patient data — hosting it on a publi
 
 ### Page-per-domain frontend
 
-Each clinical workflow is an independent, self-contained HTML file in `templates/` (inline or page-specific `<script>`, sharing `static/styles.css`):
+Each clinical workflow is an independent page template in `templates/` (inline or page-specific `<script>`, sharing `base.html` and `static/styles.css`):
 
 - `Add_New_Patient.html` / `Edit_Patient.html` — patient demographics & diagnosis intake, talk to the Flask API (`/api/patients`).
 - `Baseline_Charateristics.html`, `Chemotherapy.html` (+ `static/app.js`), `CD34+_Collection.html`, `Transplant.html`, `GVHD.html`, `Radiotherapy.html`, `Imaging.html`, `Engraftment.html` — per-domain clinical forms.
