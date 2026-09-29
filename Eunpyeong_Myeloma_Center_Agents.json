@@ -1,0 +1,128 @@
+[
+  {
+    "Class": "Anti-CD38 mAb",
+    "Agent": "Daratumumab",
+    "Abbrevations": "D",
+    "Dose": "8 mg/kg, 16 mg/kg",
+    "Dosing_day": "QW4, Q2W, Q4W, QW3, QW"
+  },
+  {
+    "Class": "Anti-CD38 mAb",
+    "Agent": "Daratumumab (SC)",
+    "Abbrevations": "D(SC)",
+    "Dose": "1800 mg",
+    "Dosing_day": "QW4, Q2W, Q4W"
+  },
+  {
+    "Class": "Anti-CD38 mAb",
+    "Agent": "Isatuximab",
+    "Abbrevations": "Isa",
+    "Dose": "10 mg/kg",
+    "Dosing_day": "QW4, Q2W, Q4W"
+  },
+  {
+    "Class": "PI",
+    "Agent": "Bortezomib",
+    "Abbrevations": "V",
+    "Dose": "1.3 mg/m2, 1.0 mg/m2, 0.7 mg/m2",
+    "Dosing_day": "BiQW2, QW4, QW3"
+  },
+  {
+    "Class": "PI",
+    "Agent": "Carfilzomib",
+    "Abbrevations": "K",
+    "Dose": "20 mg/m2, 27 mg/m2, 15 mg/m2, 56 mg/m2, 44 mg/m2, 70 mg/m2",
+    "Dosing_day": "C1, C2, QW3, Q2W, C2QW3, QW2F8, QWF8"
+  },
+  {
+    "Class": "PI",
+    "Agent": "Ixazomib",
+    "Abbrevations": "I",
+    "Dose": "4 mg, 3 mg, 2.3 mg",
+    "Dosing_day": "QW3"
+  },
+  {
+    "Class": "IMiD",
+    "Agent": "Thalidomide",
+    "Abbrevations": "T",
+    "Dose": "100 mg, 50 mg",
+    "Dosing_day": "C28"
+  },
+  {
+    "Class": "IMiD",
+    "Agent": "Lenalidomide",
+    "Abbrevations": "R",
+    "Dose": "25 mg, 20 mg, 15 mg, 10 mg, 5 mg, 2.5 mg",
+    "Dosing_day": "C14, C21, C28"
+  },
+  {
+    "Class": "IMiD",
+    "Agent": "Pomalidomide",
+    "Abbrevations": "P",
+    "Dose": "4 mg, 3 mg, 2 mg",
+    "Dosing_day": "C14, C21, C28"
+  },
+  {
+    "Class": "CELMoD",
+    "Agent": "Mezigdomide",
+    "Abbrevations": "Mezi",
+    "Dose": "1 mg, 0.6 mg, 0.3 mg",
+    "Dosing_day": "C21, QW4"
+  },
+  {
+    "Class": "Alkylating",
+    "Agent": "Melphalan",
+    "Abbrevations": "M",
+    "Dose": "9 mg/m2, 50 mg/m2, 70 mg/m2, 100 mg/m2",
+    "Dosing_day": "C4, C2, C1"
+  },
+  {
+    "Class": "Alkylating",
+    "Agent": "Cyclophsphamide",
+    "Abbrevations": "C",
+    "Dose": "300 mg/m2",
+    "Dosing_day": "QW"
+  },
+  {
+    "Class": "Steroid",
+    "Agent": "Dexamethasone",
+    "Abbrevations": "d",
+    "Dose": "40 mg, 20 mg, 10 mg, 5 mg",
+    "Dosing_day": "C2QW4, QW4, C2, C2QWF8, C2QW3, QW"
+  },
+  {
+    "Class": "Steroid",
+    "Agent": "Prednisolone",
+    "Abbrevations": "P",
+    "Dose": "60 mg/m2",
+    "Dosing_day": "C4"
+  },
+  {
+    "Class": "BsAb",
+    "Agent": "Teclistamab",
+    "Abbrevations": "Tec",
+    "Dose": "0.06 mg/kg, 0.3 mg/kg, 1.5 mg/kg",
+    "Dosing_day": "TEC#1, QW, Q2W, Q4W"
+  },
+  {
+    "Class": "BsAb",
+    "Agent": "Talquetamab",
+    "Abbrevations": "Tal",
+    "Dose": "0.01 mg/kg, 0.06 mg/kg, 0.4 mg/kg, 0.8 mg/kg",
+    "Dosing_day": "TAL#1QW, TAL#1Q2W, QW, Q2W, Q4W"
+  },
+  {
+    "Class": "BsAb",
+    "Agent": "Elranatamab",
+    "Abbrevations": "Elran",
+    "Dose": "12 mg, 32 mg, 76 mg",
+    "Dosing_day": "ELR#1"
+  },
+  {
+    "Class": "XPO1i",
+    "Agent": "Selinexor",
+    "Abbrevations": "X",
+    "Dose": "100 mg, 80 mg, 60 mg, 40 mg",
+    "Dosing_day": "X"
+  }
+]

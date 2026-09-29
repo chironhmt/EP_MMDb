@@ -1,0 +1,1420 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Patient - Myeloma Center</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(20, 25, 35, 0.65);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --success-text: #34d399;
+            --danger-bg: rgba(239, 68, 68, 0.15);
+            --danger-text: #f87171;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .logo h1 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .content-area {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            animation-delay: 0.2s;
+        }
+
+        .planner-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+        
+        .planner-header h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .planner-header .subtitle {
+            font-size: 0.95rem;
+            color: #a5b4fc;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card-body {
+            padding: 1.25rem 2.5rem 0.9rem 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+        }
+
+        .emr-textarea {
+            width: 100%;
+            height: 175px;
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .emr-textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .emr-textarea:focus {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            color: white;
+            border: 1px solid transparent;
+            padding: 0.3rem 1.2rem;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: calc(0.9rem - 1pt);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            box-sizing: border-box;
+            background: transparent;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            height: 2.1rem; /* Same height as inputs */
+            padding: 0 1.25rem;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: calc(0.75rem + 1pt);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .result-card {
+            margin-top: 2rem;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.42rem 0.85rem;
+        }
+
+        .result-item {
+            background: transparent;
+            border-radius: 0;
+            padding: 0.25rem 0.5rem;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            margin-right: 0.75rem;
+            margin-bottom: 0;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            flex: 1;
+            line-height: 1.2;
+        }
+
+        .result-input {
+            width: 55%;
+            height: 2.1rem; /* Unify height for input, select, and div elements */
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.3); /* Brighter color for empty/default fields */
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: var(--transition);
+            box-sizing: border-box;
+        }
+
+        .result-input.filled {
+            color: #ffffff; /* Bright white when filled */
+        }
+
+        .result-input option {
+            color: #0b0f19;
+            background-color: #ffffff;
+        }
+        
+        .empty-date::-webkit-datetime-edit {
+            color: transparent;
+        }
+        
+        .empty-date::-webkit-calendar-picker-indicator {
+            opacity: 0.15;
+            cursor: pointer;
+        }
+
+        .result-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            color: #ffffff; /* Bright white while typing */
+        }
+
+        .result-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            line-height: 1;
+        }
+        .close-btn:hover {
+            color: #ffffff;
+        }
+        .modal-body {
+            padding: 1.5rem;
+        }
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <h1>Eunpyeong St. Mary's Myeloma Center Database</h1>
+            </div>
+            <a href="Dashboard.html" class="btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <main class="app-main">
+            <section class="content-area" id="content-area">
+                <div class="planner-header">
+                    <h2>Edit Patient Data</h2>
+                </div>
+
+
+                <div id="result-container" class="card result-card">
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0;">1. Baseline Demographics and Disease-Related Characteristics</h3>
+                            <button class="btn-secondary" onclick="toggleSection('baseline-content', this)" style="padding: 0 1rem;">Hide</button>
+                        </div>
+                        <div id="baseline-content">
+                            <div class="result-grid" id="result-grid">
+                                <!-- Results will be dynamically populated here -->
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <button class="btn-secondary" onclick="openEmrModal()">
+                                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Auto-fill from EMR
+                                </button>
+                                <button class="btn-secondary" onclick="submitData()" style="padding: 0 1.5rem;">
+                                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                        <polyline points="7 3 7 8 15 8"></polyline>
+                                    </svg>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="staging-container" class="card result-card" style="margin-top: 2rem;">
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <h3 style="color: var(--text-primary); font-size: calc(1.15rem + 1pt); font-weight: 600; margin: 0;">2. Disease Staging</h3>
+                            <button class="btn-secondary" onclick="toggleSection('staging-content', this)" style="padding: 0 1rem;">Hide</button>
+                        </div>
+                        <div id="staging-content">
+                            <h4 style="margin-top: 1rem; margin-bottom: 1rem; color: #cbd5e1; font-weight: 600; font-size: 1.05rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">Clinical findings for myeloma staging</h4>
+                            <div id="staging-summary" style="margin-bottom: 1.5rem; padding: 0.5rem 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.8; letter-spacing: 0.2px; display: flex; flex-direction: column; gap: 0.5rem;">
+                                <!-- Unified summary goes here -->
+                            </div>
+                            <div class="result-grid" id="staging-grid">
+                                <!-- Disease Staging fields will go here -->
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <button class="btn-secondary" onclick="submitStagingData()" style="padding: 0 1.5rem;">
+                                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                        <polyline points="7 3 7 8 15 8"></polyline>
+                                    </svg>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- EMR Modal -->
+    <div id="emr-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Auto-fill from EMR</h3>
+                <button class="close-btn" onclick="closeEmrModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="emr-input" class="emr-textarea" placeholder="Enter patient EMR notes, lab results, or clinical summary here..." style="height: 350px;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="convertEMRAndClose()">
+                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Convert & Fill
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Locally the API is the standalone Flask dev server on :5001; on Vercel it's
+        // same-origin serverless functions under /api, so the base is empty there.
+        const API_BASE = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+            ? 'http://127.0.0.1:5001'
+            : '';
+        function openEmrModal() {
+            document.getElementById('emr-modal').style.display = 'flex';
+        }
+
+        function closeEmrModal() {
+            document.getElementById('emr-modal').style.display = 'none';
+        }
+
+        function convertEMRAndClose() {
+            convertEMR();
+            closeEmrModal();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const upn = urlParams.get('upn');
+            
+            if (upn) {
+                fetch(`${API_BASE}/api/patients/${upn}`)
+                    .then(res => res.json())
+                    .then(row => {
+                        if (row.error) {
+                            console.error(row.error);
+                            displayResults({});
+                        } else {
+                            const data = {
+                                id: row.upn,
+                                name: row.name,
+                                sex: row.sex,
+                                birthdate: row.date_birth,
+                                height: row.height_dx,
+                                weight: row.bwt_dx,
+                                dateDx: row.date_dx,
+                                diseasePhase: row.dp_dx,
+                                crab: `${row.hyperca_dx || '-'} / ${row.renal_dx || '-'} / ${row.anemia_dx || '-'} / ${row.osetlytic_dx || '-'}`,
+                                paraskeletal: row.paraskeletal_dx,
+                                extramedullary: row.emd_dx,
+                                hg: row.hg_dx,
+                                b2m: row.b2mg_dx,
+                                tpAlb: `${row.tp_dx || ''} / ${row.alb_dx || ''}`,
+                                bunCr: `${row.bun_dx || ''} / ${row.cr_dx || ''}`,
+                                tb: row.tb_dx,
+                                astAlt: `${row.ast_dx || ''} / ${row.alt_dx || ''}`,
+                                ca: row.ca_dx,
+                                ldh: row.ldh_dx,
+                                igGAM: `${row.ig_g_dx || ''} / ${row.ig_a_dx || ''} / ${row.ig_m_dx || ''}`,
+                                igDE: `${row.ig_d_dx || ''} / ${row.ig_e_dx || ''}`,
+                                serumKappa: row.kappa_dx,
+                                serumLambda: row.lambda_dx,
+                                heavyChain: row.chain_heavy,
+                                lightChain: row.chain_light,
+                                spep: row.serum_m_dx,
+                                upep: row.urine_m_dx,
+                                bm: {
+                                    cellularity: row.cellularity_dx,
+                                    plasmaCell: row['plasma-cell_dx'],
+                                    cytogenetics: row.cytogenetics_dx,
+                                    t4_14: row['IGH:FGFR3_dx'],
+                                    t11_14: row['IGH:CCND1_dx'],
+                                    t14_16: row['IGH:MAF_dx'],
+                                    t14_20: row['IGH:MAFB_dx'],
+                                    del17p13: row.TP53_dx,
+                                    gain1q21: row.CKS1B_dx,
+                                    del13q14: row.RB1_dx,
+                                    del1p32: row.CDKN2C_dx
+                                },
+                                viral: {
+                                    hbs: `${row.hbsag_dx || ''} / ${row.hbsab_dx || ''}`,
+                                    hbc: row.hbcab_dx,
+                                    hcv: row.anti_hcv_dx
+                                }
+                            };
+                            displayResults(data);
+                            setTimeout(updateStagingSummary, 100);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Fetch error:', err);
+                        displayResults({});
+                    });
+            } else {
+                displayResults({});
+            }
+            
+            document.getElementById('result-grid').addEventListener('input', updateStagingSummary);
+            
+            // Listen to input and change events to dynamically update input styles
+            document.addEventListener('input', (e) => {
+                if (e.target && e.target.classList.contains('result-input')) {
+                    handleInputElementChange(e.target);
+                }
+            });
+            
+            document.addEventListener('change', (e) => {
+                if (e.target && e.target.classList.contains('result-input')) {
+                    handleInputElementChange(e.target);
+                }
+            });
+        });
+
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                btn.innerText = 'Hide';
+            } else {
+                container.style.display = 'none';
+                btn.innerText = 'Show';
+            }
+        }
+
+        function displayResults(data) {
+            const grid = document.getElementById('result-grid');
+            
+            grid.innerHTML = '';
+            
+            const createItem = (label, value, fieldId, colspan = 1, type = 'text') => {
+                let itemStyle = '';
+                let labelStyle = '';
+                let inputStyle = '';
+                
+                if (colspan > 1) {
+                    itemStyle = ` style="grid-column: span ${colspan};"`;
+                    labelStyle = ` style="flex: 0 0 calc(22.5% - 1.3rem + 2px);"`;
+                    inputStyle = ` style="flex: 1; width: auto;"`;
+                }
+
+                const placeholders = {
+                    'input-upn': '12345678',
+                    'input-name': '홍길동',
+                    'input-sex': 'M',
+                    'input-date_birth': '1950-01-01',
+                    'input-height_dx': '170.5',
+                    'input-bwt_dx': '65.2',
+                    'input-date_dx': '2023-05-12',
+                    'input-dp_dx': 'Symptomatic myeloma',
+                    'input-crab': '- / + / - / -',
+                    'input-paraskeletal_dx': '-',
+                    'input-emd_dx': '+',
+                    'input-hg_dx': '10.5',
+                    'input-b2mg_dx': '3.5',
+                    'input-tp_alb': '8.0 / 3.2',
+                    'input-bun_cr': '20 / 1.1',
+                    'input-tb_dx': '0.8',
+                    'input-ast_alt': '25 / 30',
+                    'input-ca_dx': '9.5',
+                    'input-ldh_dx': '250',
+                    'input-ig_gam': '2500 / 100 / 50',
+                    'input-ig_de': '32/14',
+                    'input-kappa_dx': '15.2',
+                    'input-lambda_dx': '1.5',
+                    'input-chain_heavy': 'IgG',
+                    'input-chain_light': 'kappa',
+                    'input-serum_m_dx': '2.5',
+                    'input-urine_m_dx': '150',
+                    'input-bm_cellularity': '80',
+                    'input-bm_plasma_cell': '45',
+                    'input-bm_cytogenetics': '46,XY[20]',
+                    'input-bm_t4_14': '15.5',
+                    'input-bm_t11_14': '0.0',
+                    'input-bm_t14_16': '0.0',
+                    'input-bm_t14_20': '0.0',
+                    'input-bm_del17p13': '25.0',
+                    'input-bm_gain1q21': '80.5',
+                    'input-bm_del13q14': '40.0',
+                    'input-bm_del1p32': '0.0',
+                    'input-hbs_ag_ab': '- / +',
+                    'input-hbcab_dx': '+',
+                    'input-anti_hcv_dx': '-',
+                    'input-hiv_dx': '-'
+                };
+                const placeholderText = placeholders[fieldId] ? `placeholder="${placeholders[fieldId]}"` : '';
+                
+                let isFilled = !!value;
+                let inputElement = '';
+                
+                if (type === 'date') {
+                    inputElement = `
+                        <div style="width: 55%; position: relative; display: flex;" ${inputStyle}>
+                            <input type="${type}" id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : 'empty-date'}" style="width: 100%; flex: 1;" value="${value || ''}">
+                            <span class="date-placeholder" style="position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); color: rgba(255, 255, 255, 0.3); pointer-events: none; font-size: 0.9rem; font-weight: 500; ${isFilled ? 'display: none;' : ''}">yyyy/mm/dd</span>
+                        </div>
+                    `;
+                } else {
+                    inputElement = `<input type="${type}" id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : ''}"${inputStyle ? ' ' + inputStyle : ''} value="${value || ''}" ${placeholderText}>`;
+                }
+
+                return `
+                    <div class="result-item"${itemStyle}>
+                        <label class="result-label"${labelStyle}>${label}</label>
+                        ${inputElement}
+                    </div>
+                `;
+            };
+
+            const createDropdownItem = (label, options, value, fieldId, infoId = null, colspan = 1) => {
+                let itemStyle = 'flex-direction: column; align-items: flex-start; justify-content: flex-end;';
+                let labelStyle = 'width: 100%; margin-bottom: 0.5rem; color: #cbd5e1; font-size: 1.05rem; font-weight: 600; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;';
+                let inputStyle = 'width: 100%;';
+                
+                if (colspan > 1) {
+                    itemStyle += ` grid-column: span ${colspan};`;
+                }
+
+                let optionsHtml = '';
+                options.forEach(opt => {
+                    const selected = (value === opt) ? 'selected' : '';
+                    optionsHtml += `<option value="${opt}" ${selected}>${opt}</option>`;
+                });
+
+                const infoHtml = infoId ? `<div id="${infoId}" style="width: 100%; font-size: 0.75rem; color: #3b82f6; margin-bottom: 0.5rem; min-height: 3.5em; line-height: 1.3;"></div>` : '';
+                let isFilled = !!value;
+
+                return `
+                    <div class="result-item" style="${itemStyle}">
+                        ${infoHtml}
+                        <label class="result-label" style="${labelStyle}">${label}</label>
+                        <select id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : ''}" style="${inputStyle}">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                `;
+            };
+
+            const createInlineDropdownItem = (label, options, value, fieldId, defaultValue = null, colspan = 1, inputWidth = null) => {
+                let itemStyle = '';
+                let labelStyle = '';
+                let inputStyle = '';
+                
+                let isFilled = !!value;
+                let actualValue = value || defaultValue;
+
+                if (colspan > 1) {
+                    itemStyle = ` style="grid-column: span ${colspan};"`;
+                    if (inputWidth === 'match-1col') {
+                        labelStyle = ` style="flex: 0 0 calc((100% - 2.5rem) / 2 * 0.45);"`;
+                        inputStyle = ` style="flex: 0 0 calc((100% - 2.5rem) / 2 * 0.55); width: auto;"`;
+                    } else {
+                        labelStyle = ` style="flex: 0 0 calc(22.5% - 1.3rem + 2px);"`;
+                        inputStyle = ` style="flex: ${inputWidth ? '0 0 ' + inputWidth : '1'}; width: auto;"`;
+                    }
+                } else if (inputWidth) {
+                    inputStyle = ` style="flex: 0 0 ${inputWidth}; width: auto;"`;
+                }
+
+                let optionsHtml = '';
+                options.forEach(opt => {
+                    let isSelected = false;
+                    if (actualValue) {
+                        const v = String(actualValue).toLowerCase();
+                        if (opt === 'Male' && (v === 'm' || v === 'male')) isSelected = true;
+                        else if (opt === 'Female' && (v === 'f' || v === 'female')) isSelected = true;
+                        else if (opt === 'Yes' && (v === 'positive' || v === 'yes' || v === '+')) isSelected = true;
+                        else if (opt === 'No' && (v === 'negative' || v === 'no' || v === '-')) isSelected = true;
+                        else if (opt.toLowerCase() === v) isSelected = true;
+                    }
+                    const selected = isSelected ? 'selected' : '';
+                    optionsHtml += `<option value="${opt}" ${selected}>${opt}</option>`;
+                });
+
+                return `
+                    <div class="result-item"${itemStyle}>
+                        <label class="result-label"${labelStyle}>${label}</label>
+                        <select id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : ''}"${inputStyle ? ' ' + inputStyle : ''}>
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                `;
+            };
+
+            const createSection = (title) => {
+                return `<div style="grid-column: 1 / -1; margin-top: 1rem; margin-bottom: 1rem; font-size: 1.05rem; font-weight: 600; color: #cbd5e1; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">${title}</div>`;
+            };
+
+            let html = '';
+
+            // Demographics
+            html += createSection('Demographics');
+            html += createItem('ID', data.id, 'input-upn');
+            html += createItem('Name', data.name, 'input-name');
+            html += createInlineDropdownItem('Sex', ['Male', 'Female'], data.sex, 'input-sex');
+            html += createItem('Birthdate', data.birthdate, 'input-date_birth', 1, 'date');
+            html += createInlineDropdownItem('ECOG', ['0', '1', '2', '3', '4', '5'], data.ecog, 'input-ecog');
+            html += createItem('Height (cm)', data.height, 'input-height_dx');
+            html += createItem('Body Weight (kg)', data.weight, 'input-bwt_dx');
+
+            // Clinical Features (Subsection)
+            html += createSection('Clinical Features');
+            html += createItem('Date of diagnosis', data.dateDx, 'input-date_dx', 1, 'date');
+            html += createInlineDropdownItem('Disease Phase', ['MGUS (monoclonal gammopathy of undetermined significance)', 'MGCS (monoclonal gammopathy of clinical significance)', 'Smoldering myeloma', 'Symptomatic myeloma', 'Plasma cell leukemia'], data.diseasePhase, 'input-dp_dx', 'Symptomatic myeloma', 2);
+            html += `<div style="grid-column: span 1;"></div>`;
+            html += createItem('C/R/A/B', data.crab, 'input-crab');
+            
+            let lyticHtml = createInlineDropdownItem('Number of lytic lesions', ['1', '≥ 2'], data.lyticLesions, 'input-lytic_lesions', '1');
+            lyticHtml = lyticHtml.replace('<div class="result-item"', '<div id="container-lytic_lesions" class="result-item" style="display: none;"');
+            html += lyticHtml;
+            
+            html += createInlineDropdownItem('Paraskeletal Disease', ['Yes', 'No'], data.paraskeletal, 'input-paraskeletal_dx', 'No');
+            html += createInlineDropdownItem('Extramedullary Disease', ['Yes', 'No'], data.extramedullary, 'input-emd_dx', 'No');
+
+            // Cell counts and Blood chemistry
+            html += createSection('Cell counts and Blood chemistry');
+            html += createItem('Hemoglobin (g/dL)', data.hg, 'input-hg_dx');
+            html += createItem('β2 microglobulin (mg/L)', data.b2m, 'input-b2mg_dx');
+            html += createItem('TP / Alb (g/dL)', data.tpAlb, 'input-tp_alb');
+            html += createItem('BUN / Cr (mg/dL)', data.bunCr, 'input-bun_cr');
+            html += createItem('TB (mg/dL)', data.tb, 'input-tb_dx');
+            html += createItem('AST / ALT (U/L)', data.astAlt, 'input-ast_alt');
+            html += createItem('Ca<sup>2+</sup> (mg/dL)', data.ca, 'input-ca_dx');
+            html += createItem('LDH (U/L)', data.ldh, 'input-ldh_dx');
+
+            // Serum and urine PEP/IEP
+            html += createSection('Serum and urine PEP/IEP');
+            html += createItem('Ig G/A/M', data.igGAM, 'input-ig_gam');
+            html += createItem('Ig D/E', data.igDE, 'input-ig_de');
+            html += createItem('Serum kappa', data.serumKappa, 'input-kappa_dx');
+            html += createItem('Serum lambda', data.serumLambda, 'input-lambda_dx');
+            html += createInlineDropdownItem('Heavy Chain', ['', 'IgG', 'IgA', 'IgM', 'IgD', 'IgE', 'Negative'], data.heavyChain, 'input-chain_heavy');
+            html += createInlineDropdownItem('Light Chain', ['', 'kappa', 'lambda', 'Negative'], data.lightChain, 'input-chain_light');
+            html += createItem('Serum PEP/IEP (g/dL)', data.spep, 'input-serum_m_dx');
+            html += createItem('Urine PEP/IEP (mg/day)', data.upep, 'input-urine_m_dx');
+
+            // BM aspiration and biopsy
+            html += createSection('BM aspiration and biopsy');
+            html += createItem('Cellularity (%)', data.bm?.cellularity, 'input-bm_cellularity');
+            html += createItem('Plasma Cell (%)', data.bm?.plasmaCell, 'input-bm_plasma_cell');
+            html += createItem('Cytogenetics', data.bm?.cytogenetics, 'input-bm_cytogenetics', 2);
+            html += createItem('IGH::FGFR3/<br>MMSET (%)', data.bm?.t4_14, 'input-bm_t4_14');
+            html += createItem('IGH::CCND1 (%)', data.bm?.t11_14, 'input-bm_t11_14');
+            html += createItem('IGH::MAF (%)', data.bm?.t14_16, 'input-bm_t14_16');
+            html += createItem('IGH::MAFB (%)', data.bm?.t14_20, 'input-bm_t14_20');
+            html += createItem('TP53 (%)', data.bm?.del17p13, 'input-bm_del17p13');
+            html += createItem('CKS1B (%)', data.bm?.gain1q21, 'input-bm_gain1q21');
+            html += createItem('RB1/D13S319 (%)', data.bm?.del13q14, 'input-bm_del13q14');
+            html += createItem('CDKN2C (%)', data.bm?.del1p32, 'input-bm_del1p32');
+
+            // Viral markers
+            html += createSection('Viral markers');
+            html += createItem('HBs Ag/Ab', data.viral?.hbs, 'input-hbs_ag_ab');
+            html += createItem('HBc Ab IgG', data.viral?.hbc, 'input-hbcab_dx');
+            html += createItem('Anti-HCV Ab', data.viral?.hcv, 'input-anti_hcv_dx');
+            html += createItem('HIV Ag/Ab', data.viral?.hiv, 'input-hiv_dx');
+
+            grid.innerHTML = html;
+
+            const crabInput = document.getElementById('input-crab');
+            if (crabInput) {
+                crabInput.addEventListener('input', () => {
+                    const parts = crabInput.value.split('/');
+                    const bPart = parts.length > 3 ? parts[3].trim() : '';
+                    const lesionsEl = document.getElementById('container-lytic_lesions');
+                    if (lesionsEl) {
+                        lesionsEl.style.display = (bPart === '+') ? 'flex' : 'none';
+                    }
+                });
+                crabInput.dispatchEvent(new Event('input'));
+            }
+
+            const stagingGrid = document.getElementById('staging-grid');
+            let stagingHtml = '';
+            stagingHtml += createDropdownItem('Durie-Salmon Stage', ['IA', 'IB', 'IIA', 'IIB', 'IIIA', 'IIIB'], data.dsStage, 'input-ds_stage');
+            stagingHtml += createDropdownItem('ISS Stage', ['I', 'II', 'III'], data.issStage, 'input-iss_stage');
+            stagingHtml += createDropdownItem('R-ISS Stage', ['I', 'II', 'III'], data.rissStage, 'input-riss_stage');
+            stagingHtml += createDropdownItem('R2-ISS Stage', ['I', 'II', 'III', 'IV'], data.r2issStage, 'input-r2iss_stage');
+            stagingGrid.innerHTML = stagingHtml;
+
+            updateStagingSummary();
+            grid.addEventListener('input', updateStagingSummary);
+            grid.addEventListener('change', updateStagingSummary);
+        }
+
+        function handleInputElementChange(input) {
+            let isFilled = false;
+            if (input.tagName === 'SELECT') {
+                isFilled = input.value !== '';
+            } else if (input.type === 'date') {
+                isFilled = input.value !== '';
+                if (isFilled) {
+                    input.classList.remove('empty-date');
+                    const placeholder = input.nextElementSibling;
+                    if (placeholder && placeholder.classList.contains('date-placeholder')) {
+                        placeholder.style.display = 'none';
+                    }
+                } else {
+                    input.classList.add('empty-date');
+                    const placeholder = input.nextElementSibling;
+                    if (placeholder && placeholder.classList.contains('date-placeholder')) {
+                        placeholder.style.display = 'block';
+                    }
+                }
+            } else {
+                isFilled = input.value.trim() !== '';
+            }
+
+            if (isFilled) {
+                input.classList.add('filled');
+            } else {
+                input.classList.remove('filled');
+            }
+        }
+
+        function updateStagingSummary() {
+            const summaryEl = document.getElementById('staging-summary');
+            if (!summaryEl) return;
+            const val = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : '-'; };
+            
+            const cr = val('input-bun_cr').split('/')[1] || val('input-bun_cr');
+            const bone = val('input-crab').split('/')[3] || val('input-crab');
+            const lyticLesions = (bone.trim() === '+') ? val('input-lytic_lesions') : '-';
+            const alb = val('input-tp_alb').split('/')[1] || val('input-tp_alb');
+            
+            const createSummaryItem = (label, value, unit='', colspan=1) => {
+                const isFilled = value && value !== '-';
+                const inputClass = 'result-input'; // Removed 'filled' class to eliminate the bright border/glow effect
+                const gridSpan = colspan > 1 ? `grid-column: span ${colspan};` : '';
+                const displayValue = isFilled ? (unit ? `${value} ${unit}` : value) : '';
+                const filledStyle = isFilled ? 'color: #ffffff;' : '';
+                return `
+                    <div class="result-item" style="margin-bottom: 0; padding: 0; ${gridSpan}">
+                        <label class="result-label" style="font-size: 0.8rem; margin-right: 0.5rem; flex: 0 0 calc(45% - 0.5rem);">${label}</label>
+                        <div class="${inputClass}" style="flex: 1; display: flex; align-items: center; width: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ${filledStyle}">${displayValue}</div>
+                    </div>
+                `;
+            };
+
+            summaryEl.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem 1rem; align-items: center; padding: 0.2rem 0;">
+                    ${createSummaryItem('Hb', val('input-hg_dx'), 'g/dL')}
+                    ${createSummaryItem('β2 microglobulin', val('input-b2mg_dx'), 'mg/L')}
+                    ${createSummaryItem('Alb', alb, 'g/dL')}
+                    ${createSummaryItem('Cr', cr, 'mg/dL')}
+                    
+                    ${createSummaryItem('Ca<sup>2+</sup>', val('input-ca_dx'), 'mg/dL')}
+                    ${createSummaryItem('LDH', val('input-ldh_dx'), 'U/L')}
+                    <div></div>
+                    <div></div>
+                    ${createSummaryItem('Heavy chain', val('input-chain_heavy'), '')}
+                    ${createSummaryItem('Serum PEP/IEP', val('input-serum_m_dx'), 'g/dL')}
+                    
+                    ${createSummaryItem('Urine PEP/IEP', val('input-urine_m_dx'), 'mg/day')}
+                    ${createSummaryItem('Number of lytic<br>lesions', lyticLesions, '')}
+                    ${createSummaryItem('IGH::FGFR3/<br>MMSET', val('input-bm_t4_14'), '%')}
+                    
+                    ${createSummaryItem('IGH::MAF', val('input-bm_t14_16'), '%')}
+                    ${createSummaryItem('TP53', val('input-bm_del17p13'), '%')}
+                    ${createSummaryItem('CKS1B', val('input-bm_gain1q21'), '%')}
+                </div>
+            `;
+            calculateStaging();
+        }
+
+        function calculateStaging() {
+            const valNum = (id) => { const el = document.getElementById(id); return el && el.value ? parseFloat(el.value) : NaN; };
+            const valStr = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+            const hb = valNum('input-hg_dx');
+            const ca = valNum('input-ca_dx');
+            const lyticBoneRaw = valStr('input-crab').split('/')[3];
+            const bone_lesions = (lyticBoneRaw && lyticBoneRaw.trim() === '+') ? valStr('input-lytic_lesions') : '0';
+            const heavy = valStr('input-chain_heavy');
+            const spep = valNum('input-serum_m_dx');
+            const upep = valNum('input-urine_m_dx');
+            const cr = parseFloat(valStr('input-bun_cr').split('/')[1] || valStr('input-bun_cr'));
+
+            const b2m = valNum('input-b2mg_dx');
+            const alb = parseFloat(valStr('input-tp_alb').split('/')[1] || valStr('input-tp_alb'));
+
+            const ldh = valNum('input-ldh_dx');
+            const t4_14 = valNum('input-bm_t4_14');
+            const t14_16 = valNum('input-bm_t14_16');
+            const del17p = valNum('input-bm_del17p13');
+            const gain1q = valNum('input-bm_gain1q21');
+
+            const setStage = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && val !== '') {
+                    el.value = val;
+                    if (typeof handleInputElementChange === 'function') handleInputElementChange(el);
+                }
+            };
+
+            // 1. Durie-Salmon
+            let isDS3 = false;
+            let isDS1 = true;
+            if (hb < 8.5 || ca > 12 || bone_lesions === '≥ 2' || upep > 12000 || (heavy === 'IgG' && spep > 7) || (heavy === 'IgA' && spep > 5)) {
+                isDS3 = true;
+            }
+            if (hb <= 10 || ca > 10.5 || bone_lesions === '≥ 2' || upep >= 4000 || (heavy === 'IgG' && spep >= 5) || (heavy === 'IgA' && spep >= 3)) {
+                isDS1 = false;
+            }
+            
+            let ds = '';
+            if (isDS3) ds = 'III';
+            else if (isDS1 && !isNaN(hb) && !isNaN(ca)) ds = 'I';
+            else if (!isNaN(hb) && !isNaN(ca)) ds = 'II';
+            
+            if (ds && !isNaN(cr)) {
+                ds += (cr >= 2.0) ? 'B' : 'A';
+                setStage('input-ds_stage', ds);
+            }
+
+            // 2. ISS
+            let iss = '';
+            if (!isNaN(b2m) && !isNaN(alb)) {
+                if (b2m < 3.5 && alb >= 3.5) iss = 'I';
+                else if (b2m >= 5.5) iss = 'III';
+                else iss = 'II';
+                setStage('input-iss_stage', iss);
+            } else {
+                iss = valStr('input-iss_stage');
+            }
+
+            // 3. R-ISS
+            let riss = '';
+            if (iss && !isNaN(ldh) && !isNaN(t4_14) && !isNaN(t14_16) && !isNaN(del17p)) {
+                const highRiskCyto = (t4_14 > 0 || t14_16 > 0 || del17p > 0);
+                const normalLdh = (ldh <= 250);
+                if (iss === 'I' && !highRiskCyto && normalLdh) riss = 'I';
+                else if (iss === 'III' && (highRiskCyto || !normalLdh)) riss = 'III';
+                else riss = 'II';
+                setStage('input-riss_stage', riss);
+            }
+
+            // 4. R2-ISS
+            let r2iss = '';
+            if (iss && !isNaN(ldh) && !isNaN(t4_14) && !isNaN(del17p) && !isNaN(gain1q)) {
+                let score = 0;
+                if (iss === 'II') score += 1;
+                if (iss === 'III') score += 1.5;
+                if (del17p > 0) score += 1;
+                if (ldh > 250) score += 1;
+                if (t4_14 > 0) score += 1;
+                if (gain1q > 0) score += 0.5;
+
+                if (score === 0) r2iss = 'I';
+                else if (score >= 0.5 && score <= 1) r2iss = 'II';
+                else if (score >= 1.5 && score <= 2.5) r2iss = 'III';
+                else if (score >= 3) r2iss = 'IV';
+                setStage('input-r2iss_stage', r2iss);
+            }
+        }
+
+
+
+        function convertEMR() {
+            const text = document.getElementById('emr-input').value;
+            if (!text.trim()) {
+                alert("Please paste EMR data before converting.");
+                return;
+            }
+            
+            // 1. ID, Name, Birthdate, Sex
+            let id = '';
+            let name = '';
+            let birthdate = '';
+            let sex = '';
+            
+            const lines = text.split(/\r?\n/);
+            const idLine = lines.find(line => line.match(/ID\s*[:\-]?\s*\d+/i));
+            
+            if (idLine) {
+                const idMatch = idLine.match(/ID\s*[:\-]?\s*(\d+)/i);
+                id = idMatch ? idMatch[1] : '';
+                
+                let rest = idLine.replace(idMatch[0], '').trim();
+                rest = rest.replace(/^[,:\-\s]+/, ''); // remove leading commas or spaces
+                
+                // Extract Sex before date so M/F doesn't get caught in name
+                const sexMatch = rest.match(/(?:Sex|Gender|성별)\s*[:\-]?\s*(Male|Female|M|F|남|여)/i) 
+                               || rest.match(/\d{1,3}\s*\/\s*(Male|Female|M|F|남|여)/i) // e.g. 65/F or 65/여
+                               || rest.match(/(Male|Female|M|F|남|여)\s*\/\s*\d{1,3}/i) // e.g. F/65 or 여/65
+                               || rest.match(/\b(Male|Female|M|F)\b/i)
+                               || rest.match(/\((Male|Female|M|F|남|여)\)/i)
+                               || rest.match(/,\s*(Male|Female|M|F|남|여)\s*(?:,|$)/i)
+                               || rest.match(/(?:^|\s)(남|여)(?:\s|$)/);
+                
+                if (sexMatch) {
+                    let extracted = sexMatch[1] || sexMatch[0];
+                    if (extracted.match(/M|남|Male/i)) sex = 'M';
+                    if (extracted.match(/F|여|Female/i)) sex = 'F';
+                    rest = rest.replace(sexMatch[0], '').trim();
+                }
+
+                // Look for date formats: YYYY-MM-DD, YYYY.MM.DD, YYYY/MM/DD, or YYMMDD-XXXXXXX
+                const bdMatch = rest.match(/(\d{4}[-\.\/]\d{2}[-\.\/]\d{2}|\d{6}[-\s]?\d{7})/);
+                if (bdMatch) {
+                    birthdate = bdMatch[1];
+                    let rawName = rest.replace(bdMatch[0], '').trim();
+                    rawName = rawName.replace(/[,:\-\s]+$/, ''); // clean up trailing characters
+                    name = rawName;
+                } else {
+                    name = rest;
+                }
+                
+                // Clean up any remaining prefixes like "Name:" or "DOB:"
+                name = name.replace(/^(?:Name|Patient|이름|성명)\s*[:\-]?\s*/i, '').trim();
+                name = name.replace(/(?:DOB|Birth(?:date|day|eday)?|생년월일)\s*[:\-]?\s*/i, '').trim();
+                name = name.replace(/[,:\-\s]+$/, ''); // clean trailing again
+            }
+            
+            // Global Fallbacks if missing on ID line
+            if (!name) {
+                const nameMatch = text.match(/(?:Name|Patient|성명|이름)\s*[:\-]?\s*([가-힣a-zA-Z\s]+)(?:\n|,|$)/i);
+                if (nameMatch) name = nameMatch[1].trim();
+            }
+            
+            if (!birthdate) {
+                const globalBd = text.match(/(?:DOB|Birth(?:date|day|eday)?|생년월일|Birth|Date of Birth)\s*[:\-]?\s*(\d{4}[-\.\/]\d{2}[-\.\/]\d{2}|\d{6}[-\s]?\d{7}|\d{8}|\d{6})/i)
+                               || text.match(/\b(\d{4}[-\.\/]\d{2}[-\.\/]\d{2})\b/)
+                               || text.match(/\b(\d{6}[-\s]?\d{7})\b/);
+                if (globalBd) birthdate = globalBd[1];
+            }
+            
+            if (!sex) {
+                const globalSex = text.match(/(?:Sex|Gender|성별)\s*[:\-]?\s*(Male|Female|M|F|남|여)/i)
+                                  || text.match(/\d{1,3}\s*\/\s*(Male|Female|M|F|남|여)/i)
+                                  || text.match(/(Male|Female|M|F|남|여)\s*\/\s*\d{1,3}/i);
+                if (globalSex) {
+                    let extracted = globalSex[1] || globalSex[0];
+                    if (extracted.match(/M|남|Male/i)) sex = 'M';
+                    if (extracted.match(/F|여|Female/i)) sex = 'F';
+                }
+            }
+            
+            // Infer Sex from Resident Registration Number if present
+            if (!sex && birthdate) {
+                const rrnMatch = birthdate.match(/^(\d{6})[-\s]?(\d{7})$/);
+                if (rrnMatch) {
+                    const genderDigit = rrnMatch[2].charAt(0);
+                    if (['1', '3', '5', '7'].includes(genderDigit)) sex = 'M';
+                    if (['2', '4', '6', '8'].includes(genderDigit)) sex = 'F';
+                }
+            }
+
+            // Format birthdate for <input type="date"> which requires YYYY-MM-DD
+            if (birthdate) {
+                let d = birthdate.replace(/[\.\/]/g, '-');
+                if (d.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    birthdate = d;
+                } else {
+                    const rrnFormat = birthdate.match(/^(\d{2})(\d{2})(\d{2})[-\s]?(\d{7})$/);
+                    if (rrnFormat) {
+                        const prefix = ['3','4','7','8'].includes(rrnFormat[4].charAt(0)) ? '20' : '19';
+                        birthdate = `${prefix}${rrnFormat[1]}-${rrnFormat[2]}-${rrnFormat[3]}`;
+                    } else if (birthdate.match(/^\d{8}$/)) {
+                        birthdate = `${birthdate.substring(0,4)}-${birthdate.substring(4,6)}-${birthdate.substring(6,8)}`;
+                    } else if (birthdate.match(/^\d{6}$/)) {
+                        const yy = parseInt(birthdate.substring(0,2));
+                        const prefix = yy > new Date().getFullYear() % 100 + 5 ? '19' : '20'; 
+                        birthdate = `${prefix}${birthdate.substring(0,2)}-${birthdate.substring(2,4)}-${birthdate.substring(4,6)}`;
+                    }
+                }
+            }
+
+            // Height and Weight
+            const heightMatch = text.match(/(?:Height|Ht|키)\s*[:\-]?\s*([\d\.]+)/i);
+            const height = heightMatch ? heightMatch[1] : '';
+            const weightMatch = text.match(/(?:Weight|Wt|BW|Body Weight|체중|몸무게)\s*[:\-]?\s*([\d\.]+)/i);
+            const weight = weightMatch ? weightMatch[1] : '';
+
+            // ECOG
+            const ecogMatch = text.match(/ECOG\s*(?:PS)?\s*[:\-]?\s*([0-5])/i);
+            const ecog = ecogMatch ? ecogMatch[1] : '';
+
+            // 2. Disease phase
+            const diseaseMatch = text.match(/#\s*([^\n]+)/);
+            let diseasePhase = diseaseMatch ? diseaseMatch[1].trim() : '';
+            
+            let crab = '';
+            const crabMatch = diseasePhase.match(/C\/R\/A\/B\s*(?:\(([^)]+)\)|([^,\n]+))/i);
+            if (crabMatch) {
+                crab = (crabMatch[1] || crabMatch[2] || '').trim();
+                crab = crab.replace(/\s*\/\s*/g, ' / ');
+                diseasePhase = diseasePhase.replace(/,?\s*C\/R\/A\/B\s*(?:\([^)]+\)|[^,\n]+)/i, '').trim();
+                diseasePhase = diseasePhase.replace(/,\s*$/, ''); // Clean up trailing comma
+            }
+            
+            let paraskeletal = '';
+            const paraMatch = diseasePhase.match(/Paraskeletal[^(\n,]*\s*(?:\(([^)]+)\)|([^,\n]+))/i);
+            if (paraMatch) {
+                paraskeletal = (paraMatch[1] || paraMatch[2] || '').trim();
+                diseasePhase = diseasePhase.replace(/,?\s*Paraskeletal[^,\n]*/i, '').trim();
+                diseasePhase = diseasePhase.replace(/,\s*$/, '');
+            }
+
+            let extramedullary = '';
+            const extraMatch = diseasePhase.match(/(?:Extramedullary|Extrameullary|EMD|Plasmacytoma)[^(\n,]*\s*(?:\(([^)]+)\)|([^,\n]+))/i);
+            if (extraMatch) {
+                extramedullary = (extraMatch[1] || extraMatch[2] || '').trim();
+                diseasePhase = diseasePhase.replace(/,?\s*(?:Extramedullary|Extrameullary|EMD|Plasmacytoma)[^,\n]*/i, '').trim();
+                diseasePhase = diseasePhase.replace(/,\s*$/, '');
+            }
+            
+            diseasePhase = diseasePhase.replace(/\s*\/\s*/g, ' / ');
+
+            // 3. Hg (g/dL), β2 microglobulin
+            const cbcMatch = text.match(/CBC[^-\d]*[\d\.\(\)]+-([\d\.]+)-[\d\.]+/i);
+            const hg = cbcMatch ? cbcMatch[1] : '';
+            
+            const b2mMatch = text.match(/β2\s*microglobulin\s*([\d\.]+)/i);
+            const b2m = b2mMatch ? b2mMatch[1] : '';
+
+            // 4. TP/Alb, BUN/Cr, TB/AST/ALT, Ca, LDH
+            const tpAlbMatch = text.match(/TP\/Alb\s*([\d\.\/]+)/i);
+            const tpAlb = tpAlbMatch ? tpAlbMatch[1].replace(/\s*\/\s*/g, ' / ') : '';
+            
+            const bunCrMatch = text.match(/BUN\/Cr\s*([\d\.\/]+)/i);
+            const bunCr = bunCrMatch ? bunCrMatch[1].replace(/\s*\/\s*/g, ' / ') : '';
+            
+            let tb = '';
+            let astAlt = '';
+            const tbAstAltMatch = text.match(/TB\/AST\/ALT\s*([\d\.\/]+)/i);
+            if (tbAstAltMatch) {
+                const parts = tbAstAltMatch[1].split(/\s*\/\s*/);
+                tb = parts[0] || '';
+                astAlt = parts.slice(1).join(' / ') || '';
+            }
+            
+            const caMatch = text.match(/Ca\s*([\d\.]+)/i);
+            const ca = caMatch ? caMatch[1] : '';
+            
+            const ldhMatch = text.match(/LDH\s*([\d\.]+)/i);
+            const ldh = ldhMatch ? ldhMatch[1] : '';
+
+            // 5. Serum PEP, Urine PEP
+            const spepMatch = text.match(/Serum PEP\/IEP\s*-\s*([\d\.]+\s*g\/dL)/i) || text.match(/Serum PEP\/IEP\s*-\s*([\d\.]+)/i);
+            const spep = spepMatch ? spepMatch[1].replace(/\s*g\/dL/i, '').trim() : '';
+            
+            const upepMatch = text.match(/Urine PEP\/IEP\s*-\s*([\d\.]*\s*mg\/day)/i) || text.match(/Urine PEP\/IEP\s*-\s*([\d\.]*)/i);
+            const upep = upepMatch ? upepMatch[1].replace(/\s*mg\/day/i, '').trim() : '';
+
+            let serumKappa = '';
+            let serumLambda = '';
+            const sflcMatch = text.match(/kappa\/lambda\s*(?:-\s*)?([\d\.]+)\s*\/\s*([\d\.]+)/i);
+            if (sflcMatch) {
+                serumKappa = sflcMatch[1];
+                serumLambda = sflcMatch[2];
+            }
+
+            // 6. Heavy chain, Light chain
+            const isotypeMatch = text.match(/,\s*(Ig[GAMED]\s+(?:kappa|lambda))/i) || text.match(/\(\s*(Ig[GAMED]\s+(?:kappa|lambda))\s*\)/i);
+            let heavyChain = '';
+            let lightChain = '';
+            if (isotypeMatch) {
+                const parts = isotypeMatch[1].split(/\s+/);
+                heavyChain = parts[0];
+                lightChain = parts[1];
+            }
+
+            // Ig G/A/M, Ig D/E
+            const iggamMatch = text.match(/Ig\s*G\/A\/M\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgG\/IgA\/IgM\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgG\/A\/M\s*[:\-]?\s*([\d\.\/]+)/i);
+            const igGAM = iggamMatch ? iggamMatch[1].replace(/\s*\/\s*/g, ' / ') : '';
+            const igdeMatch = text.match(/Ig\s*D\/E\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgD\/IgE\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgD\/E\s*[:\-]?\s*([\d\.\/]+)/i);
+            const igDE = igdeMatch ? igdeMatch[1].replace(/\s*\/\s*/g, ' / ') : '';
+
+            // 7. Viral marker : HBs Ag/Ab, HBc Ab IgG, Anti-HCV Ab, HIV Ag/Ab
+            const hbsMatch = text.match(/HBS\s*Ag\/Ab\s*\(([^)]+)\)/i);
+            const hbcMatch = text.match(/HBC\s*(?:Ab\s*IgG|IgG\s*Ab)\s*\(([^)]+)\)/i);
+            const hcvMatch = text.match(/Anti-HCV\s*Ab\s*\(([^)]+)\)/i);
+            const hivMatch = text.match(/HIV\s*Ag\/Ab\s*\(([^)]+)\)/i);
+
+            // BM aspiration and biopsy
+            const cellularityMatch = text.match(/(?:Cellularity|\bC\b)\s*(?:[:=]?)\s*([\d.\-]+)/i);
+            const plasmaCellMatch = text.match(/(?:Plasma\s*Cell|\bCD138\b)\s*(?:[:=]?)\s*([\d.\-]+)/i);
+            let cytogeneticsMatch = text.match(/Cytogenetics\s*(?:[:=]?)\s*([^\n,]+)/i);
+            let cytogeneticsVal = cytogeneticsMatch ? cytogeneticsMatch[1].trim() : '';
+            if (!cytogeneticsVal) {
+                const karyoMatch = text.match(/\b(\d{2}\s*,\s*(?:XX|XY|X|Y)[A-Za-z0-9\+\-\~\[\]\s\/]*)/i);
+                if (karyoMatch) cytogeneticsVal = karyoMatch[1].trim();
+            }
+            
+            const getFish = (pattern) => {
+                const match = text.match(new RegExp(pattern, 'i'));
+                if (match) {
+                    let val = match[1].trim();
+                    if (val.endsWith('%')) val = val.replace('%', '');
+                    let lower = val.toLowerCase();
+                    if (lower.startsWith('neg') || lower === 'not detected') val = '0';
+                    if (lower.startsWith('pos') || lower === 'detected') val = '1';
+                    return [null, val];
+                }
+                return null;
+            };
+
+            const fishRegex = '[^\\w]*([\\d.]+%?|Negative|Positive|Neg|Pos|Not detected|Detected)';
+            const t414Match = getFish('(?:t\\(4;14\\)|IGH/FGFR3)' + fishRegex);
+            const t1114Match = getFish('(?:t\\(11;14\\)|IGH/CCND1|IGC/CCND1)' + fishRegex);
+            const t1416Match = getFish('(?:t\\(14;16\\)|IGH/MAF)' + fishRegex);
+            const t1420Match = getFish('(?:t\\(14;20\\)|IGH/MAFB)' + fishRegex);
+            const del17p13Match = getFish('(?:del\\(17p13\\)|TP53)' + fishRegex);
+            const gain1q21Match = getFish('(?:gain\\s*1q21|amplification\\s*1q21|CKS1B)' + fishRegex);
+            const del13q14Match = getFish('(?:del\\(13q14\\)|RB1)' + fishRegex);
+            const del1p32Match = getFish('(?:del\\(1p32\\)|CDKN2[AC]?)' + fishRegex);
+
+            const dateDxMatch = text.match(/Date\s*of\s*diagnosis\s*(?:[:=]?)\s*([\d\-./]+)/i);
+            let dateDx = '';
+            if (dateDxMatch) {
+                let d = dateDxMatch[1].replace(/[\.\/]/g, '-');
+                if (d.length === 10) dateDx = d;
+            }
+            if (!dateDx) {
+                const bmLine = text.match(/BM aspiration and biopsy[^(\n]*\((\d{4}[-\.\/]\d{2}[-\.\/]\d{2})\)/i);
+                if (bmLine) dateDx = bmLine[1].replace(/[\.\/]/g, '-');
+            }
+
+            const resultObj = {
+                id, name, birthdate, sex, height, weight, ecog, diseasePhase, crab,
+                paraskeletal, extramedullary, dateDx,
+                hg, b2m,
+                tpAlb, bunCr, tb, astAlt, ca, ldh,
+                spep, upep,
+                serumKappa, serumLambda,
+                heavyChain, lightChain, igGAM, igDE,
+                viral: {
+                    hbs: hbsMatch ? hbsMatch[1].replace(/\s*\/\s*/g, ' / ') : '',
+                    hbc: hbcMatch ? hbcMatch[1].replace(/\s*\/\s*/g, ' / ') : '',
+                    hcv: hcvMatch ? hcvMatch[1].replace(/\s*\/\s*/g, ' / ') : '',
+                    hiv: hivMatch ? hivMatch[1].replace(/\s*\/\s*/g, ' / ') : ''
+                },
+                bm: {
+                    cellularity: cellularityMatch ? cellularityMatch[1] : '',
+                    plasmaCell: plasmaCellMatch ? plasmaCellMatch[1] : '',
+                    cytogenetics: cytogeneticsVal,
+                    t4_14: t414Match ? t414Match[1] : '',
+                    t11_14: t1114Match ? t1114Match[1] : '',
+                    t14_16: t1416Match ? t1416Match[1] : '',
+                    t14_20: t1420Match ? t1420Match[1] : '',
+                    del17p13: del17p13Match ? del17p13Match[1] : '',
+                    gain1q21: gain1q21Match ? gain1q21Match[1] : '',
+                    del13q14: del13q14Match ? del13q14Match[1] : '',
+                    del1p32: del1p32Match ? del1p32Match[1] : ''
+                }
+            };
+
+            displayResults(resultObj);
+        }
+
+        async function submitData() {
+            const val = (id) => {
+                const el = document.getElementById(id);
+                return el ? el.value.trim() : '';
+            };
+            
+            const splitSlash = (str, count) => {
+                const parts = str.split('/').map(s => s.trim());
+                while(parts.length < count) parts.push('');
+                return parts;
+            };
+
+            const crabParts = splitSlash(val('input-crab'), 4);
+            const tpAlbParts = splitSlash(val('input-tp_alb'), 2);
+            const bunCrParts = splitSlash(val('input-bun_cr'), 2);
+            const astAltParts = splitSlash(val('input-ast_alt'), 2);
+            const igGamParts = splitSlash(val('input-ig_gam'), 3);
+            const igDeParts = splitSlash(val('input-ig_de'), 2);
+            const hbsAgAbParts = splitSlash(val('input-hbs_ag_ab'), 2); // Ag / Ab
+
+            const payload = {
+                upn: val('input-upn'),
+                name: val('input-name'),
+                date_birth: val('input-date_birth'),
+                sex: val('input-sex'),
+                date_dx: val('input-date_dx'),
+                chain_heavy: val('input-chain_heavy'),
+                chain_light: val('input-chain_light'),
+                hg_dx: val('input-hg_dx'),
+                b2mg_dx: val('input-b2mg_dx'),
+                bun_dx: bunCrParts[0],
+                cr_dx: bunCrParts[1],
+                tp_dx: tpAlbParts[0],
+                alb_dx: tpAlbParts[1],
+                osetlytic_dx: crabParts[3], // B is 4th in C/R/A/B
+                height_dx: val('input-height_dx'),
+                bwt_dx: val('input-bwt_dx'),
+                dp_dx: val('input-dp_dx'),
+                hyperca_dx: crabParts[0], // C
+                renal_dx: crabParts[1], // R
+                anemia_dx: crabParts[2], // A
+                paraskeletal_dx: val('input-paraskeletal_dx'),
+                emd_dx: val('input-emd_dx'),
+                tb_dx: val('input-tb_dx'),
+                ast_dx: astAltParts[0],
+                alt_dx: astAltParts[1],
+                ca_dx: val('input-ca_dx'),
+                ldh_dx: val('input-ldh_dx'),
+                ig_g_dx: igGamParts[0],
+                ig_a_dx: igGamParts[1],
+                ig_m_dx: igGamParts[2],
+                ig_d_dx: igDeParts[0],
+                ig_e_dx: igDeParts[1],
+                kappa_dx: val('input-kappa_dx'),
+                lambda_dx: val('input-lambda_dx'),
+                serum_m_dx: val('input-serum_m_dx'),
+                urine_m_dx: val('input-urine_m_dx'),
+                hbsag_dx: hbsAgAbParts[0],
+                hbsab_dx: hbsAgAbParts[1],
+                hbcab_dx: val('input-hbcab_dx'),
+                anti_hcv_dx: val('input-anti_hcv_dx'),
+                hiv_dx: val('input-hiv_dx'),
+                cellularity_dx: val('input-bm_cellularity'),
+                'plasma-cell_dx': val('input-bm_plasma_cell'),
+                cytogenetics_dx: val('input-bm_cytogenetics'),
+                'IGH:FGFR3_dx': val('input-bm_t4_14'),
+                'IGH:CCND1_dx': val('input-bm_t11_14'),
+                'IGH:MAF_dx': val('input-bm_t14_16'),
+                'IGH:MAFB_dx': val('input-bm_t14_20'),
+                TP53_dx: val('input-bm_del17p13'),
+                CKS1B_dx: val('input-bm_gain1q21'),
+                RB1_dx: val('input-bm_del13q14'),
+                CDKN2C_dx: val('input-bm_del1p32'),
+                stage_ds: val('input-ds_stage'),
+                stage_iss: val('input-iss_stage'),
+                'stage_r-iss': val('input-riss_stage'),
+                'stage-r2-iss': val('input-r2iss_stage')
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/patients/` + payload.upn, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    alert('Patient data updated successfully!');
+                } else {
+                    const err = await response.text();
+                    alert('Error saving data: ' + err);
+                }
+            } catch (e) {
+                alert('Connection to local server failed. Please ensure server.py is running.');
+            }
+        }
+        async function submitStagingData() {
+            await submitData();
+        }
+    </script>
+</body>
+</html>

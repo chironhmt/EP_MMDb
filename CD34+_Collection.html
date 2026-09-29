@@ -1,0 +1,613 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma - Transplant</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+    <div class="app-container" style="flex-direction: row;">
+
+        <!-- Main Content -->
+        <main class="app-main" style="flex-direction: column;">
+            <!-- Header -->
+            <header class="app-header" style="justify-content: space-between;">
+                <div class="logo">
+                    <h1 style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">Eunpyeong St. Mary's Myeloma Center Database</h1>
+                </div>
+                <a href="Dashboard.html" class="btn-secondary" style="text-decoration: none;">
+                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </header>
+
+            <!-- Content Area -->
+            <section class="content-area" id="content-area" style="padding: 2rem; overflow-y: auto;">
+                <div class="cycle-planner" id="cd34-collection">
+                    <div class="planner-header" style="margin-bottom: 2rem;">
+                        <h2 style="margin: 0; color: var(--accent-primary); font-size: 1.75rem;">CD34+ Stem Cell Collection</h2>
+                    </div>
+
+                    <div class="planner-sections">
+                        <!-- Mobilization Card -->
+                        <div class="card agent-selection-card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div>
+                                    <h3 style="margin: 0;">1. Mobilization Regimen</h3>
+                                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">Enter the details of the mobilization regimen used to stimulate stem cell release.</p>
+                                </div>
+                                <button class="btn-secondary" onclick="toggleSection('mobilization-container', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                            </div>
+                            <div class="card-body" id="mobilization-container">
+                                <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                                    
+                                    <!-- Mobilization Regimen -->
+                                    <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                                        <h4 style="margin: 0 0 1.5rem 0; color: var(--text-primary); font-size: 1.1rem;">G-CSF</h4>
+                                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start;">
+                                            <!-- Type -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="gcsf-type" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Type</label>
+                                                <div style="width: 60%;">
+                                                    <select id="gcsf-type" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" onchange="document.getElementById('gcsf-type-others').style.display = this.value === 'Others' ? 'block' : 'none';">
+                                                        <option value="Filgrastim" selected>Filgrastim</option>
+                                                        <option value="Lenograstim">Lenograstim</option>
+                                                        <option value="Pegfilgrastim">Pegfilgrastim</option>
+                                                        <option value="Others">Others</option>
+                                                    </select>
+                                                    <input type="text" id="gcsf-type-others" class="custom-text-input" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none;" placeholder="Specify...">
+                                                </div>
+                                            </div>
+                                            <!-- Dose -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="gcsf-dose" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Dose</label>
+                                                <div style="width: 60%;">
+                                                    <select id="gcsf-dose" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" onchange="document.getElementById('gcsf-dose-others').style.display = this.value === 'Others' ? 'block' : 'none';">
+
+                                                        <option value="10 mcg/kg" selected>10 mcg/kg</option>
+                                                        <option value="Others">Others</option>
+                                                    </select>
+                                                    <input type="text" id="gcsf-dose-others" class="custom-text-input" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none;" placeholder="e.g. 16 mg/kg">
+                                                </div>
+                                            </div>
+                                            <!-- Duration -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="gcsf-duration" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Duration</label>
+                                                <div style="width: 60%;">
+                                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                        <select id="gcsf-duration" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" onchange="document.getElementById('gcsf-duration-others-wrapper').style.display = this.value === 'Others' ? 'flex' : 'none';">
+                                                            <option value="5" selected>5</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                    </div>
+                                                    <div id="gcsf-duration-others-wrapper" style="margin-top: 0.5rem; display: none; align-items: center; gap: 0.5rem;">
+                                                        <input type="text" id="gcsf-duration-others" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 7">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Start Date -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="gcsf-start-date" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Start Date</label>
+                                                <input type="date" id="gcsf-start-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.95rem; height: 2.1rem;">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chemotherapeutic Drugs Regimen -->
+                                    <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                            <h4 style="margin: 0; color: var(--text-primary); font-size: 1.1rem;">Chemotherapeutic Drugs</h4>
+                                            <button type="button" class="btn-secondary" style="padding: 0 0.75rem; height: 2.1rem; font-size: 0.85rem;" id="add-additional-agent-btn" onclick="addAdditionalAgent()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                </svg>
+                                                Add
+                                            </button>
+                                        </div>
+                                        <div id="additional-agents-list" style="display: flex; flex-direction: column;">
+                                            <div class="agent-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start;">
+                                                <!-- Agent -->
+                                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Agent</label>
+                                                    <div style="width: 60%;">
+                                                        <select class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" onchange="this.nextElementSibling.style.display = this.value === 'Others' ? 'block' : 'none';">
+                                                            <option value="None" selected>None</option>
+                                                            <option value="Cy">Cy</option>
+                                                            <option value="Cytarabine">Cytarabine</option>
+                                                            <option value="Etoposide">Etoposide</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        <input type="text" class="custom-text-input" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none;" placeholder="Specify...">
+                                                    </div>
+                                                </div>
+                                                <!-- Dose -->
+                                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Dose</label>
+                                                    <div style="width: 60%;">
+                                                        <select class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" onchange="this.nextElementSibling.style.display = this.value === 'Others' ? 'block' : 'none';">
+                                                            <option value="1.0 g/m2">1.0 g/m2</option>
+                                                            <option value="1.5 g/m2" selected>1.5 g/m2</option>
+                                                            <option value="3.0 g/m2">3.0 g/m2</option>
+                                                            <option value="50 mg/m2">50 mg/m2</option>
+                                                            <option value="100 mg/m2">100 mg/m2</option>
+                                                            <option value="200 mg/m2">200 mg/m2</option>
+                                                            <option value="375 mg/m2">375 mg/m2</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        <input type="text" class="custom-text-input" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none;" placeholder="e.g. 4.5 g/m2">
+                                                    </div>
+                                                </div>
+                                                <!-- Duration -->
+                                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Duration</label>
+                                                    <div style="width: 60%;">
+                                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                            <select class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" onchange="this.parentElement.nextElementSibling.style.display = this.value === 'Others' ? 'flex' : 'none';">
+                                                                <option value="1">1</option>
+                                                                <option value="2" selected>2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="Others">Others</option>
+                                                            </select>
+                                                            <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                        </div>
+                                                        <div style="margin-top: 0.5rem; display: none; align-items: center; gap: 0.5rem;">
+                                                            <input type="text" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 5">
+                                                            <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Start Date -->
+                                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Start Date</label>
+                                                    <input type="date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.95rem; height: 2.1rem;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <button type="button" class="btn-secondary" style="padding: 0 1rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    SUBMIT
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Stem Cell Collection Results Card -->
+                        <div class="card agent-selection-card" style="margin-top: 1.5rem;">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div>
+                                    <h3 style="margin: 0;">2. Stem Cell Collection Results</h3>
+                                    <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.95rem;">Enter the yield and details of the harvested stem cells.</p>
+                                </div>
+                                <button class="btn-secondary" onclick="toggleSection('collection-container', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                            </div>
+                            <div class="card-body" id="collection-container">
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start;">
+                                    
+                                    <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); grid-column: 1 / -1;">
+                                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start;">
+                                            <!-- Date of Collection -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="collection-date" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Start date</label>
+                                                <input type="date" id="collection-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.95rem; height: 2.1rem;">
+                                            </div>
+                                            <!-- Apheresis day -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="apheresis-days" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Apheresis day</label>
+                                                <div style="width: 60%;">
+                                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                        <select id="apheresis-days" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem; color: var(--text-secondary);" onchange="this.style.color = 'var(--text-primary)'; document.getElementById('apheresis-days-others-wrapper').style.display = this.value === 'Others' ? 'flex' : 'none'; updateDailyYields()">
+                                                            <option value="1" selected>1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                    </div>
+                                                    <div id="apheresis-days-others-wrapper" style="margin-top: 0.5rem; display: none; align-items: center; gap: 0.5rem;">
+                                                        <input type="text" id="apheresis-days-others" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 6">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Cell Viability -->
+                                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="cell-viability" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Cell viability</label>
+                                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                    <input type="text" id="cell-viability" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 95">
+                                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">%</span>
+                                                </div>
+                                            </div>
+                                            <!-- Day 1 Yield -->
+                                            <div id="day-1-yield-container" style="grid-column: 1 / span 3; display: flex; gap: 2rem;">
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-1-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 1 CD34+ yield</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-1-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 4.32">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁶/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-1-tnc" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 1 TNC</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-1-tnc" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 15.2">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁸/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-1-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-1-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" value="1" min="1">
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-1-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number<br>of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-1-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="1" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Day 2 Yield -->
+                                            <div id="day-2-yield-container" style="grid-column: 1 / span 3; display: none; gap: 2rem;">
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-2-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 2 CD34+ yield</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-2-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 3.18">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁶/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-2-tnc" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 2 TNC</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-2-tnc" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 12.1">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁸/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-2-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-2-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" value="1" min="1">
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-2-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number<br>of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-2-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="1" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Day 3 Yield -->
+                                            <div id="day-3-yield-container" style="grid-column: 1 / span 3; display: none; gap: 2rem;">
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-3-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 3 CD34+ yield</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-3-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 2.53">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁶/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-3-tnc" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 3 TNC</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-3-tnc" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 9.5">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁸/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-3-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-3-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" value="1" min="1">
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-3-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number<br>of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-3-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="1" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Day 4 Yield -->
+                                            <div id="day-4-yield-container" style="grid-column: 1 / span 3; display: none; gap: 2rem;">
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-4-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 4 CD34+ yield</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-4-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 1.89">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁶/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-4-tnc" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 4 TNC</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-4-tnc" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 7.2">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁸/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-4-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-4-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" value="1" min="1">
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-4-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number<br>of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-4-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="1" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Day 5 Yield -->
+                                            <div id="day-5-yield-container" style="grid-column: 1 / span 3; display: none; gap: 2rem;">
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-5-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 5 CD34+ yield</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-5-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 1.40">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁶/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-5-tnc" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Day 5 TNC</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="day-5-tnc" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 5.0">
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁸/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-5-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-5-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" value="1" min="1">
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="day-5-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Number<br>of bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="number" id="day-5-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="1" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Total Yield -->
+                                            <div style="grid-column: 1 / span 3; display: flex; gap: 2rem;">
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="cd34-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Total CD34+ yield</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="cd34-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem; opacity: 0.7; cursor: not-allowed;" placeholder="0.0" readonly>
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁶/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="tnc-yield" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Total TNC</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="tnc-yield" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem; opacity: 0.7; cursor: not-allowed;" placeholder="0.0" readonly>
+                                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">×10⁸/kg</span>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="total-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Total bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="total-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem; opacity: 0.7; cursor: not-allowed;" placeholder="0" readonly>
+                                                    </div>
+                                                </div>
+                                                <div style="flex: 1; display: flex; align-items: flex-start; justify-content: space-between;">
+                                                    <label for="total-bags" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Total bags</label>
+                                                    <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                        <input type="text" id="total-bags" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem; opacity: 0.7; cursor: not-allowed;" placeholder="0" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <button type="button" class="btn-secondary" style="padding: 0 1rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    SUBMIT
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide`;
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Show`;
+            }
+        }
+
+        function addAdditionalAgent() {
+            const container = document.getElementById('additional-agents-list');
+            const row = document.createElement('div');
+            row.className = 'agent-row';
+            row.style.cssText = 'display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-glass);';
+            
+            row.innerHTML = `
+                <!-- Agent -->
+                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Agent</label>
+                    <div style="width: 60%;">
+                        <select class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" onchange="this.nextElementSibling.style.display = this.value === 'Others' ? 'block' : 'none';">
+                            <option value="None" selected>None</option>
+                            <option value="Cy">Cy</option>
+                            <option value="Cytarabine">Cytarabine</option>
+                            <option value="Etoposide">Etoposide</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <input type="text" class="custom-text-input" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none;" placeholder="Specify...">
+                    </div>
+                </div>
+                <!-- Dose -->
+                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Dose</label>
+                    <div style="width: 60%;">
+                        <select class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" onchange="this.nextElementSibling.style.display = this.value === 'Others' ? 'block' : 'none';">
+                            <option value="1.0 g/m2">1.0 g/m2</option>
+                            <option value="1.5 g/m2" selected>1.5 g/m2</option>
+                            <option value="3.0 g/m2">3.0 g/m2</option>
+                            <option value="50 mg/m2">50 mg/m2</option>
+                            <option value="100 mg/m2">100 mg/m2</option>
+                            <option value="200 mg/m2">200 mg/m2</option>
+                            <option value="375 mg/m2">375 mg/m2</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <input type="text" class="custom-text-input" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none;" placeholder="e.g. 4.5 g/m2">
+                    </div>
+                </div>
+                <!-- Duration -->
+                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Duration</label>
+                    <div style="width: 60%;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <select class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" onchange="this.parentElement.nextElementSibling.style.display = this.value === 'Others' ? 'flex' : 'none';">
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                        </div>
+                        <div style="margin-top: 0.5rem; display: none; align-items: center; gap: 0.5rem;">
+                                                            <input type="text" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 5">
+                                                            <span style="font-size: 0.8rem; color: var(--text-secondary);">days</span>
+                                                        </div>
+                    </div>
+                </div>
+                <!-- Start Date -->
+                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Start Date</label>
+                    <input type="date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.95rem; height: 2.1rem;">
+                </div>
+                <!-- Remove Button -->
+                <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
+                    <button type="button" class="btn-secondary" style="padding: 0 1rem; height: 2.1rem;" onclick="this.closest('.agent-row').remove()" title="Remove Agent">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        REMOVE
+                    </button>
+                </div>
+            `;
+            container.appendChild(row);
+        }
+
+        function updateDailyYields() {
+            const daysSelect = document.getElementById('apheresis-days');
+            if (!daysSelect) return;
+            let days = parseInt(daysSelect.value);
+            if (daysSelect.value === 'Others') {
+                days = 5;
+            } else {
+                days = days || 1;
+            }
+            
+            for (let i = 1; i <= 5; i++) {
+                const container = document.getElementById(`day-${i}-yield-container`);
+                if (container) {
+                    if (i <= days) {
+                        container.style.display = 'flex';
+                    } else {
+                        container.style.display = 'none';
+                        // clear value when hidden
+                        const inputYield = document.getElementById(`day-${i}-yield`);
+                        if (inputYield) inputYield.value = '';
+                        const inputTnc = document.getElementById(`day-${i}-tnc`);
+                        if (inputTnc) inputTnc.value = '';
+                        const inputBags = document.getElementById(`day-${i}-bags`);
+                        if (inputBags) inputBags.value = '1';
+                        const inputBags = document.getElementById(`day-${i}-bags`);
+                        if (inputBags) inputBags.value = '';
+                    }
+                }
+            }
+            calculateTotalYield();
+        }
+
+        function calculateTotalYield() {
+            let totalCd34 = 0;
+            let totalTnc = 0;
+            let totalBags = 0;
+            let explicitBags = false;
+            for (let i = 1; i <= 5; i++) {
+                const container = document.getElementById(`day-${i}-yield-container`);
+                if (container && container.style.display === 'none') continue;
+
+                const inputCd34 = document.getElementById(`day-${i}-yield`);
+                if (inputCd34 && inputCd34.value) {
+                    const val = parseFloat(inputCd34.value);
+                    if (!isNaN(val)) totalCd34 += val;
+                }
+                const inputTnc = document.getElementById(`day-${i}-tnc`);
+                if (inputTnc && inputTnc.value) {
+                    const val = parseFloat(inputTnc.value);
+                    if (!isNaN(val)) totalTnc += val;
+                }
+                const inputBags = document.getElementById(`day-${i}-bags`);
+                if (inputBags) {
+                    if (inputBags.value !== '') explicitBags = true;
+                    const val = parseInt(inputBags.value || '1', 10);
+                    if (!isNaN(val)) totalBags += val;
+                }
+            }
+            const totalCd34Input = document.getElementById('cd34-yield');
+            if (totalCd34Input) {
+                totalCd34Input.value = totalCd34 > 0 ? totalCd34.toFixed(2) : '';
+            }
+            const totalTncInput = document.getElementById('tnc-yield');
+            if (totalTncInput) {
+                totalTncInput.value = totalTnc > 0 ? totalTnc.toFixed(2) : '';
+            }
+            const totalBagsInput = document.getElementById('total-bags');
+            if (totalBagsInput) {
+                if (explicitBags) {
+                    totalBagsInput.value = totalBags > 0 ? totalBags : '';
+                } else {
+                    totalBagsInput.value = '';
+                    totalBagsInput.placeholder = totalBags > 0 ? totalBags : '0';
+                }
+            }
+        }
+
+        // Initialize state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDailyYields();
+            for (let i = 1; i <= 5; i++) {
+                const inputCd34 = document.getElementById(`day-${i}-yield`);
+                if (inputCd34) inputCd34.addEventListener('input', calculateTotalYield);
+                const inputTnc = document.getElementById(`day-${i}-tnc`);
+                if (inputTnc) inputTnc.addEventListener('input', calculateTotalYield);
+                const inputBags = document.getElementById(`day-${i}-bags`);
+                if (inputBags) inputBags.addEventListener('input', calculateTotalYield);
+                const inputBags = document.getElementById(`day-${i}-bags`);
+                if (inputBags) inputBags.addEventListener('input', calculateTotalYield);
+            }
+        });
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>

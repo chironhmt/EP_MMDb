@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma - Engraftment</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=8">
+    <style>
+        body {
+            height: auto !important;
+            min-height: 100vh !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+        .app-container {
+            height: auto !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .app-main {
+            height: auto !important;
+            overflow: visible !important;
+            flex: 1 0 auto !important;
+            display: flex !important;
+        }
+
+        .content-area {
+            overflow: visible !important;
+            height: auto !important;
+            padding: 0 !important;
+        }
+
+        .str-record-row:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .form-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        input[type="date"].custom-date-format::before {
+            pointer-events: none !important;
+        }
+
+        input[type="date"] {
+            cursor: pointer;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--accent-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-glow), 0 10px 25px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="flex-direction: column;">
+        <!-- Header -->
+        <header class="app-header" style="justify-content: space-between;">
+            <div class="logo">
+                <h1 style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">
+                    Eunpyeong St. Mary's Myeloma Center Database
+                </h1>
+            </div>
+            <a href="Dashboard.html" class="btn-secondary" style="text-decoration: none;">
+                <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main" style="flex-direction: column; padding: 2rem;">
+            <section class="content-area" id="content-area" style="max-width: 1120px; margin: 0 auto; width: 100%;">
+
+                <div class="planner-header" style="margin-bottom: 2rem;">
+                    <h2 style="margin: 0; color: var(--accent-primary); font-size: 1.75rem;">Engraftment &amp; Chimerism</h2>
+                </div>
+
+                <!-- Section 1: Neutrophil and Platelet Engraftment -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">1. Neutrophil &amp; Platelet Engraftment</h3>
+                        </div>
+                        <button class="btn-secondary" onclick="toggleSection('engraftment-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                            Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="engraftment-container" style="padding: 1.5rem;">
+                        <div class="form-grid-4">
+                            <!-- Neutrophil Engraftment -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">
+                                    Neutrophil<br>Engraftment
+                                </label>
+                                <div style="width: 60%;">
+                                    <select id="neutrophil-engraftment" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: var(--text-primary);" onchange="handleNeutrophilEngraftmentChange(this.value);">
+                                        <option value="Yes" selected>Yes</option>
+                                        <option value="No">No</option>
+                                        <option value="Competing">Competing</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Neutrophil Engraftment Date -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                    Date
+                                </label>
+                                <input type="date" id="neutrophil-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                            </div>
+
+                            <!-- Platelet Engraftment -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">
+                                    Platelet<br>Engraftment
+                                </label>
+                                <div style="width: 60%;">
+                                    <select id="platelet-engraftment" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: var(--text-primary);">
+                                        <option value="Yes" selected>Yes</option>
+                                        <option value="No">No</option>
+                                        <option value="Competing">Competing</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Platelet Engraftment Date -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                    Date
+                                </label>
+                                <input type="date" id="platelet-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Section Submit Button -->
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitEngraftment()" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 2: Graft Failure -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">2. Graft Failure</h3>
+                        </div>
+                        <button class="btn-secondary" onclick="toggleSection('graft-failure-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                            Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="graft-failure-container" style="padding: 1.5rem;">
+                        <div class="form-grid-4">
+                            <!-- Graft Failure Select -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                    Graft failure
+                                </label>
+                                <div style="width: 60%;">
+                                    <select id="graft-failure" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: var(--text-primary);">
+                                        <option value="No" selected>No</option>
+                                        <option value="Primary graft failure">Primary graft failure</option>
+                                        <option value="Secondary graft failure">Secondary graft failure</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Failure Date -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                    Date
+                                </label>
+                                <input type="date" id="graft-failure-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                            </div>
+
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- Section Submit Button -->
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitGraftFailure()" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 3: STR (Chimerism Analysis) -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">3. STR (Short Tandem Repeat)</h3>
+                        </div>
+                        <button class="btn-secondary" onclick="toggleSection('str-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                            Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="str-container" style="padding: 1.5rem;">
+                        <div id="str-records-wrapper" style="display: flex; flex-direction: column;">
+                            <!-- Initial STR Record Row -->
+                            <div class="str-record-row">
+                                <div class="form-grid-4">
+                                    <!-- Specimen Type (BM / PB) -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                            Specimen
+                                        </label>
+                                        <div style="width: 60%;">
+                                            <select class="custom-text-input str-specimen" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                                <option value="NA" selected>NA</option>
+                                                <option value="PB">PB</option>
+                                                <option value="BM">BM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- STR (%) Input -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                            STR (%)
+                                        </label>
+                                        <div style="width: 60%; display: flex; align-items: center; gap: 0.35rem;">
+                                            <input type="number" step="0.1" min="0" max="100" class="custom-text-input str-value" placeholder="e.g. 100" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.88rem; height: 2.1rem;">
+                                            <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">%</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Date -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">
+                                            Date
+                                        </label>
+                                        <input type="date" class="custom-text-input custom-date-format str-date" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                                    </div>
+
+                                    <div></div>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                                    <button type="button" class="btn-secondary add-str-btn" onclick="addStrRecord()" style="padding: 0 1rem; height: 2.1rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                        ADD
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Section Submit Button -->
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitStr()" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast-notification">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span id="toast-message">Data successfully saved.</span>
+    </div>
+
+    <script>
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>Hide`;
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>Show`;
+            }
+        }
+
+        // Automatic logic for Graft failure based on Neutrophil Engraftment
+        function handleNeutrophilEngraftmentChange(val) {
+            const graftFailureSelect = document.getElementById('graft-failure');
+            if (!graftFailureSelect) return;
+
+            if (val === 'No') {
+                graftFailureSelect.value = 'Primary graft failure';
+            } else {
+                if (graftFailureSelect.value === 'Primary graft failure') {
+                    graftFailureSelect.value = 'No';
+                }
+            }
+        }
+
+        function addStrRecord() {
+            const wrapper = document.getElementById('str-records-wrapper');
+            const firstRow = wrapper.querySelector('.str-record-row');
+            if (!wrapper || !firstRow) return;
+
+            const newRow = firstRow.cloneNode(true);
+
+            // Change button from Add to Remove
+            const btnContainer = newRow.querySelector('div[style*="justify-content: flex-end"]');
+            if (btnContainer) {
+                btnContainer.innerHTML = `
+                    <button type="button" class="btn-secondary remove-str-btn" style="padding: 0 1rem; height: 2.1rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        Remove
+                    </button>
+                `;
+                const removeBtn = btnContainer.querySelector('.remove-str-btn');
+                removeBtn.onclick = function() {
+                    wrapper.removeChild(newRow);
+                };
+            }
+
+            // Reset inputs & selects
+            const selects = newRow.querySelectorAll('select');
+            selects.forEach(s => {
+                s.selectedIndex = 0;
+                s.style.color = '#aaaaaa';
+                s.onchange = function() {
+                    this.style.color = 'var(--text-primary)';
+                };
+            });
+
+            const inputs = newRow.querySelectorAll('input');
+            inputs.forEach(i => {
+                i.value = '';
+            });
+
+            wrapper.appendChild(newRow);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            if (toast && toastMsg) {
+                toastMsg.innerText = message || 'Data successfully saved.';
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        function submitEngraftment() {
+            showToast('Engraftment data successfully submitted.');
+        }
+
+        function submitGraftFailure() {
+            showToast('Graft Failure data successfully submitted.');
+        }
+
+        function submitStr() {
+            showToast('STR Chimerism data successfully submitted.');
+        }
+    </script>
+</body>
+
+</html>

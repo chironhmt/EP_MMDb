@@ -1,0 +1,435 @@
+[
+  {
+    "Regimen": "D-VTd (Bortezomib biweekly)",
+    "Cycles": [
+      {
+        "Cycle": "1-2",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "BiQW2"
+          },
+          {
+            "Agent": "Thalidomide",
+            "Dose": "100 mg",
+            "Dosing_day": "C28"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "C2QW4"
+          }
+        ]
+      },
+      {
+        "Cycle": "3-4",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "Q2W"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "BiQW2"
+          },
+          {
+            "Agent": "Thalidomide",
+            "Dose": "100 mg",
+            "Dosing_day": "C28"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "C2"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QWF8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "D-VTd (Bortezomib weekly)",
+    "Cycles": [
+      {
+        "Cycle": "1-2",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Thalidomide",
+            "Dose": "100 mg",
+            "Dosing_day": "C28"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "C2QW4"
+          }
+        ]
+      },
+      {
+        "Cycle": "3-4",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "Q2W"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Thalidomide",
+            "Dose": "100 mg",
+            "Dosing_day": "C28"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "C2"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QWF8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "VRd (Bortezomib biweekly for TIE)",
+    "Cycles": [
+      {
+        "Cycle": "1-8",
+        "Length": 21,
+        "Agents": [
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "BiQW2"
+          },
+          {
+            "Agent": "Lenalidomide",
+            "Dose": "25 mg",
+            "Dosing_day": "C21"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QW3"
+          }
+        ]
+      },
+      {
+        "Cycle": "9-",
+        "Length": 21,
+        "Agents": [
+          {
+            "Agent": "Lenalidomide",
+            "Dose": "25 mg",
+            "Dosing_day": "C21"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QW3"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "VRd (Bortezomib weekly for TIE)",
+    "Cycles": [
+      {
+        "Cycle": "1-2",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Thalidomide",
+            "Dose": "100 mg",
+            "Dosing_day": "C28"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "C2QW4"
+          }
+        ]
+      },
+      {
+        "Cycle": "3-4",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "Q2W"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Thalidomide",
+            "Dose": "100 mg",
+            "Dosing_day": "C28"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "C2"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QWF8"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "R Maintenance",
+    "Cycles": [
+      {
+        "Cycle": "1-",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Lenalidomide",
+            "Dose": "10 mg",
+            "Dosing_day": "C21"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "D-Vd (Bortezomib biweekly)",
+    "Cycles": [
+      {
+        "Cycle": "1-3",
+        "Length": 21,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW3"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "BiQW2"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QW3"
+          }
+        ]
+      },
+      {
+        "Cycle": "4-8",
+        "Length": 21,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "BiQW2"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QW3"
+          }
+        ]
+      },
+      {
+        "Cycle": "9-",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "Q4W"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "D-Vd (Bortezomib weekly)",
+    "Cycles": [
+      {
+        "Cycle": "1-3",
+        "Length": 21,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW3"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "QW3"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QW3"
+          }
+        ]
+      },
+      {
+        "Cycle": "4-8",
+        "Length": 21,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "QW"
+          },
+          {
+            "Agent": "Bortezomib",
+            "Dose": "1.3 mg/m2",
+            "Dosing_day": "QW3"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "20 mg",
+            "Dosing_day": "C2QW3"
+          }
+        ]
+      },
+      {
+        "Cycle": "9-",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Daratumumab",
+            "Dose": "16 mg/kg",
+            "Dosing_day": "Q4W"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Regimen": "Mezi-Kd",
+    "Cycles": [
+      {
+        "Cycle": "1",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Mezigdomide",
+            "Dose": "1 mg",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Carfilzomib",
+            "Dose": "20 mg/m2",
+            "Dosing_day": "C1"
+          },
+          {
+            "Agent": "Carfilzomib",
+            "Dose": "56 mg/m2",
+            "Dosing_day": "QWF8"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "QW"
+          }
+        ]
+      },
+      {
+        "Cycle": "2-12",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Mezigdomide",
+            "Dose": "1 mg",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Carfilzomib",
+            "Dose": "56 mg/m2",
+            "Dosing_day": "QWF8"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "QW"
+          }
+        ]
+      },
+      {
+        "Cycle": "13-",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Mezigdomide",
+            "Dose": "1 mg",
+            "Dosing_day": "QW4"
+          },
+          {
+            "Agent": "Carfilzomib",
+            "Dose": "56 mg/m2",
+            "Dosing_day": "Q2W"
+          },
+          {
+            "Agent": "Dexamethasone",
+            "Dose": "40 mg",
+            "Dosing_day": "QW"
+          }
+        ]
+      }
+    ]
+  }
+]

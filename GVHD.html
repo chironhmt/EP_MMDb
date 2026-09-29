@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma - GVHD</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <style>
+        body {
+            height: auto !important;
+            min-height: 100vh !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+        .app-container {
+            height: auto !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .app-main {
+            height: auto !important;
+            overflow: visible !important;
+            flex: 1 0 auto !important;
+            display: flex !important;
+        }
+
+        .content-area {
+            overflow: visible !important;
+            height: auto !important;
+            padding: 0 !important;
+        }
+
+        .treatment-record-row:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .form-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+        input[type="date"].custom-date-format::before {
+            pointer-events: none !important;
+        }
+        input[type="date"] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="flex-direction: column;">
+        <!-- Header -->
+        <header class="app-header" style="justify-content: space-between;">
+            <div class="logo">
+                <h1 style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">Eunpyeong St. Mary's Myeloma Center Database</h1>
+            </div>
+            <a href="Dashboard.html" class="btn-secondary" style="text-decoration: none;">
+                <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main" style="flex-direction: column; padding: 2rem;">
+            <section class="content-area" id="content-area" style="max-width: 1120px; margin: 0 auto; width: 100%;">
+                
+                <div class="planner-header" style="margin-bottom: 2rem;">
+                    <h2 style="margin: 0; color: var(--accent-primary); font-size: 1.75rem;">Graft-versus-Host Disease (GVHD)</h2>
+                </div>
+
+                <!-- Section 1: Acute GVHD (aGVHD) -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">1. Acute GVHD</h3>
+                        </div>
+                        <button class="btn-secondary" onclick="toggleSection('agvhd-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="agvhd-container" style="padding: 1.5rem;">
+                        <div class="form-grid-4">
+                            <!-- aGVHD status -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">aGVHD<br>status</label>
+                                <div style="width: 60%;">
+                                    <select id="agvhd-status" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; handleAgvhdStatusChange(this.value);">
+                                        <option value="No" selected>No</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="Competing">Competing</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Onset date -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Onset date</label>
+                                <input type="date" id="agvhd-onset-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                            </div>
+
+                            <!-- Max grade -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Max grade</label>
+                                <div style="width: 60%;">
+                                    <select id="agvhd-max-grade" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="I">I</option>
+                                        <option value="II">II</option>
+                                        <option value="III">III</option>
+                                        <option value="IV">IV</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Skin stage -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Skin stage</label>
+                                <div style="width: 60%;">
+                                    <select id="agvhd-skin-stage" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Liver stage -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Liver stage</label>
+                                <div style="width: 60%;">
+                                    <select id="agvhd-liver-stage" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- GI stage -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">GI stage</label>
+                                <div style="width: 60%;">
+                                    <select id="agvhd-gi-stage" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Section Submit Button -->
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitAgvhd()" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 2: Chronic GVHD (cGVHD) -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">2. Chronic GVHD</h3>
+                        </div>
+                        <button class="btn-secondary" onclick="toggleSection('cgvhd-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="cgvhd-container" style="padding: 1.5rem;">
+                        <div class="form-grid-4">
+                            <!-- cGVHD status -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">cGVHD<br>status</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-status" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; handleCgvhdStatusChange(this.value);">
+                                        <option value="No" selected>No</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="Competing">Competing</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Onset date -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Onset date</label>
+                                <input type="date" id="cgvhd-onset-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                            </div>
+
+                            <!-- Severity -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Severity</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-severity" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="Mild">Mild</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Severe">Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Skin score -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Skin score</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-skin-score" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="Mild">Mild</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Severe">Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Mouth score -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Mouth score</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-mouth-score" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="Mild">Mild</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Severe">Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Eyes score -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Eyes score</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-eyes-score" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="Mild">Mild</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Severe">Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Lungs score -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Lungs score</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-lungs-score" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="Mild">Mild</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Severe">Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Musculoskeletal score -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Musculo-<br>skeletal score</label>
+                                <div style="width: 60%;">
+                                    <select id="cgvhd-musculoskeletal-score" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="None" selected>None</option>
+                                        <option value="Mild">Mild</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Severe">Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Extra Organ Scores Container -->
+                        <div id="extra-organ-scores-wrapper" class="form-grid-4" style="margin-top: 1.5rem;"></div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                            <button type="button" id="remove-organ-btn" class="btn-secondary" onclick="removeLastExtraOrganScore()" style="padding: 0 1rem; height: 2.1rem; display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                REMOVE
+                            </button>
+                            <button type="button" class="btn-secondary" onclick="addExtraOrganScore()" style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Add organ score
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Section Submit Button -->
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitCgvhd()" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 3: GVHD Systemic Treatments -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">3. GVHD Systemic Treatments</h3>
+                        </div>
+                        <button class="btn-secondary" onclick="toggleSection('treatment-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="treatment-container" style="padding: 1.5rem;">
+                        <div id="treatment-records-wrapper" style="display: flex; flex-direction: column;">
+                            <div class="treatment-record-row">
+                                <div class="form-grid-4">
+                                    <!-- Treatment Line -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Line</label>
+                                        <div style="width: 60%;">
+                                            <select class="custom-text-input treatment-line-select" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; handleLineChange(this);">
+                                                <option value="1st" selected>1st</option>
+                                                <option value="2nd">2nd</option>
+                                                <option value="3rd">3rd</option>
+                                                <option value="4th">4th</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <input type="text" class="custom-text-input treatment-line-others" placeholder="e.g. 5th, 6th" style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.88rem; height: 2.1rem; margin-top: 0.5rem;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Agent Name -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Agent</label>
+                                        <div style="width: 60%;">
+                                            <select class="custom-text-input treatment-agent-select" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; handleAgentChange(this);">
+                                                <option value="Steroid" selected>Steroid</option>
+                                                <option value="ECP">ECP</option>
+                                                <option value="Ruxolitinib">Ruxolitinib</option>
+                                                <option value="Ibrutinib">Ibrutinib</option>
+                                                <option value="Belumosudil">Belumosudil</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <input type="text" class="custom-text-input treatment-agent-others" placeholder="Specify agent..." style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.88rem; height: 2.1rem; margin-top: 0.5rem;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Start date -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Start date</label>
+                                        <input type="date" class="custom-text-input custom-date-format treatment-start-date" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.88rem; height: 2.1rem;">
+                                    </div>
+
+                                    <!-- Best response -->
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Best response</label>
+                                        <div style="width: 60%;">
+                                            <select class="custom-text-input treatment-response-select" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; handleResponseChange(this);">
+                                                <option value="CR">CR</option>
+                                                <option value="PR">PR</option>
+                                                <option value="NR" selected>NR</option>
+                                                <option value="Ongoing">Ongoing</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <input type="text" class="custom-text-input treatment-response-others" placeholder="Specify response..." style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.88rem; height: 2.1rem; margin-top: 0.5rem;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                                    <button type="button" class="btn-secondary add-treatment-btn" onclick="addTreatmentRecord()" style="padding: 0 1rem; height: 2.1rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                        ADD
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Section Submit Button -->
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitTreatments()" style="padding: 0 1rem; height: 2.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <div id="loading-text" class="loading-text">Saving data...</div>
+    </div>
+
+    <script>
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide`;
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Show`;
+            }
+        }
+
+        function handleAgvhdStatusChange(val) {
+            const gradeEl = document.getElementById('agvhd-max-grade');
+            if (val === 'No' || val === 'Competing') {
+                if (gradeEl) {
+                    gradeEl.value = 'None';
+                    gradeEl.style.color = '#aaaaaa';
+                }
+            }
+        }
+
+        function handleCgvhdStatusChange(val) {
+            const sevEl = document.getElementById('cgvhd-severity');
+            if (val === 'No' || val === 'Competing') {
+                if (sevEl) {
+                    sevEl.value = 'None';
+                    sevEl.style.color = '#aaaaaa';
+                }
+            }
+        }
+
+        function handleLineChange(selectObj) {
+            const row = selectObj.closest('.treatment-record-row');
+            const othersInput = row.querySelector('.treatment-line-others');
+            if (othersInput) {
+                othersInput.style.display = selectObj.value === 'Others' ? 'block' : 'none';
+            }
+        }
+
+        function handleAgentChange(selectObj) {
+            const row = selectObj.closest('.treatment-record-row');
+            const othersInput = row.querySelector('.treatment-agent-others');
+            if (othersInput) {
+                othersInput.style.display = selectObj.value === 'Others' ? 'block' : 'none';
+            }
+        }
+
+        function handleResponseChange(selectObj) {
+            const row = selectObj.closest('.treatment-record-row');
+            const othersInput = row.querySelector('.treatment-response-others');
+            if (othersInput) {
+                othersInput.style.display = selectObj.value === 'Others' ? 'block' : 'none';
+            }
+        }
+
+        function addTreatmentRecord() {
+            const wrapper = document.getElementById('treatment-records-wrapper');
+            const firstRow = wrapper.querySelector('.treatment-record-row');
+            const newRow = firstRow.cloneNode(true);
+
+            // Change button from Add to Remove
+            const btnContainer = newRow.querySelector('div[style*="justify-content: flex-end"]');
+            if (btnContainer) {
+                btnContainer.innerHTML = `
+                    <button type="button" class="btn-secondary remove-treatment-btn" style="padding: 0 1rem; height: 2.1rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        Remove
+                    </button>
+                `;
+                const removeBtn = btnContainer.querySelector('.remove-treatment-btn');
+                removeBtn.onclick = function() {
+                    wrapper.removeChild(newRow);
+                };
+            }
+
+            // Reset inputs & selects
+            const selects = newRow.querySelectorAll('select');
+            selects.forEach(s => {
+                s.selectedIndex = 0;
+                s.style.color = '#aaaaaa';
+            });
+
+            const inputs = newRow.querySelectorAll('input');
+            inputs.forEach(i => {
+                i.value = '';
+                if (i.type === 'text') i.style.display = 'none';
+            });
+
+            // Re-bind change listeners
+            const lineSelect = newRow.querySelector('.treatment-line-select');
+            if (lineSelect) {
+                lineSelect.onchange = function() {
+                    this.style.color = 'var(--text-primary)';
+                    handleLineChange(this);
+                };
+            }
+
+            const agentSelect = newRow.querySelector('.treatment-agent-select');
+            if (agentSelect) {
+                agentSelect.onchange = function() {
+                    this.style.color = 'var(--text-primary)';
+                    handleAgentChange(this);
+                };
+            }
+
+            const responseSelect = newRow.querySelector('.treatment-response-select');
+            if (responseSelect) {
+                responseSelect.onchange = function() {
+                    this.style.color = 'var(--text-primary)';
+                    handleResponseChange(this);
+                };
+            }
+
+            wrapper.appendChild(newRow);
+            initDateInputs(newRow);
+        }
+
+        
+                function handleExtraOrganChange(selectObj) {
+            const row = selectObj.closest('.extra-organ-row');
+            const specifyInput = row.querySelector('.extra-organ-specify');
+            if (specifyInput) {
+                specifyInput.style.display = selectObj.value === 'Others' ? 'block' : 'none';
+            }
+        }
+
+        function addExtraOrganScore() {
+            const wrapper = document.getElementById('extra-organ-scores-wrapper');
+            const newRow = document.createElement('div');
+            newRow.className = 'extra-organ-row';
+            newRow.style.cssText = 'display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem;';
+            newRow.innerHTML = `
+                <div style="flex: 0 0 40%; margin-left: -2pt; display: flex; flex-direction: column; gap: 0.25rem;">
+                    <select class="custom-text-input extra-organ-select" style="margin: 0; padding: 0.2rem 0.3rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color='var(--text-primary)'; handleExtraOrganChange(this);">
+                        <option value="GI tract" selected>GI tract</option>
+                        <option value="Liver">Liver</option>
+                        <option value="Genital">Genital</option>
+                        <option value="Joint">Joint</option>
+                        <option value="Others">Others</option>
+                    </select>
+                    <input type="text" class="custom-text-input extra-organ-specify" placeholder="Specify organ..." style="display: none; width: 140%; padding: 0.15rem 0.4rem; font-size: 0.88rem; height: 2.1rem; box-sizing: border-box;">
+                </div>
+                <div style="width: 58%;">
+                    <select class="custom-text-input extra-organ-score" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.88rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color='var(--text-primary)';">
+                        <option value="None" selected>None</option>
+                        <option value="Mild">Mild</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Severe">Severe</option>
+                    </select>
+                </div>
+            `;
+            wrapper.appendChild(newRow);
+            const removeBtn = document.getElementById('remove-organ-btn');
+            if (removeBtn) removeBtn.style.display = 'inline-flex';
+        }
+
+        function removeLastExtraOrganScore() {
+            const wrapper = document.getElementById('extra-organ-scores-wrapper');
+            const rows = wrapper.querySelectorAll('.extra-organ-row');
+            if (rows.length > 0) {
+                wrapper.removeChild(rows[rows.length - 1]);
+            }
+            const removeBtn = document.getElementById('remove-organ-btn');
+            if (removeBtn && wrapper.querySelectorAll('.extra-organ-row').length === 0) {
+                removeBtn.style.display = 'none';
+            }
+        }
+
+        function submitAgvhd() {
+            const data = {
+                status: document.getElementById('agvhd-status').value,
+                onsetDate: document.getElementById('agvhd-onset-date').value,
+                maxGrade: document.getElementById('agvhd-max-grade').value,
+                skinStage: document.getElementById('agvhd-skin-stage').value,
+                liverStage: document.getElementById('agvhd-liver-stage').value,
+                giStage: document.getElementById('agvhd-gi-stage').value
+            };
+            console.log("Acute GVHD Submitted:", data);
+            alert("Acute GVHD data successfully submitted!");
+        }
+
+        function submitCgvhd() {
+            const extraOrgans = [];
+            const extraRows = document.querySelectorAll('.extra-organ-row');
+            extraRows.forEach(row => {
+                const organSelect = row.querySelector('.extra-organ-select');
+                const organSpecify = row.querySelector('.extra-organ-specify');
+                const scoreSelect = row.querySelector('.extra-organ-score');
+                const organName = organSelect && organSelect.value === 'Others' ? (organSpecify && organSpecify.value ? organSpecify.value : 'Others') : (organSelect ? organSelect.value : '');
+                if (organName) {
+                    extraOrgans.push({
+                        organ: organName,
+                        score: scoreSelect ? scoreSelect.value : 'None'
+                    });
+                }
+            });
+
+            const data = {
+                status: document.getElementById('cgvhd-status').value,
+                onsetDate: document.getElementById('cgvhd-onset-date').value,
+                severity: document.getElementById('cgvhd-severity').value,
+                skinScore: document.getElementById('cgvhd-skin-score').value,
+                mouthScore: document.getElementById('cgvhd-mouth-score').value,
+                eyesScore: document.getElementById('cgvhd-eyes-score').value,
+                lungsScore: document.getElementById('cgvhd-lungs-score').value,
+                musculoskeletalScore: document.getElementById('cgvhd-musculoskeletal-score').value,
+                extraOrgans: extraOrgans
+            };
+            console.log("Chronic GVHD Submitted:", data);
+            alert("Chronic GVHD data successfully submitted!");
+        }
+
+        function submitTreatments() {
+            const treatments = [];
+            const treatmentRows = document.querySelectorAll('.treatment-record-row');
+            treatmentRows.forEach(row => {
+                const lineSelect = row.querySelector('.treatment-line-select');
+                const lineOthers = row.querySelector('.treatment-line-others');
+                const agentSelect = row.querySelector('.treatment-agent-select');
+                const agentOthers = row.querySelector('.treatment-agent-others');
+                const startDate = row.querySelector('.treatment-start-date');
+                const responseSelect = row.querySelector('.treatment-response-select');
+                const responseOthers = row.querySelector('.treatment-response-others');
+
+                treatments.push({
+                    treatmentLine: lineSelect && lineSelect.value === 'Others' ? (lineOthers ? lineOthers.value : 'Others') : (lineSelect ? lineSelect.value : ''),
+                    agentName: agentSelect && agentSelect.value === 'Others' ? (agentOthers ? agentOthers.value : 'Others') : (agentSelect ? agentSelect.value : ''),
+                    startDate: startDate ? startDate.value : '',
+                    bestResponse: responseSelect && responseSelect.value === 'Others' ? (responseOthers ? responseOthers.value : 'Others') : (responseSelect ? responseSelect.value : '')
+                });
+            });
+
+            console.log("GVHD Treatments Submitted:", treatments);
+            alert("GVHD Treatments data successfully submitted!");
+        }
+
+        function submitGvhd() {
+            // Collect assessment data
+            const data = {
+                agvhd: {
+                    status: document.getElementById('agvhd-status').value,
+                    maxGrade: document.getElementById('agvhd-max-grade').value,
+                    onsetDate: document.getElementById('agvhd-onset-date').value,
+                    skinStage: document.getElementById('agvhd-skin-stage').value,
+                    liverStage: document.getElementById('agvhd-liver-stage').value,
+                    giStage: document.getElementById('agvhd-gi-stage').value
+                },
+                cgvhd: {
+                    status: document.getElementById('cgvhd-status').value,
+                    severity: document.getElementById('cgvhd-severity').value,
+                    onsetDate: document.getElementById('cgvhd-onset-date').value,
+                    skinScore: document.getElementById('cgvhd-skin-score').value,
+                    mouthScore: document.getElementById('cgvhd-mouth-score').value,
+                    eyesScore: document.getElementById('cgvhd-eyes-score').value,
+                    lungsScore: document.getElementById('cgvhd-lungs-score').value,
+                    musculoskeletalScore: document.getElementById('cgvhd-musculoskeletal-score').value
+                },
+                treatments: []
+            };
+
+            const treatmentRows = document.querySelectorAll('.treatment-record-row');
+            treatmentRows.forEach(row => {
+                const lineSelect = row.querySelector('.treatment-line-select');
+                const lineOthers = row.querySelector('.treatment-line-others');
+                const agentSelect = row.querySelector('.treatment-agent-select');
+                const agentOthers = row.querySelector('.treatment-agent-others');
+                const startDate = row.querySelector('.treatment-start-date');
+                const responseSelect = row.querySelector('.treatment-response-select');
+                const responseOthers = row.querySelector('.treatment-response-others');
+
+                data.treatments.push({
+                    treatmentLine: lineSelect && lineSelect.value === 'Others' ? (lineOthers ? lineOthers.value : 'Others') : (lineSelect ? lineSelect.value : ''),
+                    agentName: agentSelect && agentSelect.value === 'Others' ? (agentOthers ? agentOthers.value : 'Others') : (agentSelect ? agentSelect.value : ''),
+                    startDate: startDate ? startDate.value : '',
+                    bestResponse: responseSelect && responseSelect.value === 'Others' ? (responseOthers ? responseOthers.value : 'Others') : (responseSelect ? responseSelect.value : '')
+                });
+            });
+
+            console.log("GVHD Data Submitted:", data);
+            alert("GVHD data successfully submitted!");
+        }
+
+        function initDateInputs(parent = document) {
+            parent.querySelectorAll('input[type="date"].custom-date-format').forEach(input => {
+                input.setAttribute('data-date', input.value || '');
+                input.oninput = function () {
+                    this.setAttribute('data-date', this.value || '');
+                };
+                input.onchange = function () {
+                    this.setAttribute('data-date', this.value || '');
+                };
+                // Make clicking anywhere open the native picker if supported
+                input.onclick = function () {
+                    try {
+                        if (typeof this.showPicker === 'function') {
+                            this.showPicker();
+                        }
+                    } catch (e) {}
+                };
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initDateInputs();
+        });
+
+    </script>
+</body>
+
+</html>

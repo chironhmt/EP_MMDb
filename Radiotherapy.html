@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma - Radiotherapy</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <style>
+        div[id$="checkboxes"] label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        div[id$="checkboxes"] input[type="checkbox"],
+        div[id$="checkboxes"] input[type="radio"] {
+            margin: 0;
+            transform: scale(1.15);
+            cursor: pointer;
+        }
+        div[id$="checkboxes"] .custom-text-input {
+            margin-top: 0;
+            width: 170px !important;
+            line-height: normal;
+        }
+        div[id$="checkboxes"] label + div {
+            margin-left: calc(0.5rem + 8px) !important;
+        }
+
+        .rt-record-row:not(:last-child) {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="flex-direction: column;">
+        <header class="app-header" style="justify-content: space-between;">
+            <div class="logo">
+                <h1 style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">Eunpyeong St. Mary's Myeloma Center Database</h1>
+            </div>
+            <a href="Dashboard.html" class="btn-secondary">
+                <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </header>
+            
+        <main class="app-main" style="flex-direction: column; padding: 2rem;">
+            <section class="content-area" id="content-area" style="max-width: 1120px; margin: 0 auto; width: 100%;">
+                
+                <div class="planner-header" style="margin-bottom: 2rem;">
+                    <h2 style="margin: 0; color: var(--accent-primary); font-size: 1.75rem;">Radiotherapy</h2>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0;">1. Radiotherapy</h3>
+                            <p class="subtitle" style="margin-top: 0.5rem; margin-bottom: 0;">Record radiotherapy treatment</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-secondary" onclick="toggleSection('rt-container', this)" style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                Hide
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body" id="rt-container">
+                        <div id="rt-records-wrapper" style="display: flex; flex-direction: column;">
+                            <div class="rt-record-row" style="padding: 1.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; position: relative;">
+                                <!-- Modality -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Modality</label>
+                                <div style="width: 60%;">
+                                    <select class="custom-text-input modality-select" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; this.nextElementSibling.style.display = this.value === 'Others' ? 'block' : 'none';">
+                                        <option value="3D-CRT" selected>3D-CRT</option>
+                                        <option value="IMRT">IMRT</option>
+                                        <option value="VMAT">VMAT</option>
+                                        <option value="IGRT">IGRT</option>
+                                        <option value="SBRT">SBRT</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                    <input type="text" class="custom-text-input modality-others" placeholder="Specify..." style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.95rem; height: 2.1rem; margin-top: 0.5rem;">
+                                </div>
+                            </div>
+
+                            <!-- Dose -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Dose</label>
+                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                    <input type="number" class="custom-text-input rt-dose" style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 30">
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">Gy</span>
+                                </div>
+                            </div>
+
+                            <!-- Fractions (fxs) -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Fractions</label>
+                                <div style="width: 60%;">
+                                    <input type="number" class="custom-text-input rt-fxs" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;" placeholder="e.g. 10">
+                                </div>
+                            </div>
+
+                            <!-- Start Date -->
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.35rem;">Start date</label>
+                                <input type="date" class="custom-text-input custom-date-format rt-start-date" style="margin: 0; padding: 0.25rem 0.5rem; width: 60%; font-size: 0.95rem; height: 2.1rem;">
+                            </div>
+
+                            <!-- Irradiated site -->
+                            <div class="rt-site-cell" style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                <div class="rt-site-label-col" style="flex: 0 0 40%; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.35rem;">
+                                    <label style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0;">Irradiated site</label>
+                                </div>
+                                <div style="width: 60%;">
+                                    <select class="custom-text-input rt-site-select" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)'; handleRtSiteChange(this)">
+                                        <option value="Spine" selected>Spine</option>
+                                        <option value="Ribs">Ribs</option>
+                                        <option value="Pelvis">Pelvis</option>
+                                        <option value="Femur">Femur</option>
+                                        <option value="Humerus">Humerus</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                    
+                                    <input type="text" class="custom-text-input rt-site-spine" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: block; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.95rem; height: 2.1rem; margin-top: 0.5rem;">
+                                    
+                                    <input type="text" class="custom-text-input rt-site-ribs" placeholder="e.g. Rt. 7th" style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.95rem; height: 2.1rem; margin-top: 0.5rem;">
+
+                                    <select class="custom-text-input rt-site-side" style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.95rem; height: 2.1rem; margin-top: 0.5rem; color: #aaaaaa;" onchange="this.style.color = 'var(--text-primary)';">
+                                        <option value="Rt." selected>Rt.</option>
+                                        <option value="Lt.">Lt.</option>
+                                        <option value="Both">Both</option>
+                                    </select>
+
+                                    <input type="text" class="custom-text-input rt-site-others" placeholder="e.g. Clavicle, Rt., Scapula, Lt." style="display: none; width: 100%; padding: 0.25rem 0.5rem; font-size: 0.95rem; height: 2.1rem; margin-top: 0.5rem;">
+                                </div>
+                            </div>
+                            <div style="grid-column: 4; display: flex; justify-content: flex-end; align-items: flex-start; margin-top: 2.75rem;">
+                                <button type="button" class="btn-secondary add-rt-btn" onclick="addRadiotherapyRecord()" style="padding: 0 0.5rem; height: 1.8rem; font-size: 0.75rem; width: fit-content;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.2rem;">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Add
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <button type="button" class="btn-secondary" onclick="submitRadiotherapy()" style="padding: 0 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay (optional, matching Chemotherapy) -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <div id="loading-text" class="loading-text">Loading data...</div>
+    </div>
+
+    <script>
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide`;
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Show`;
+            }
+        }
+        
+        function handleRtSiteChange(selectObj) {
+            const val = selectObj.value;
+            const cell = selectObj.closest('.rt-site-cell');
+            
+            const spineInput = cell.querySelector('.rt-site-spine');
+            const sideSelect = cell.querySelector('.rt-site-side');
+            const othersInput = cell.querySelector('.rt-site-others');
+            const ribsInput = cell.querySelector('.rt-site-ribs');
+            
+            if (spineInput) spineInput.style.display = 'none';
+            if (sideSelect) sideSelect.style.display = 'none';
+            if (othersInput) othersInput.style.display = 'none';
+            if (ribsInput) ribsInput.style.display = 'none';
+            
+            if (val === 'Spine') {
+                if (spineInput) spineInput.style.display = 'block';
+            } else if (val === 'Ribs') {
+                if (ribsInput) ribsInput.style.display = 'block';
+            } else if (['Pelvis', 'Femur', 'Humerus'].includes(val)) {
+                if (sideSelect) sideSelect.style.display = 'block';
+            } else if (val === 'Others') {
+                if (othersInput) othersInput.style.display = 'block';
+            }
+        }
+
+        function addRadiotherapyRecord() {
+            const wrapper = document.getElementById('rt-records-wrapper');
+            const firstRow = wrapper.querySelector('.rt-record-row');
+            const newRow = firstRow.cloneNode(true);
+            
+            const addBtn = newRow.querySelector('.add-rt-btn');
+            if (addBtn) {
+                addBtn.className = 'btn-secondary remove-rt-btn';
+                addBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.2rem;">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Remove
+                `;
+                addBtn.onclick = function() {
+                    wrapper.removeChild(newRow);
+                };
+            }
+            
+            const mainSelect = newRow.querySelector('.rt-site-select');
+            if (mainSelect) {
+                mainSelect.value = 'Spine';
+                mainSelect.style.color = '#aaaaaa';
+            }
+            
+            const modalitySelect = newRow.querySelector('.modality-select');
+            if (modalitySelect) {
+                modalitySelect.value = '3D-CRT';
+                modalitySelect.style.color = '#aaaaaa';
+            }
+            
+            const textInputs = newRow.querySelectorAll('input');
+            textInputs.forEach(i => i.value = '');
+            
+            const sideSelect = newRow.querySelector('.rt-site-side');
+            if (sideSelect) {
+                sideSelect.value = 'Rt.';
+                sideSelect.style.color = '#aaaaaa';
+            }
+            
+            const modalityOthers = newRow.querySelector('.modality-others');
+            if (modalityOthers) modalityOthers.style.display = 'none';
+            
+            wrapper.appendChild(newRow);
+            if (mainSelect) handleRtSiteChange(mainSelect);
+        }
+        
+        function submitRadiotherapy() {
+            // Placeholder logic
+            console.log("Radiotherapy submitted");
+        }
+    </script>
+</body>
+
+</html>

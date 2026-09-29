@@ -1,0 +1,2592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma - Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=8">
+    <style>
+        /* Smooth scrolling with invisible scrollbars */
+        html,
+        body {
+            height: auto !important;
+            min-height: 100vh !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        .app-container {
+            height: auto !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .app-main {
+            height: auto !important;
+            overflow: visible !important;
+            flex: 1 0 auto !important;
+        }
+
+        * {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        *::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 221px;
+        }
+
+        .search-bar input.custom-text-input {
+            width: 100%;
+            margin-top: 0;
+            padding: 0 1rem 0 2.4rem !important;
+            height: 2.2rem;
+            max-width: 100%;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: var(--transition-fast);
+        }
+
+        .search-bar input:focus + .search-icon {
+            color: var(--accent-primary);
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-glass);
+            background: rgba(0, 0, 0, 0.25);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.92rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border-glass);
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.03);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table tbody tr {
+            transition: var(--transition-fast);
+        }
+
+        .data-table tbody tr.main-row {
+            cursor: pointer;
+        }
+
+        .data-table tbody tr.main-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-alive {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-alive::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--success);
+            box-shadow: 0 0 6px var(--success);
+        }
+
+        .status-deceased {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-deceased::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--danger);
+            box-shadow: 0 0 6px var(--danger);
+        }
+
+        .status-active {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-secondary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .status-active::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent-secondary);
+            box-shadow: 0 0 6px var(--accent-secondary);
+        }
+
+        /* Expandable Details Row */
+        .details-row {
+            display: none;
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .details-row.active {
+            display: table-row;
+        }
+
+        .details-content {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .details-section {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .details-section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .details-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .page-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .page-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .page-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .empty-state {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        
+        .empty-state svg {
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-bar {
+                max-width: none;
+            }
+            
+            .app-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .app-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="flex-direction: column;">
+        <!-- Top Navigation Bar -->
+        <header class="app-header" style="justify-content: space-between;">
+            <div class="logo">
+                <h1
+                    style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">
+                    Eunpyeong St. Mary's Myeloma Center Database</h1>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main" style="flex-direction: column; padding: 2rem;">
+            <section class="content-area" id="content-area"
+                style="max-width: 1120px; margin: 0 auto; width: 100%; padding: 0;">
+
+                <div class="planner-header" style="margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <h2 style="margin: 0; color: var(--accent-primary); font-size: 1.75rem;">Dashboard</h2>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div>
+                            <h3 style="margin: 0;">Patient Registry</h3>
+                        </div>
+                        <button class="btn-secondary" data-target="dashboard-card-body" onclick="toggleSection('dashboard-card-body', this)" style="padding: 0 1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>Hide</button>
+                    </div>
+                    <div class="card-body" id="dashboard-card-body" style="padding: 1.5rem;">
+                        
+                        <div class="search-container">
+                            <div class="search-bar">
+                                <input type="text" id="search-input" class="custom-text-input" placeholder="Search by ID or Name..." onkeyup="filterPatients()">
+                                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: auto;">
+                                <label for="rows-per-page-select" style="font-size: 0.88rem; color: var(--text-secondary); white-space: nowrap;">Show:</label>
+                                <select id="rows-per-page-select" class="custom-text-input" style="height: 2.2rem; padding: 0 0.8rem; width: auto; color: var(--text-primary); cursor: pointer;" onchange="changeRowsPerPage(this.value)">
+                                    <option value="5">5 rows</option>
+                                    <option value="10" selected>10 rows</option>
+                                    <option value="15">15 rows</option>
+                                    <option value="20">20 rows</option>
+                                </select>
+                            </div>
+
+                            <button class="btn-secondary" onclick="window.location.href='Add_New_Patient.html'">
+                                <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Add New Patient
+                            </button>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="data-table" id="patients-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient ID</th>
+                                        <th>Name</th>
+                                        <th>Sex</th>
+                                        <th>Age</th>
+                                        <th>Diagnosis Date</th>
+                                        <th>Current Status</th>
+                                        <th>Vital Status</th>
+                                        <th>Last Follow-up</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="patients-tbody">
+                                    <!-- Rows will be populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pagination-container" id="pagination-controls">
+                            <!-- Will be dynamically populated by JS -->
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-glass);">
+                            <button class="btn-secondary" data-target="dashboard-card-body" onclick="toggleSection('dashboard-card-body', this)" style="padding: 0 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                Hide
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Locally the API is the standalone Flask dev server on :5001; on Vercel it's
+        // same-origin serverless functions under /api, so the base is empty there.
+        const API_BASE = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+            ? 'http://127.0.0.1:5001'
+            : '';
+        let allPatients = [];
+        
+        const mockPatients = [
+            {
+                        "upn": "2521908",
+                        "name": "김대현",
+                        "sex": "M",
+                        "date_birth": "1994-05-20",
+                        "vital_status": "Alive",
+                        "current_status": "In Treatment",
+                        "last_followup_date": "2026-07-13",
+                        "date_dx": "2023-05-12",
+                        "dp_dx": "Symptomatic myeloma",
+                        "height_dx": "175.0",
+                        "bwt_dx": "68.5",
+                        "ecog": "1",
+                        "hyperca_dx": "-",
+                        "renal_dx": "+",
+                        "anemia_dx": "-",
+                        "osetlytic_dx": "+",
+                        "paraskeletal_dx": "No",
+                        "emd_dx": "No",
+                        "hg_dx": "11.2",
+                        "b2mg_dx": "4.2",
+                        "tp_dx": "8.5",
+                        "alb_dx": "3.4",
+                        "bun_dx": "24",
+                        "cr_dx": "1.35",
+                        "ca_dx": "9.4",
+                        "ldh_dx": "210",
+                        "chain_heavy": "IgG",
+                        "chain_light": "kappa",
+                        "kappa_dx": "28.5",
+                        "lambda_dx": "1.4",
+                        "serum_m_dx": "3.1",
+                        "urine_m_dx": "120",
+                        "cellularity_dx": "70",
+                        "plasma-cell_dx": "55",
+                        "cytogenetics_dx": "46,XY,t(4;14)(p16;q32)[14]/46,XY[6]",
+                        "IGH:FGFR3_dx": "18.5",
+                        "IGH:CCND1_dx": "0.0",
+                        "IGH:MAF_dx": "0.0",
+                        "IGH:MAFB_dx": "0.0",
+                        "TP53_dx": "0.0",
+                        "CKS1B_dx": "65.0",
+                        "RB1_dx": "0.0",
+                        "CDKN2C_dx": "0.0",
+                        "stage_ds": "IIIB",
+                        "stage_iss": "II",
+                        "stage_r-iss": "II",
+                        "stage-r2-iss": "III",
+                        "hbsag_dx": "-",
+                        "hbsab_dx": "+",
+                        "hbcab_dx": "-",
+                        "anti_hcv_dx": "-",
+                        "hiv_dx": "-"
+            },
+            {
+                        "upn": "2526301",
+                        "name": "신미자",
+                        "sex": "F",
+                        "date_birth": "1959-12-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2117236",
+                        "name": "심송홈",
+                        "sex": "M",
+                        "date_birth": "1947-11-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2535751",
+                        "name": "심희숙",
+                        "sex": "F",
+                        "date_birth": "1948-10-22",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2475772",
+                        "name": "양태홍",
+                        "sex": "M",
+                        "date_birth": "1954-11-19",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2534025",
+                        "name": "엄광식",
+                        "sex": "M",
+                        "date_birth": "1954-08-21",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2000311",
+                        "name": "어영자",
+                        "sex": "F",
+                        "date_birth": "1942-07-21",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2556121",
+                        "name": "이제열",
+                        "sex": "M",
+                        "date_birth": "1954-07-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2071414",
+                        "name": "이창규",
+                        "sex": "M",
+                        "date_birth": "1938-12-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2513314",
+                        "name": "임희열",
+                        "sex": "M",
+                        "date_birth": "1950-11-09",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2502452",
+                        "name": "정민영",
+                        "sex": "M",
+                        "date_birth": "1961-03-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2536863",
+                        "name": "최남칠",
+                        "sex": "M",
+                        "date_birth": "1960-08-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2500559",
+                        "name": "최웅기",
+                        "sex": "M",
+                        "date_birth": "1968-07-26",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2572956",
+                        "name": "피영찬",
+                        "sex": "F",
+                        "date_birth": "1959-12-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2516215",
+                        "name": "한금례",
+                        "sex": "F",
+                        "date_birth": "1943-04-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2576213",
+                        "name": "김영길",
+                        "sex": "M",
+                        "date_birth": "1951-04-17",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2557713",
+                        "name": "라멜라신차피",
+                        "sex": "M",
+                        "date_birth": "1973-03-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2365501",
+                        "name": "박소희",
+                        "sex": "F",
+                        "date_birth": "1988-05-24",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2527538",
+                        "name": "박종출",
+                        "sex": "M",
+                        "date_birth": "1964-08-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2284269",
+                        "name": "이의순",
+                        "sex": "F",
+                        "date_birth": "1947-01-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2539561",
+                        "name": "조인준",
+                        "sex": "M",
+                        "date_birth": "1959-09-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2083372",
+                        "name": "최성숙",
+                        "sex": "F",
+                        "date_birth": "1938-12-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2521180",
+                        "name": "XIUZHANGRU",
+                        "sex": "M",
+                        "date_birth": "1981-06-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2403393",
+                        "name": "강상구",
+                        "sex": "F",
+                        "date_birth": "1953-03-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2144656",
+                        "name": "강성률",
+                        "sex": "M",
+                        "date_birth": "1975-04-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2084372",
+                        "name": "강정례",
+                        "sex": "F",
+                        "date_birth": "1944-09-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2543609",
+                        "name": "강현호",
+                        "sex": "M",
+                        "date_birth": "1969-11-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2428499",
+                        "name": "구정희",
+                        "sex": "F",
+                        "date_birth": "1943-03-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2515397",
+                        "name": "권태동",
+                        "sex": "M",
+                        "date_birth": "1957-02-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2465514",
+                        "name": "김경자",
+                        "sex": "F",
+                        "date_birth": "1961-07-17",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2301672",
+                        "name": "김경주",
+                        "sex": "M",
+                        "date_birth": "1955-10-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2487055",
+                        "name": "김길수",
+                        "sex": "M",
+                        "date_birth": "1956-12-09",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2292100",
+                        "name": "김동형",
+                        "sex": "F",
+                        "date_birth": "1963-01-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2080924",
+                        "name": "김명순",
+                        "sex": "F",
+                        "date_birth": "1949-12-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2057557",
+                        "name": "김명심",
+                        "sex": "F",
+                        "date_birth": "1952-02-27",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2269281",
+                        "name": "김명옥",
+                        "sex": "F",
+                        "date_birth": "1946-02-28",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2204154",
+                        "name": "김민호",
+                        "sex": "M",
+                        "date_birth": "1974-11-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2574203",
+                        "name": "김바체슬라브",
+                        "sex": "F",
+                        "date_birth": "1955-01-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2221174",
+                        "name": "김봉현",
+                        "sex": "M",
+                        "date_birth": "1982-08-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2576119",
+                        "name": "김상문",
+                        "sex": "M",
+                        "date_birth": "1961-12-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2223784",
+                        "name": "김선영",
+                        "sex": "M",
+                        "date_birth": "1955-09-16",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2297902",
+                        "name": "김성중",
+                        "sex": "M",
+                        "date_birth": "1955-03-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2172643",
+                        "name": "김성희",
+                        "sex": "F",
+                        "date_birth": "1981-03-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2432334",
+                        "name": "김세영",
+                        "sex": "M",
+                        "date_birth": "1963-05-05",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2279505",
+                        "name": "김수민",
+                        "sex": "M",
+                        "date_birth": "1974-04-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2558112",
+                        "name": "김수연",
+                        "sex": "F",
+                        "date_birth": "1969-08-02",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2488164",
+                        "name": "김숙희",
+                        "sex": "F",
+                        "date_birth": "1963-03-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2489160",
+                        "name": "김연호",
+                        "sex": "F",
+                        "date_birth": "1938-09-28",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2516210",
+                        "name": "김영길",
+                        "sex": "M",
+                        "date_birth": "1959-12-28",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2053119",
+                        "name": "김영복",
+                        "sex": "F",
+                        "date_birth": "1955-07-26",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2366264",
+                        "name": "김영이",
+                        "sex": "F",
+                        "date_birth": "1955-08-12",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2443130",
+                        "name": "김영자",
+                        "sex": "F",
+                        "date_birth": "1958-02-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2028702",
+                        "name": "김영희",
+                        "sex": "F",
+                        "date_birth": "1953-12-28",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "1354026",
+                        "name": "김용만",
+                        "sex": "M",
+                        "date_birth": "1951-11-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2236707",
+                        "name": "김용주",
+                        "sex": "F",
+                        "date_birth": "1954-08-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2266556",
+                        "name": "김정동",
+                        "sex": "M",
+                        "date_birth": "1969-05-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2237229",
+                        "name": "김정만",
+                        "sex": "M",
+                        "date_birth": "1958-08-16",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2518052",
+                        "name": "김종명",
+                        "sex": "M",
+                        "date_birth": "1958-12-26",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2538777",
+                        "name": "김종선",
+                        "sex": "M",
+                        "date_birth": "1960-12-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2559616",
+                        "name": "김종열",
+                        "sex": "F",
+                        "date_birth": "1944-05-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2355220",
+                        "name": "김지현",
+                        "sex": "M",
+                        "date_birth": "1951-06-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2342997",
+                        "name": "김철회",
+                        "sex": "M",
+                        "date_birth": "1959-02-20",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2323849",
+                        "name": "김태성",
+                        "sex": "M",
+                        "date_birth": "1952-10-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2492228",
+                        "name": "김혜숙",
+                        "sex": "F",
+                        "date_birth": "1964-09-20",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2002859",
+                        "name": "김희경",
+                        "sex": "F",
+                        "date_birth": "1954-01-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2530814",
+                        "name": "남태효",
+                        "sex": "M",
+                        "date_birth": "1963-07-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2537127",
+                        "name": "남허웅",
+                        "sex": "M",
+                        "date_birth": "1949-03-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2089427",
+                        "name": "노창순",
+                        "sex": "F",
+                        "date_birth": "1975-05-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2461201",
+                        "name": "명재석",
+                        "sex": "M",
+                        "date_birth": "1971-10-08",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2503220",
+                        "name": "민복순",
+                        "sex": "F",
+                        "date_birth": "1949-12-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2257048",
+                        "name": "박경수",
+                        "sex": "M",
+                        "date_birth": "1954-10-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2303725",
+                        "name": "박광성",
+                        "sex": "M",
+                        "date_birth": "1941-09-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "1366682",
+                        "name": "박귀례",
+                        "sex": "F",
+                        "date_birth": "1950-05-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2517848",
+                        "name": "박동섭",
+                        "sex": "M",
+                        "date_birth": "1978-11-12",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2568649",
+                        "name": "박명순",
+                        "sex": "M",
+                        "date_birth": "1956-09-12",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2247213",
+                        "name": "박미애",
+                        "sex": "F",
+                        "date_birth": "1971-09-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2535288",
+                        "name": "박선자",
+                        "sex": "F",
+                        "date_birth": "1965-08-22",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2080437",
+                        "name": "박순길",
+                        "sex": "M",
+                        "date_birth": "1943-01-17",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2090154",
+                        "name": "박영",
+                        "sex": "F",
+                        "date_birth": "1974-12-26",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2212229",
+                        "name": "박인심",
+                        "sex": "F",
+                        "date_birth": "1956-06-03",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2166855",
+                        "name": "박정녀",
+                        "sex": "F",
+                        "date_birth": "1971-03-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2487623",
+                        "name": "박춘희",
+                        "sex": "F",
+                        "date_birth": "1953-10-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2498784",
+                        "name": "박혜남",
+                        "sex": "F",
+                        "date_birth": "1968-05-16",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2501678",
+                        "name": "박후재",
+                        "sex": "M",
+                        "date_birth": "1960-08-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2526884",
+                        "name": "박희진",
+                        "sex": "F",
+                        "date_birth": "1963-06-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2565212",
+                        "name": "방경천",
+                        "sex": "M",
+                        "date_birth": "1952-05-18",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2026142",
+                        "name": "백혜정",
+                        "sex": "F",
+                        "date_birth": "1967-05-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2561973",
+                        "name": "서엄석",
+                        "sex": "M",
+                        "date_birth": "1957-01-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2248513",
+                        "name": "석점숙",
+                        "sex": "F",
+                        "date_birth": "1944-08-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2529861",
+                        "name": "성명순",
+                        "sex": "F",
+                        "date_birth": "1955-03-24",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2571849",
+                        "name": "손미영",
+                        "sex": "F",
+                        "date_birth": "1975-06-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2576283",
+                        "name": "손성옥",
+                        "sex": "F",
+                        "date_birth": "1959-03-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2432324",
+                        "name": "손옥자",
+                        "sex": "F",
+                        "date_birth": "1967-10-09",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2023859",
+                        "name": "손정자",
+                        "sex": "F",
+                        "date_birth": "1945-07-02",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2545961",
+                        "name": "신동민",
+                        "sex": "M",
+                        "date_birth": "1949-10-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2503031",
+                        "name": "신봉훈",
+                        "sex": "M",
+                        "date_birth": "1958-06-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "811270",
+                        "name": "신혜숙",
+                        "sex": "M",
+                        "date_birth": "1970-02-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2141002",
+                        "name": "신호재",
+                        "sex": "M",
+                        "date_birth": "1957-03-27",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2273492",
+                        "name": "심선혜",
+                        "sex": "F",
+                        "date_birth": "1955-01-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2555200",
+                        "name": "양창모",
+                        "sex": "M",
+                        "date_birth": "1961-12-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2515693",
+                        "name": "엄인숙",
+                        "sex": "F",
+                        "date_birth": "1959-12-06",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2201588",
+                        "name": "엄현옥",
+                        "sex": "F",
+                        "date_birth": "1967-04-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2534959",
+                        "name": "오광무",
+                        "sex": "M",
+                        "date_birth": "1943-07-17",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2162706",
+                        "name": "우병대",
+                        "sex": "M",
+                        "date_birth": "1958-04-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2499117",
+                        "name": "우석제",
+                        "sex": "M",
+                        "date_birth": "1958-07-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2544831",
+                        "name": "우혜자",
+                        "sex": "F",
+                        "date_birth": "1964-01-28",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2572123",
+                        "name": "원정옥",
+                        "sex": "F",
+                        "date_birth": "1956-08-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2194898",
+                        "name": "유종옥",
+                        "sex": "F",
+                        "date_birth": "1939-12-19",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2431842",
+                        "name": "유혜자",
+                        "sex": "F",
+                        "date_birth": "1959-10-22",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2067302",
+                        "name": "윤순분",
+                        "sex": "F",
+                        "date_birth": "1945-09-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2525451",
+                        "name": "윤순자",
+                        "sex": "F",
+                        "date_birth": "1948-02-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2047278",
+                        "name": "윤영규",
+                        "sex": "M",
+                        "date_birth": "1948-04-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2330676",
+                        "name": "윤태연",
+                        "sex": "F",
+                        "date_birth": "1956-05-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2531701",
+                        "name": "이갑복",
+                        "sex": "M",
+                        "date_birth": "1965-03-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2397521",
+                        "name": "이강민",
+                        "sex": "M",
+                        "date_birth": "1971-09-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2512383",
+                        "name": "이대순",
+                        "sex": "M",
+                        "date_birth": "1958-06-02",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2251052",
+                        "name": "이명자",
+                        "sex": "F",
+                        "date_birth": "1964-07-27",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2437256",
+                        "name": "이미자",
+                        "sex": "F",
+                        "date_birth": "1947-10-19",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2410975",
+                        "name": "이병훈",
+                        "sex": "M",
+                        "date_birth": "1961-07-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2512196",
+                        "name": "이봉은",
+                        "sex": "F",
+                        "date_birth": "1965-04-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2075260",
+                        "name": "이봉주",
+                        "sex": "F",
+                        "date_birth": "1976-09-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "1014557",
+                        "name": "이부영",
+                        "sex": "F",
+                        "date_birth": "1945-06-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2499618",
+                        "name": "이부점",
+                        "sex": "F",
+                        "date_birth": "1948-05-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2039205",
+                        "name": "이삼순",
+                        "sex": "F",
+                        "date_birth": "1961-03-31",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2487840",
+                        "name": "이상남",
+                        "sex": "M",
+                        "date_birth": "1972-08-21",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2386709",
+                        "name": "이상수",
+                        "sex": "M",
+                        "date_birth": "1967-11-26",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2456800",
+                        "name": "이상훈",
+                        "sex": "M",
+                        "date_birth": "1951-12-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2507653",
+                        "name": "이석환",
+                        "sex": "M",
+                        "date_birth": "1942-01-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2379401",
+                        "name": "이성효",
+                        "sex": "M",
+                        "date_birth": "1956-11-28",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2572973",
+                        "name": "이숙자",
+                        "sex": "M",
+                        "date_birth": "1953-04-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2375443",
+                        "name": "이순옥",
+                        "sex": "F",
+                        "date_birth": "1942-04-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2543432",
+                        "name": "이연옥",
+                        "sex": "F",
+                        "date_birth": "1961-04-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2482313",
+                        "name": "이영숙",
+                        "sex": "F",
+                        "date_birth": "1953-07-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2028710",
+                        "name": "이옥자",
+                        "sex": "F",
+                        "date_birth": "1943-03-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2559413",
+                        "name": "이운희",
+                        "sex": "M",
+                        "date_birth": "1952-07-20",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2157452",
+                        "name": "이윤주",
+                        "sex": "M",
+                        "date_birth": "1952-03-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2532327",
+                        "name": "이인호",
+                        "sex": "M",
+                        "date_birth": "1950-03-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2013981",
+                        "name": "이정순",
+                        "sex": "F",
+                        "date_birth": "1952-10-19",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2322940",
+                        "name": "이정원",
+                        "sex": "F",
+                        "date_birth": "1962-10-05",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2070203",
+                        "name": "이종성",
+                        "sex": "M",
+                        "date_birth": "1967-11-02",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2547485",
+                        "name": "이종침",
+                        "sex": "M",
+                        "date_birth": "1954-11-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2355341",
+                        "name": "이주연",
+                        "sex": "F",
+                        "date_birth": "1961-02-16",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2480751",
+                        "name": "이하경",
+                        "sex": "M",
+                        "date_birth": "1976-10-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2392874",
+                        "name": "이희춘",
+                        "sex": "F",
+                        "date_birth": "1964-10-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2536884",
+                        "name": "임길호",
+                        "sex": "M",
+                        "date_birth": "1959-03-15",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2493498",
+                        "name": "임정화",
+                        "sex": "F",
+                        "date_birth": "1959-05-09",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2144926",
+                        "name": "장광분",
+                        "sex": "F",
+                        "date_birth": "1955-02-06",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2376000",
+                        "name": "장명옥",
+                        "sex": "F",
+                        "date_birth": "1958-01-08",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2464355",
+                        "name": "전광자",
+                        "sex": "F",
+                        "date_birth": "1944-07-12",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2328489",
+                        "name": "전상근",
+                        "sex": "M",
+                        "date_birth": "1968-05-06",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2332843",
+                        "name": "전진필",
+                        "sex": "M",
+                        "date_birth": "1975-03-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2558285",
+                        "name": "전현철",
+                        "sex": "M",
+                        "date_birth": "1976-05-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2503988",
+                        "name": "정경자",
+                        "sex": "F",
+                        "date_birth": "1941-10-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2366408",
+                        "name": "정법원",
+                        "sex": "M",
+                        "date_birth": "1961-08-03",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2312307",
+                        "name": "정석오",
+                        "sex": "M",
+                        "date_birth": "1958-01-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2559650",
+                        "name": "정선귀",
+                        "sex": "F",
+                        "date_birth": "1956-12-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2408339",
+                        "name": "정창만",
+                        "sex": "M",
+                        "date_birth": "1955-01-05",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2398532",
+                        "name": "정창효",
+                        "sex": "M",
+                        "date_birth": "1964-12-16",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2524174",
+                        "name": "제갈순화",
+                        "sex": "F",
+                        "date_birth": "1960-03-03",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2268742",
+                        "name": "조기성",
+                        "sex": "M",
+                        "date_birth": "1956-01-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2496413",
+                        "name": "조동순",
+                        "sex": "F",
+                        "date_birth": "1946-06-20",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2448035",
+                        "name": "조성대",
+                        "sex": "M",
+                        "date_birth": "1952-02-24",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2462186",
+                        "name": "조언숙",
+                        "sex": "F",
+                        "date_birth": "1945-12-21",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2001057",
+                        "name": "조연옥",
+                        "sex": "F",
+                        "date_birth": "1952-03-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2273406",
+                        "name": "조영찬",
+                        "sex": "M",
+                        "date_birth": "1976-03-03",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2356999",
+                        "name": "조정자",
+                        "sex": "F",
+                        "date_birth": "1959-05-03",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2484555",
+                        "name": "조효옥",
+                        "sex": "F",
+                        "date_birth": "1942-09-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2381989",
+                        "name": "지창환",
+                        "sex": "M",
+                        "date_birth": "1965-03-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2555789",
+                        "name": "진영관",
+                        "sex": "M",
+                        "date_birth": "1968-03-12",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2446113",
+                        "name": "진원재",
+                        "sex": "M",
+                        "date_birth": "1954-04-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2065607",
+                        "name": "채영주",
+                        "sex": "F",
+                        "date_birth": "1967-02-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2451510",
+                        "name": "채정훈",
+                        "sex": "M",
+                        "date_birth": "1969-08-26",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2082400",
+                        "name": "최순자",
+                        "sex": "F",
+                        "date_birth": "1963-04-05",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2051449",
+                        "name": "최영수",
+                        "sex": "M",
+                        "date_birth": "1958-12-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2575557",
+                        "name": "최운석",
+                        "sex": "M",
+                        "date_birth": "1966-03-16",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2577746",
+                        "name": "최희환",
+                        "sex": "M",
+                        "date_birth": "1947-09-05",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2488619",
+                        "name": "추진옥",
+                        "sex": "F",
+                        "date_birth": "1960-04-20",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2577580",
+                        "name": "하귀숙",
+                        "sex": "F",
+                        "date_birth": "1943-09-29",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2393900",
+                        "name": "한동숙",
+                        "sex": "F",
+                        "date_birth": "1961-05-14",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2288551",
+                        "name": "한복희",
+                        "sex": "M",
+                        "date_birth": "1941-11-11",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2519746",
+                        "name": "한연옥",
+                        "sex": "F",
+                        "date_birth": "1956-01-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2562840",
+                        "name": "홍건호",
+                        "sex": "M",
+                        "date_birth": "1950-05-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2452788",
+                        "name": "김철홍",
+                        "sex": "M",
+                        "date_birth": "1966-11-25",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2527455",
+                        "name": "원용식",
+                        "sex": "M",
+                        "date_birth": "1973-02-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2096246",
+                        "name": "정대창",
+                        "sex": "M",
+                        "date_birth": "1963-04-07",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2261819",
+                        "name": "이송근",
+                        "sex": "M",
+                        "date_birth": "1958-11-24",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2311322",
+                        "name": "이종대",
+                        "sex": "M",
+                        "date_birth": "1942-04-06",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2303133",
+                        "name": "정도원",
+                        "sex": "M",
+                        "date_birth": "1975-01-13",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "1359167",
+                        "name": "지은정",
+                        "sex": "F",
+                        "date_birth": "1973-12-04",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2066082",
+                        "name": "황규필",
+                        "sex": "M",
+                        "date_birth": "1955-04-30",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2169704",
+                        "name": "함윤기",
+                        "sex": "M",
+                        "date_birth": "1955-05-27",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2023380",
+                        "name": "강경희",
+                        "sex": "F",
+                        "date_birth": "1967-08-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2586531",
+                        "name": "김정주",
+                        "sex": "F",
+                        "date_birth": "1965-03-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2584445",
+                        "name": "양연희",
+                        "sex": "F",
+                        "date_birth": "1963-01-23",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2589060",
+                        "name": "원조연",
+                        "sex": "M",
+                        "date_birth": "1975-03-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "2589476",
+                        "name": "김병순",
+                        "sex": "F",
+                        "date_birth": "1961-05-01",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            },
+            {
+                        "upn": "1267304",
+                        "name": "민태균",
+                        "sex": "M",
+                        "date_birth": "1962-01-10",
+                        "vital_status": "Alive",
+                        "last_followup_date": "2026-07-13"
+            }
+        ];
+
+        let filteredPatients = [];
+        let currentPage = 1;
+
+        function calculateAge(birthDateStr) {
+            if (!birthDateStr) return '-';
+            const birthDate = new Date(birthDateStr);
+            if (isNaN(birthDate.getTime())) return '-';
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age >= 0 ? age : '-';
+        }
+
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const isHidden = container.style.display === 'none';
+            container.style.display = isHidden ? '' : 'none';
+
+            const hideIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide`;
+            const showIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Show`;
+
+            const allToggleBtns = document.querySelectorAll(`[data-target="${containerId}"]`);
+            allToggleBtns.forEach(b => {
+                b.innerHTML = isHidden ? hideIcon : showIcon;
+            });
+            if (btn && !btn.getAttribute('data-target')) {
+                btn.innerHTML = isHidden ? hideIcon : showIcon;
+            }
+        }
+
+        function renderPatientDetails(p) {
+            // 1. Demographics & Clinical Features
+            const dateDx = p.date_dx || p.dateDx || '-';
+            const dp = p.dp_dx || p.diseasePhase || '-';
+            const ecog = (p.ecog !== undefined && p.ecog !== null && p.ecog !== '') ? p.ecog : '-';
+            const heightWeight = (p.height_dx || p.height) ? `${p.height_dx || p.height} cm / ${p.bwt_dx || p.weight || '-'} kg` : '-';
+            
+            // CRAB
+            let crabStr = p.crab || '';
+            if (!crabStr && (p.hyperca_dx !== undefined || p.renal_dx !== undefined || p.anemia_dx !== undefined || p.osetlytic_dx !== undefined)) {
+                crabStr = `${p.hyperca_dx || '-'} / ${p.renal_dx || '-'} / ${p.anemia_dx || '-'} / ${p.osetlytic_dx || '-'}`;
+            }
+            if (!crabStr) crabStr = '-';
+
+            const paraskeletal = p.paraskeletal_dx || p.paraskeletal || '-';
+            const emd = p.emd_dx || p.extramedullary || '-';
+            
+            // Viral
+            let viralStr = '-';
+            if (p.viral) {
+                viralStr = `HBs ${p.viral.hbs || '-'} / HBc ${p.viral.hbc || '-'} / HCV ${p.viral.hcv || '-'} / HIV ${p.viral.hiv || '-'}`;
+            } else if (p.hbsag_dx || p.hbsab_dx || p.hbcab_dx || p.anti_hcv_dx || p.hiv_dx) {
+                const hbs = (p.hbsag_dx || p.hbsab_dx) ? `${p.hbsag_dx || '-'}/${p.hbsab_dx || '-'}` : '-';
+                viralStr = `HBs ${hbs} / HBc ${p.hbcab_dx || '-'} / HCV ${p.anti_hcv_dx || '-'} / HIV ${p.hiv_dx || '-'}`;
+            }
+
+            // 2. Laboratory & M-Protein PEP/IEP
+            const hg = (p.hg_dx || p.hg) ? `${p.hg_dx || p.hg} g/dL` : '-';
+            const b2m = (p.b2mg_dx || p.b2m) ? `${p.b2mg_dx || p.b2m} mg/L` : '-';
+            const tpAlb = (p.tp_dx || p.alb_dx || p.tpAlb) ? (p.tpAlb || `${p.tp_dx || '-'} / ${p.alb_dx || '-'} g/dL`) : '-';
+            const bunCr = (p.bun_dx || p.cr_dx || p.bunCr) ? (p.bunCr || `${p.bun_dx || '-'} / ${p.cr_dx || '-'} mg/dL`) : '-';
+            const caLdh = (p.ca_dx || p.ldh_dx || p.ca || p.ldh) ? `${p.ca_dx || p.ca || '-'} mg/dL / ${p.ldh_dx || p.ldh || '-'} U/L` : '-';
+            const mProteinChains = (p.chain_heavy || p.chain_light || p.heavyChain || p.lightChain) ? `${p.chain_heavy || p.heavyChain || '-'} / ${p.chain_light || p.lightChain || '-'}` : '-';
+            const sflc = (p.kappa_dx || p.lambda_dx || p.serumKappa || p.serumLambda) ? `${p.kappa_dx || p.serumKappa || '-'} / ${p.lambda_dx || p.serumLambda || '-'} mg/L` : '-';
+            const spepUpep = (p.serum_m_dx || p.urine_m_dx || p.spep || p.upep) ? `${p.serum_m_dx || p.spep || '-'} g/dL / ${p.urine_m_dx || p.upep || '-'} mg/day` : '-';
+            const igGam = (p.ig_g_dx || p.igGAM) ? (p.igGAM || `G: ${p.ig_g_dx || '-'} / A: ${p.ig_a_dx || '-'} / M: ${p.ig_m_dx || '-'}`) : '-';
+
+            // 3. Bone Marrow & Cytogenetics / FISH
+            const bmCell = (p.bm?.cellularity || p.cellularity_dx) ? `${p.bm?.cellularity || p.cellularity_dx} %` : '-';
+            const bmPlasma = (p.bm?.plasmaCell || p['plasma-cell_dx'] || p.plasma_cell_dx) ? `${p.bm?.plasmaCell || p['plasma-cell_dx'] || p.plasma_cell_dx} %` : '-';
+            const karyotype = p.bm?.cytogenetics || p.cytogenetics_dx || '-';
+            const fishAll = `t(4;14): ${p.bm?.t4_14 || p['IGH:FGFR3_dx'] || '-'}% / t(14;16): ${p.bm?.t14_16 || p['IGH:MAF_dx'] || '-'}% / del(17p): ${p.bm?.del17p13 || p.TP53_dx || '-'}% / t(11;14): ${p.bm?.t11_14 || p['IGH:CCND1_dx'] || '-'}% / +1q21: ${p.bm?.gain1q21 || p.CKS1B_dx || '-'}% / del(13q): ${p.bm?.del13q14 || p.RB1_dx || '-'}%`;
+
+            // 4. Disease Staging
+            const dsStage = p.stage_ds || p.dsStage || '-';
+            const issStage = p.stage_iss || p.issStage || '-';
+            const rissStage = p.stage_riss || p['stage_r-iss'] || p.rissStage || '-';
+            const r2issStage = p.stage_r2iss || p['stage-r2-iss'] || p.r2issStage || '-';
+
+            return `
+                <div class="details-content">
+                    <div class="details-section">
+                        <div class="details-section-title">
+                            <span>1. Baseline Demographics & Clinical Features</span>
+                            <button class="btn-secondary" style="padding: 0 0.85rem; height: 1.85rem; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.35rem;" onclick="event.stopPropagation(); editPatient('${p.upn}')">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                EDIT
+                            </button>
+                        </div>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Date of Diagnosis</span>
+                                <span class="detail-value">${dateDx}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Disease Phase</span>
+                                <span class="detail-value">${dp}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">ECOG / HEIGHT / WEIGHT</span>
+                                <span class="detail-value">${ecog !== '-' ? ecog + ' / ' : ''}${heightWeight}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">C / R / A / B</span>
+                                <span class="detail-value">${crabStr}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Paraskeletal Disease</span>
+                                <span class="detail-value">${paraskeletal}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Extramedullary Disease</span>
+                                <span class="detail-value">${emd}</span>
+                            </div>
+                            <div class="detail-item" style="grid-column: span 2;">
+                                <span class="detail-label">Viral Markers</span>
+                                <span class="detail-value">${viralStr}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">HB / β2-MICROGLOBULIN</span>
+                                <span class="detail-value">${hg} / ${b2m}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">TP / ALB</span>
+                                <span class="detail-value">${tpAlb}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">BUN / CR</span>
+                                <span class="detail-value">${bunCr}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">CA2+ / LDH</span>
+                                <span class="detail-value">${caLdh}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Serum Quantitative Ig (G/A/M)</span>
+                                <span class="detail-value">${igGam}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Heavy / Light Chain</span>
+                                <span class="detail-value">${mProteinChains}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Serum Free Light Chain (κ / λ)</span>
+                                <span class="detail-value">${sflc}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Serum PEP/IEP / Urine PEP/IEP</span>
+                                <span class="detail-value">${spepUpep}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">BM Cellularity (%)</span>
+                                <span class="detail-value">${bmCell}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Plasma Cell Proportion (%)</span>
+                                <span class="detail-value">${bmPlasma}</span>
+                            </div>
+                            <div class="detail-item" style="grid-column: span 2;">
+                                <span class="detail-label">Karyotype (Cytogenetics)</span>
+                                <span class="detail-value">${karyotype}</span>
+                            </div>
+                            <div class="detail-item" style="grid-column: 1 / -1;">
+                                <span class="detail-label">FISH</span>
+                                <span class="detail-value">${fishAll}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Durie-Salmon Stage</span>
+                                <span class="detail-value">${dsStage}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">ISS Stage</span>
+                                <span class="detail-value">${issStage}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">R-ISS Stage</span>
+                                <span class="detail-value">${rissStage}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">R2-ISS Stage</span>
+                                <span class="detail-value">${r2issStage}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Treatment History -->
+                    <div class="details-section">
+                        <div class="details-section-title">
+                            <span>2. Treatment History</span>
+                            <button class="btn-secondary" style="padding: 0 0.85rem; height: 1.85rem; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.35rem;" onclick="event.stopPropagation(); openChemotherapy('${p.upn}')">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"></path>
+                                    <line x1="8" y1="8" x2="16" y2="8"></line>
+                                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                                    <line x1="8" y1="16" x2="12" y2="16"></line>
+                                </svg>
+                                CHEMOTHERAPY
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem; text-align: center; color: var(--text-secondary); font-size: 0.88rem;">
+                            No treatment history records available.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let rowsPerPage = 10;
+
+        function changeRowsPerPage(val) {
+            rowsPerPage = parseInt(val, 10) || 10;
+            currentPage = 1;
+            renderPatientsPage();
+        }
+
+        function renderPatientsPage() {
+            const tbody = document.getElementById('patients-tbody');
+            tbody.innerHTML = '';
+
+            if (filteredPatients.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <h3>No patients found</h3>
+                                <p>Try adjusting your search query.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('pagination-controls').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('pagination-controls').style.display = 'flex';
+
+            const totalPages = Math.ceil(filteredPatients.length / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, filteredPatients.length);
+            const pageData = filteredPatients.slice(startIndex, endIndex);
+
+            pageData.forEach((p, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'main-row';
+                tr.style.animation = `fadeInUp 0.3s ease-out forwards ${index * 0.02}s`;
+                tr.style.opacity = '0';
+                tr.onclick = () => {
+                    toggleDetails(p.upn);
+                };
+                
+                const age = p.age !== undefined && p.age !== '' ? p.age : calculateAge(p.date_birth);
+                const diagnosisDate = p.date_dx || p.dateDx || '-';
+                const vitalStatusClass = p.vital_status === 'Alive' ? 'status-alive' : 'status-deceased';
+
+                // Determine Current Status
+                let currentStatus = p.current_status || p.dp_dx || (p.vital_status === 'Deceased' ? 'Deceased' : 'In Follow-up');
+                let currentStatusClass = 'status-active';
+                if (currentStatus.toLowerCase().includes('deceased') || p.vital_status === 'Deceased') {
+                    currentStatus = 'Deceased';
+                    currentStatusClass = 'status-deceased';
+                } else if (currentStatus.toLowerCase().includes('alive') || currentStatus.toLowerCase().includes('follow')) {
+                    currentStatusClass = 'status-alive';
+                }
+
+                tr.innerHTML = `
+                    <td style="font-weight: 600; color: var(--accent-primary);">${p.upn}</td>
+                    <td style="font-weight: 500;">${p.name}</td>
+                    <td>${p.sex || '-'}</td>
+                    <td>${age}</td>
+                    <td>${diagnosisDate}</td>
+                    <td><span class="status-badge ${currentStatusClass}">${currentStatus}</span></td>
+                    <td><span class="status-badge ${vitalStatusClass}">${p.vital_status || '-'}</span></td>
+                    <td style="color: var(--text-muted);">${p.last_followup_date || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+
+                // Details Row
+                const detailsTr = document.createElement('tr');
+                detailsTr.id = `details-${p.upn}`;
+                detailsTr.className = 'details-row';
+                detailsTr.innerHTML = `<td colspan="8">${renderPatientDetails(p)}</td>`;
+                tbody.appendChild(detailsTr);
+            });
+
+            renderPaginationControls(totalPages, startIndex, endIndex, filteredPatients.length);
+        }
+
+        function renderPaginationControls(totalPages, startIndex, endIndex, totalRows) {
+            const container = document.getElementById('pagination-controls');
+            container.innerHTML = '';
+
+            // Page buttons
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'pagination-buttons';
+
+            // Prev button
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            `;
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderPatientsPage();
+                }
+            };
+            buttonsDiv.appendChild(prevBtn);
+
+            // Page numbers logic (max 5 visible pages centered around current page)
+            const maxVisiblePages = 5;
+            let startPage = 1;
+            let endPage = totalPages;
+
+            if (totalPages > maxVisiblePages) {
+                const half = Math.floor(maxVisiblePages / 2);
+                if (currentPage <= half + 1) {
+                    startPage = 1;
+                    endPage = maxVisiblePages;
+                } else if (currentPage >= totalPages - half) {
+                    startPage = totalPages - maxVisiblePages + 1;
+                    endPage = totalPages;
+                } else {
+                    startPage = currentPage - half;
+                    endPage = currentPage + half;
+                }
+            }
+
+            if (startPage > 1) {
+                const firstPageBtn = document.createElement('button');
+                firstPageBtn.className = 'page-btn';
+                firstPageBtn.innerText = '1';
+                firstPageBtn.onclick = () => {
+                    currentPage = 1;
+                    renderPatientsPage();
+                };
+                buttonsDiv.appendChild(firstPageBtn);
+
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.style.margin = '0 0.25rem';
+                    dots.style.color = 'var(--text-muted)';
+                    dots.innerText = '...';
+                    buttonsDiv.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.innerText = i;
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderPatientsPage();
+                };
+                buttonsDiv.appendChild(pageBtn);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.style.margin = '0 0.25rem';
+                    dots.style.color = 'var(--text-muted)';
+                    dots.innerText = '...';
+                    buttonsDiv.appendChild(dots);
+                }
+
+                const lastPageBtn = document.createElement('button');
+                lastPageBtn.className = 'page-btn';
+                lastPageBtn.innerText = totalPages;
+                lastPageBtn.onclick = () => {
+                    currentPage = totalPages;
+                    renderPatientsPage();
+                };
+                buttonsDiv.appendChild(lastPageBtn);
+            }
+
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            `;
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderPatientsPage();
+                }
+            };
+            buttonsDiv.appendChild(nextBtn);
+
+            container.appendChild(buttonsDiv);
+        }
+
+        function filterPatients() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            filteredPatients = allPatients.filter(p => 
+                (p.upn && p.upn.toLowerCase().includes(query)) || 
+                (p.name && p.name.toLowerCase().includes(query))
+            );
+            currentPage = 1;
+            renderPatientsPage();
+        }
+
+        function editPatient(patientId) {
+            window.location.href = `Edit_Patient.html?upn=${patientId}`;
+        }
+
+        function openChemotherapy(patientId) {
+            window.location.href = `Chemotherapy.html?upn=${patientId}`;
+        }
+
+        function toggleDetails(upn) {
+            const row = document.getElementById(`details-${upn}`);
+            if (row) {
+                row.classList.toggle('active');
+            }
+        }
+
+        // Initialize table
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch from local Python server
+            fetch(`${API_BASE}/api/patients`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                })
+                .then(data => {
+                    allPatients = data.length > 0 ? data : mockPatients;
+                    filteredPatients = [...allPatients];
+                    currentPage = 1;
+                    renderPatientsPage();
+                })
+                .catch(err => {
+                    console.warn("Could not fetch from server, falling back to mock data.", err);
+                    allPatients = mockPatients;
+                    filteredPatients = [...allPatients];
+                    currentPage = 1;
+                    renderPatientsPage();
+                });
+        });
+    </script>
+</body>
+</html>

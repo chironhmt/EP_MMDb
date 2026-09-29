@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0_Multiple myeloma - Demographics and Disease-related characteristics</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=4">
+    <style>
+        .custom-text-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.225rem 0.8rem;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+        .custom-text-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .radio-group-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .radio-group-vertical label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-main, #e2e8f0);
+        }
+        .radio-group-vertical input[type="radio"] {
+            transform: scale(1.2);
+            cursor: pointer;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <h1 style="font-size: 1.5rem;">HemaCDS 2.0_<span>Multiple myeloma</span></h1>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <section class="content-area" id="content-area">
+                <div class="cycle-planner" id="planner-container" style="margin: 0; max-width: 900px;">
+                    
+                    <div class="planner-header">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                            <h2 style="font-size: 1.5rem; font-weight: 500; color: var(--text-light, #f8fafc);">Baseline Demographics and Disease-Related Characteristics</h2>
+                        </div>
+                    </div>
+
+                    <div class="planner-sections">
+                        <!-- Section 1: Disease Phase -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 style="margin: 0;">1. Disease phase</h3>
+                            </div>
+                            <div class="card-body" style="display: flex; gap: 4rem; align-items: flex-start; flex-wrap: wrap;">
+                                <div class="radio-group-vertical" style="flex: 1; min-width: 280px; max-width: 400px;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
+                                        <label style="margin: 0;">
+                                            <input type="radio" name="disease-phase" value="mgus" onchange="toggleOthersInput()">
+                                            Monoclonal gammopathy of clinical significance
+                                        </label>
+                                        <div id="mgcs-dropdown-container" style="display: none; margin-left: 1.8rem; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                                            <select id="mgcs-type-select" class="custom-text-input" style="width: 120px; cursor: pointer; transform: translateY(-6px);" onchange="toggleMgcsOthersInput()">
+                                                <option value="renal" style="color: #000;" selected>Renal</option>
+                                                <option value="nervous" style="color: #000;">Nervous</option>
+                                                <option value="cutaneous" style="color: #000;">Cutaneous</option>
+                                                <option value="ocular" style="color: #000;">Ocular</option>
+                                                <option value="others" style="color: #000;">Others</option>
+                                            </select>
+                                            <input type="text" id="mgcs-others-input" class="custom-text-input" placeholder="Please specify..." style="display: none; width: 120px; transform: translateY(-6px);">
+                                        </div>
+                                    </div>
+                                    <label>
+                                        <input type="radio" name="disease-phase" value="smoldering" onchange="toggleOthersInput()">
+                                        Smoldering myeloma
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="disease-phase" value="symptomatic" onchange="toggleOthersInput()">
+                                        Symptomatic myeloma
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="disease-phase" value="plasma_cell_leukemia" onchange="toggleOthersInput()">
+                                        Plasma cell leukemia
+                                    </label>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                        <label style="margin: 0;">
+                                            <input type="radio" name="disease-phase" value="others" onchange="toggleOthersInput()">
+                                            Others
+                                        </label>
+                                        <input type="text" id="disease-phase-others-input" class="custom-text-input" placeholder="Please specify..." style="display: none; width: 200px; margin-left: 0.5rem; transform: translateY(-6px);">
+                                    </div>
+                                </div>
+                                <div class="amyloidosis-section" style="flex: 1; min-width: 300px;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(-10px);">
+                                        <label for="amyloidosis-select" style="font-size: 1rem; color: var(--text-main, #e2e8f0); margin: 0; white-space: nowrap;">Concurrent amyloidosis</label>
+                                        <select id="amyloidosis-select" class="custom-text-input" style="width: 120px; cursor: pointer; transform: translateY(-4px);" onchange="toggleAmyloidosisDetails()">
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                            <option value="no" style="color: #000;" selected>No</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="amyloidosis-details" style="display: none; margin-top: 1rem;">
+                                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0);">
+                                                <input type="checkbox" name="amyloidosis-type" value="renal" style="transform: scale(1.1); margin: 0; cursor: pointer;"> Renal
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0);">
+                                                <input type="checkbox" name="amyloidosis-type" value="cardiac" style="transform: scale(1.1); margin: 0; cursor: pointer;"> Cardiac
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0);">
+                                                <input type="checkbox" name="amyloidosis-type" value="neurologic" style="transform: scale(1.1); margin: 0; cursor: pointer;"> Neurologic
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0);">
+                                                <input type="checkbox" name="amyloidosis-type" value="hepatic" style="transform: scale(1.1); margin: 0; cursor: pointer;"> Hepatic
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0);">
+                                                <input type="checkbox" name="amyloidosis-type" value="gi" style="transform: scale(1.1); margin: 0; cursor: pointer;"> GI
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0);">
+                                                <input type="checkbox" name="amyloidosis-type" value="soft_tissue" style="transform: scale(1.1); margin: 0; cursor: pointer;"> Soft tissue
+                                            </label>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-main, #e2e8f0); margin: 0;">
+                                                    <input type="checkbox" name="amyloidosis-type" value="other" id="amyloidosis-other-cb" onchange="toggleAmyloidosisOther()" style="transform: scale(1.1); margin: 0; cursor: pointer;"> Other
+                                                </label>
+                                                <input type="text" id="amyloidosis-other-input" class="custom-text-input" placeholder="Please specify..." style="display: none; width: 120px; margin-left: 0.5rem; transform: translateY(-6px);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Stage -->
+                        <div class="card" style="margin-top: 1.5rem;">
+                            <div class="card-header">
+                                <h3 style="margin: 0;">2. Stage</h3>
+                            </div>
+                            <div class="card-body" style="display: flex; gap: 4rem; align-items: flex-start; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                        <label for="ds-stage-select" style="font-size: 1rem; color: var(--text-main, #e2e8f0); margin: 0; white-space: nowrap; width: 160px;">Durie-Salmon</label>
+                                        <select id="ds-stage-select" class="custom-text-input" style="width: 140px; cursor: pointer;">
+                                            <option value="" disabled>N/A</option>
+                                            <option value="IA" style="color: #000;">Stage IA</option>
+                                            <option value="IB" style="color: #000;">Stage IB</option>
+                                            <option value="IIA" style="color: #000;">Stage IIA</option>
+                                            <option value="IIB" style="color: #000;">Stage IIB</option>
+                                            <option value="IIIA" style="color: #000;" selected>Stage IIIA</option>
+                                            <option value="IIIB" style="color: #000;">Stage IIIB</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                        <label for="riss-stage-select" style="font-size: 1rem; color: var(--text-main, #e2e8f0); margin: 0; white-space: nowrap; width: 160px;">R-ISS</label>
+                                        <select id="riss-stage-select" class="custom-text-input" style="width: 140px; cursor: pointer;">
+                                            <option value="" disabled>N/A</option>
+                                            <option value="I" style="color: #000;">Stage I</option>
+                                            <option value="II" style="color: #000;" selected>Stage II</option>
+                                            <option value="III" style="color: #000;">Stage III</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                        <label for="iss-stage-select" style="font-size: 1rem; color: var(--text-main, #e2e8f0); margin: 0; white-space: nowrap; width: 160px;">ISS</label>
+                                        <select id="iss-stage-select" class="custom-text-input" style="width: 140px; cursor: pointer;">
+                                            <option value="" disabled>N/A</option>
+                                            <option value="I" style="color: #000;" selected>Stage I</option>
+                                            <option value="II" style="color: #000;">Stage II</option>
+                                            <option value="III" style="color: #000;">Stage III</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                        <label for="r2iss-stage-select" style="font-size: 1rem; color: var(--text-main, #e2e8f0); margin: 0; white-space: nowrap; width: 160px;">R2-ISS</label>
+                                        <select id="r2iss-stage-select" class="custom-text-input" style="width: 140px; cursor: pointer;">
+                                            <option value="" disabled>N/A</option>
+                                            <option value="I" style="color: #000;">Stage I</option>
+                                            <option value="II" style="color: #000;" selected>Stage II</option>
+                                            <option value="III" style="color: #000;">Stage III</option>
+                                            <option value="IV" style="color: #000;">Stage IV</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-end; margin-top: 2rem;">
+                                        <button id="ai-assistant-btn" class="btn-primary" style="padding: 0.4rem 2rem; font-size: 0.875rem; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onclick="window.open('Stage_Assistant.html', '_blank', 'width=800,height=700')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles" style="margin-right: 0.25rem;"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+                                            Input stage from patient data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem; margin-bottom: 1rem;">
+                            <button id="submit-btn" class="btn-primary" style="padding: 0.4rem 2rem; font-size: 0.875rem; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleOthersInput() {
+            const othersRadio = document.querySelector('input[name="disease-phase"][value="others"]');
+            const othersInput = document.getElementById('disease-phase-others-input');
+            if (othersRadio && othersRadio.checked) {
+                othersInput.style.display = 'inline-block';
+                othersInput.focus();
+            } else {
+                if (othersInput) {
+                    othersInput.style.display = 'none';
+                    othersInput.value = '';
+                }
+            }
+
+            const mgcsRadio = document.querySelector('input[name="disease-phase"][value="mgus"]');
+            const mgcsDropdown = document.getElementById('mgcs-dropdown-container');
+            if (mgcsRadio && mgcsRadio.checked) {
+                mgcsDropdown.style.display = 'flex';
+            } else {
+                if (mgcsDropdown) {
+                    mgcsDropdown.style.display = 'none';
+                    document.getElementById('mgcs-type-select').value = "renal";
+                    const mgcsOthersInput = document.getElementById('mgcs-others-input');
+                    if (mgcsOthersInput) {
+                        mgcsOthersInput.style.display = 'none';
+                        mgcsOthersInput.value = '';
+                    }
+                }
+            }
+        }
+
+        function toggleMgcsOthersInput() {
+            const select = document.getElementById('mgcs-type-select');
+            const input = document.getElementById('mgcs-others-input');
+            if (select && select.value === 'others') {
+                input.style.display = 'inline-block';
+                input.focus();
+            } else {
+                if (input) {
+                    input.style.display = 'none';
+                    input.value = '';
+                }
+            }
+        }
+
+        function toggleAmyloidosisDetails() {
+            const select = document.getElementById('amyloidosis-select');
+            const details = document.getElementById('amyloidosis-details');
+            if (select.value === 'yes') {
+                details.style.display = 'block';
+            } else {
+                details.style.display = 'none';
+            }
+        }
+
+        function toggleAmyloidosisOther() {
+            const cb = document.getElementById('amyloidosis-other-cb');
+            const input = document.getElementById('amyloidosis-other-input');
+            if (cb && cb.checked) {
+                input.style.display = 'inline-block';
+                input.focus();
+            } else {
+                if (input) {
+                    input.style.display = 'none';
+                    input.value = '';
+                }
+            }
+        }
+
+        // Submit button event listener to close the window
+        document.addEventListener('DOMContentLoaded', () => {
+            const submitBtn = document.getElementById('submit-btn');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', () => {
+                    window.close();
+                });
+            }
+
+            const aiBtn = document.getElementById('ai-assistant-btn');
+            if (aiBtn) {
+                aiBtn.addEventListener('click', () => {
+                    alert('AI staging assistant function is under development.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma_Chemotherapy</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header" style="justify-content: space-between;">
+            <div class="logo">
+                <h1 style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">Eunpyeong St. Mary's Myeloma Center Database</h1>
+            </div>
+            <a href="Dashboard.html" class="btn-secondary">
+                <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <div style="display: flex; flex: 1; overflow: hidden;">
+        <aside class="sidebar" id="sidebar" style="height: 100%; overflow-y: auto;">
+                <div class="sidebar-header" style="flex-direction: column; align-items: stretch; gap: 0.5rem; border-bottom: none; padding-bottom: 0;">
+                    <h2>Line</h2>
+                    <select id="line-input" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.5rem; width: 100%;">
+                        <option value="First">First</option>
+                        <option value="Consolidation">Consolidation</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Second">Second</option>
+                        <option value="Third">Third</option>
+                        <option value="Fourth">Fourth</option>
+                        <option value="Fifth">Fifth</option>
+                        <option value="Sixth">Sixth</option>
+                        <option value="Seventh">Seventh</option>
+                        <option value="Eighth">Eighth</option>
+                        <option value="Ninth">Ninth</option>
+                        <option value="Tenth">Tenth</option>
+                        <option value="Eleventh">Eleventh</option>
+                        <option value="Twelfth">Twelfth</option>
+                    </select>
+                    
+                    <h2 style="margin-top: 0.5rem;">Regimen</h2>
+                    <select id="regimen-input" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.5rem; width: 100%;">
+                        <option value="" disabled selected>Choose regimen</option>
+                        <option value="Others">Others</option>
+                    </select>
+                    <input type="text" id="custom-regimen-input" class="custom-text-input hidden" style="margin-top: 0.5rem; padding: 0.5rem; width: 100%;" placeholder="e.g. VRd, D-Rd">
+                </div>
+                <div class="sidebar-header" style="flex-direction: column; align-items: stretch; gap: 0.75rem;">
+                    <h2>Cycles</h2>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="new-cycle-input" class="custom-text-input" style="margin: 0; flex: 1;" placeholder="e.g. Cycle 2, 3-5, 8-">
+                        <button id="add-cycle-btn" class="btn-secondary" aria-label="Add Cycle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18.6" height="18.6" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add
+                        </button>
+                    </div>
+                </div>
+                <div class="cycle-list" id="cycle-list">
+                    <!-- Cycle items will be injected here -->
+                </div>
+                <div class="sidebar-divider"></div>
+                <div class="sidebar-nav">
+                    <div class="cycle-item" id="response-eot-nav-item" onclick="showResponseEotView()">
+                        <div>
+                            <div class="cycle-name">Response &amp; Progression</div>
+                            <div class="cycle-summary">Response, progression &amp; EOT</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        <main class="app-main" style="flex-direction: column;">
+            <section class="content-area" id="content-area">
+                <div class="empty-state" id="empty-state">
+                    <p>Select or add a cycle to begin planning therapy.</p>
+                </div>
+
+                <div class="cycle-planner hidden" id="cycle-planner">
+                    <div class="planner-header">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                            <h2 style="margin: 0;">Chemotherapy</h2>
+                        </div>
+                    </div>
+
+                    <div class="planner-sections">
+                        <!-- Section 1: Agent Selection -->
+                        <div class="card agent-selection-card">
+                            <div class="card-header" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+                                    <h4 id="current-cycle-title" style="margin: 0; color: var(--accent-primary); font-size: calc(1.35rem + 4pt); font-weight: 600;">Cycle 1</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: center; width: 100%;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <label for="cycle-start-date" id="cycle-start-date-label" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Start Date</label>
+                                            <input type="date" data-date="" id="cycle-start-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+                                        </div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                                            <label for="cycle-length" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; white-space: nowrap;">Cycle Length</label>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+                                                <input type="number" id="cycle-length" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; min-width: 50px; font-size: 0.95rem; height: 2.1rem;">
+                                                <span style="font-size: 0.85rem; color: var(--text-secondary);">days</span>
+                                            </div>
+                                        </div>
+                                        <div></div>
+                                        <div style="display: flex; justify-content: flex-end;">
+                                            <button id="delete-cycle-btn" class="btn-secondary" style="padding: 0 1rem; height: 2.1rem;" title="Delete Cycle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>REMOVE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                                    <div>
+                                        <h3 style="margin: 0;">1. Select Anti-Myeloma Agents</h3>
+                                    </div>
+                                    <button class="btn-secondary" onclick="toggleSection('agent-classes-container', this)" style="padding: 0 1rem; align-self: flex-end;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                                </div>
+                            </div>
+                            <div class="card-body" id="agent-classes-container">
+                                <!-- Agent classes and checkboxes injected here -->
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Agent Configuration -->
+                        <div class="card agent-config-card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="margin: 0;">2. Configure Dosing</h3>
+                                </div>
+                                <button class="btn-secondary" onclick="toggleSection('agent-configs-container', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                            </div>
+                            <div class="card-body" id="agent-configs-container">
+                                <div class="empty-agents">No agents selected for this cycle.</div>
+                                <!-- Selected agent config cards injected here -->
+                            </div>
+                            <div style="padding: 1rem 1.5rem; text-align: right;">
+                                <button type="button" class="btn-secondary" onclick="renderSummary(); saveChemoLine();" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>SUBMIT</button>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Summary -->
+                        <div class="card summary-card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="margin: 0;">3. Treatment Schedule</h3>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button id="print-summary-btn" class="btn-secondary" onclick="printSummary()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                                        Print
+                                    </button>
+                                    <button class="btn-secondary" onclick="toggleSection('summary-container', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                                </div>
+                            </div>
+                            <div class="card-body" id="summary-container">
+                                <div class="empty-agents">No configuration to summarize.</div>
+                            </div>
+                            <div style="padding: 1rem 1.5rem; text-align: right;">
+                                <button type="button" class="btn-secondary" onclick="renderSummary(); saveChemoLine();" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>SUBMIT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cycle-planner hidden" id="response-eot-view">
+                    <div class="planner-header">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                            <h2 style="margin: 0;">Response &amp; Progression</h2>
+                        </div>
+                    </div>
+
+                    <div class="planner-sections">
+                        <!-- Section 3: Response & Progression -->
+                        <div class="card response-card end-of-treatment-card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="margin: 0;">Response &amp; Progression</h3>
+                                </div>
+                                <button class="btn-secondary" onclick="toggleSection('response-container', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                            </div>
+                            <div class="card-body" id="response-container">
+                                <h4 style="margin: 0 0 1rem; font-size: 1rem; font-weight: 500; color: var(--text-primary);">Response</h4>
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <label for="date-of-first-response" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Date of first response</label>
+                                        <input type="date" id="date-of-first-response" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <label for="depth-of-first-response" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Depth of first response</label>
+                                        <select id="depth-of-first-response" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+
+                                            <option value="sCR">sCR</option>
+                                            <option value="CR">CR</option>
+                                            <option value="VGPR">VGPR</option>
+                                            <option value="PR">PR</option>
+                                            <option value="MR">MR</option>
+                                            <option value="SD" selected>SD</option>
+                                            <option value="PD">PD</option>
+                                            <option value="NE">NE</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <label for="date-of-best-response" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Date of best response</label>
+                                        <input type="date" id="date-of-best-response" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <label for="depth-of-best-response" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Depth of best response</label>
+                                        <select id="depth-of-best-response" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+
+                                            <option value="sCR">sCR</option>
+                                            <option value="CR">CR</option>
+                                            <option value="VGPR">VGPR</option>
+                                            <option value="PR">PR</option>
+                                            <option value="MR">MR</option>
+                                            <option value="SD" selected>SD</option>
+                                            <option value="PD">PD</option>
+                                            <option value="NE">NE</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border-glass); padding-top: 1.5rem;">
+                                    <h4 style="margin: 0 0 1rem; font-size: 1rem; font-weight: 500; color: var(--text-primary);">Progression</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <label for="disease-progression" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Disease progression</label>
+                                            <select id="disease-progression" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;" onchange="document.getElementById('dp-date-container').style.visibility = this.value === 'Yes' ? 'visible' : 'hidden';">
+
+                                                <option value="Yes">Yes</option>
+                                                <option value="No" selected>No</option>
+                                            </select>
+                                        </div>
+                                        <div id="dp-date-container" style="visibility: hidden; display: flex; align-items: center; justify-content: space-between;">
+                                            <label for="date-of-disease-progression" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">Date of disease progression</label>
+                                            <input type="date" id="date-of-disease-progression" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border-glass); padding-top: 1.5rem;">
+                                    <h4 style="margin: 0 0 1rem; font-size: 1rem; font-weight: 500; color: var(--text-primary);">End of treatment</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem 2rem;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <label for="end-of-treatment-date" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 45%;">End of treatment date</label>
+                                            <input type="date" id="end-of-treatment-date" class="custom-text-input custom-date-format" style="margin: 0; padding: 0.25rem 0.5rem; width: 55%; font-size: 0.95rem; height: 2.1rem;">
+                                        </div>
+                                        <div style="display: flex; align-items: flex-start; justify-content: flex-start; flex-wrap: wrap; gap: 0.5rem 1.5rem; grid-column: span 2;">
+                                            <label for="cessation-reason" style="font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 0 0 calc((100% - 2rem) / 2 * 0.45); padding-top: 0.35rem;">Reason for cessation</label>
+                                            <select id="cessation-reason" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 0 0 calc((100% - 2rem) / 2 * 0.55); min-width: 0; font-size: 0.95rem; height: 2.1rem;" onchange="
+                                                document.getElementById('custom-cessation-reason').style.display = this.value === 'Others' ? 'block' : 'none';
+                                                document.getElementById('disease-progression-type').style.display = this.value === 'Disease progression' ? 'block' : 'none';
+                                                var isTox = this.value === 'Toxicity / Side effects';
+                                                document.getElementById('toxicity-specify').style.display = isTox ? 'block' : 'none';
+                                                document.getElementById('toxicity-grade').style.display = isTox ? 'block' : 'none';
+                                            ">
+
+                                                <option value="Completed" selected>Completed</option>
+                                                <option value="Disease progression">Disease progression</option>
+                                                <option value="Toxicity / Side effects">Toxicity / Side effects</option>
+                                                <option value="Patient refusal">Patient refusal</option>
+                                                <option value="Death">Death</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <select id="disease-progression-type" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 0 0 calc((100% - 2rem) / 2 * 0.55); min-width: 0; display: none; font-size: 0.95rem; height: 2.1rem;">
+
+                                                <option value="Biochemical">Biochemical</option>
+                                                <option value="Clinical">Clinical</option>
+                                                <option value="both">both</option>
+                                            </select>
+                                            <input type="text" id="custom-cessation-reason" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 0 0 calc((100% - 2rem) / 2 * 0.55); min-width: 0; display: none; font-size: 0.95rem; height: 2.1rem;" placeholder="Please specify...">
+                                            <input type="text" id="toxicity-specify" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 0 0 calc((100% - 2rem) / 2 * 0.55); min-width: 0; display: none; font-size: 0.95rem; height: 2.1rem;" placeholder="Specify...">
+                                            <select id="toxicity-grade" class="custom-text-input" style="margin: 0; padding: 0.25rem 0.5rem; flex: 0 0 calc((100% - 2rem) / 2 * 0.55); min-width: 0; display: none; font-size: 0.95rem; height: 2.1rem;">
+                                                <option value="" disabled selected>Grade</option>
+                                                <option value="I">I</option>
+                                                <option value="II">II</option>
+                                                <option value="III">III</option>
+                                                <option value="IV">IV</option>
+                                                <option value="V">V</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border-glass); padding-top: 1.5rem;">
+                                        <h4 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 500; color: var(--text-primary);">Refractory Status for Used Agents</h4>
+                                        <div id="eot-agents-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem 2rem;">
+                                            <div class="empty-agents" style="grid-column: 1 / -1;">No agents selected yet.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding: 1rem 1.5rem; text-align: right;">
+                                <button type="button" class="btn-secondary" onclick="renderSummary(); saveChemoLine();" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>SUBMIT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div id="loading-text" class="loading-text">Loading data...</div>
+    </div>
+
+    <script>
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide`;
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Show`;
+            }
+        }
+    </script>
+    <script src="app.js"></script>
+</body>
+
+</html>
+

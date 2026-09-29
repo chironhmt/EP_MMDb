@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id='panel' style='display:none;'>PANEL</div>
+<button onclick='test()'>Click</button>
+<script>
+function test() {
+    document.getElementById('panel').style.display = 'block';
+    nonExistentFunction();
+}
+</script>
+</body>
+</html>

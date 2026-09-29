@@ -1,0 +1,2902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0 Multiple Myeloma - Transplantation</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=8">
+    <style>
+        /* Smooth scrolling with invisible scrollbars */
+        html,
+        body {
+            height: auto !important;
+            min-height: 100vh !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        .app-container {
+            height: auto !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .app-main {
+            height: auto !important;
+            overflow: visible !important;
+            flex: 1 0 auto !important;
+        }
+
+        * {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        *::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        .content-area,
+        .planner-sections,
+        .card,
+        .card-header,
+        .card-body {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .card-body>div {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        #type-date-container,
+        #conditioning-regimen-content,
+        #gvhd-regimen-content,
+        #infused-cell-container,
+        #support-container,
+        #summary-container {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        #infused-cell-rows-list,
+        .infused-cell-row {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .infused-cell-row>div {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .infused-cell-row:not(:last-child) {
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Checkbox Container Multi-Column Layout */
+        .agent-classes-grid {
+            column-count: 2;
+            column-gap: 2rem;
+            column-rule: 1px solid var(--border-glass);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .agent-classes-grid {
+                column-count: 1;
+            }
+        }
+
+        /* .agent-class-group, .class-title, .checkbox-list, .checkbox-item-container are
+           already defined in styles.css (shared with Chemotherapy.html) -- not redeclared
+           here to avoid the two copies silently drifting apart. */
+
+        .badge-type {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-autologous {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .badge-allogeneic {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--accent-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-glow), 0 10px 25px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .unit-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        /* Print only Transplantation Schedule */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .sidebar,
+            .app-header,
+            .planner-header,
+            .btn-secondary,
+            #print-summary-btn,
+            .card:not(.summary-card) {
+                display: none !important;
+            }
+            .app-container {
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .app-main {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .content-area,
+            .planner-sections {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .summary-card {
+                border: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .summary-card .card-header {
+                border: none !important;
+                padding: 0 0 1rem 0 !important;
+            }
+            .summary-card .card-header h3 {
+                color: #0f172a !important;
+                font-size: 1.35rem !important;
+            }
+            .summary-card .card-header .subtitle {
+                color: #475569 !important;
+            }
+            .summary-card .card-body {
+                padding: 0 !important;
+                background: transparent !important;
+            }
+            #summary-container > div:first-child {
+                background: #f8fafc !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+            }
+            #summary-container > div:first-child div[style*="text-transform: uppercase"] {
+                color: #64748b !important;
+            }
+            #summary-badge-type,
+            #summary-badge-cell,
+            #summary-badge-donor {
+                color: #0f172a !important;
+            }
+            #summary-badge-date {
+                color: #4f46e5 !important;
+            }
+            .summary-card table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                background: #ffffff !important;
+                color: #0f172a !important;
+            }
+            .summary-card thead tr {
+                background: #f1f5f9 !important;
+                border-bottom: 2px solid #cbd5e1 !important;
+            }
+            .summary-card th {
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1 !important;
+                padding: 0.6rem 0.8rem !important;
+                font-weight: 700 !important;
+            }
+            .summary-card td {
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1 !important;
+                padding: 0.5rem 0.8rem !important;
+            }
+            .summary-card tbody tr:nth-child(even) {
+                background: #f8fafc !important;
+            }
+            .summary-card tbody tr[style*="rgba(167, 139, 250"] {
+                background: #ede9fe !important;
+            }
+            .summary-card span {
+                color: inherit !important;
+            }
+            .summary-card div[style*="text-align: right"] {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" style="flex-direction: column;">
+        <!-- Top Navigation Bar -->
+        <header class="app-header" style="justify-content: space-between;">
+            <div class="logo">
+                <h1
+                    style="font-size: 1.75rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.5px; margin: 0;">
+                    Eunpyeong St. Mary's Myeloma Center Database</h1>
+            </div>
+            <a href="Dashboard.html" class="btn-secondary" style="text-decoration: none;">
+                <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main" style="flex-direction: column; padding: 2rem;">
+            <section class="content-area" id="content-area"
+                style="max-width: 1120px; margin: 0 auto; width: 100%; padding: 0;">
+
+                <div class="planner-header" style="margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <h2 style="margin: 0; color: var(--accent-primary); font-size: 1.75rem;">Transplantation</h2>
+                    </div>
+                </div>
+
+                <div class="planner-sections" style="display: flex; flex-direction: column; gap: 2rem;">
+
+                    <!-- Section 1: Transplant Classification -->
+                    <div class="card">
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <h3 style="margin: 0;">1. Transplant Type</h3>
+                            </div>
+                            <button class="btn-secondary" onclick="toggleSection('type-date-container', this)"
+                                style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                Hide
+                            </button>
+                        </div>
+                        <div class="card-body" id="type-date-container" style="width: 100%; box-sizing: border-box;">
+                            <!-- 1 Row x 4 Column Grid -->
+                            <div
+                                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+
+                                <!-- 1. Transplant Order / Sequence -->
+                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="transplant-order"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Transplant<br>order</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="transplant-order" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: var(--text-primary);"
+                                            onchange="this.style.color = 'var(--text-primary)'; document.getElementById('transplant-order-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                            <option value="1st" selected>1st</option>
+                                            <option value="2nd (Tandem)">2nd (Tandem)</option>
+                                            <option value="2nd (Salvage)">2nd (Salvage)</option>
+                                            <option value="3rd">3rd</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="transplant-order-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. 4th, 5th">
+                                    </div>
+                                </div>
+
+                                <!-- 2. Transplant Type (Autologous / Allogeneic) -->
+                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="transplant-type"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Transplant<br>type</label>
+                                    <div style="width: 60%;">
+                                        <select id="transplant-type" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: var(--text-primary);"
+                                            onchange="handleTransplantTypeChange(this, true)">
+                                            <option value="Autologous" selected>Autologous</option>
+                                            <option value="Allogeneic">Allogeneic</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Donor Type -->
+                                <div style="display: flex; align-items: flex-start; justify-content: space-between; opacity: 0.5;"
+                                    id="donor-type-wrapper">
+                                    <label for="donor-type"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Donor
+                                        type</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="donor-type" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                            onchange="this.style.color = 'var(--text-primary)'; handleDonorTypeChange(this)"
+                                            disabled>
+                                            <option value="N/A" selected>N/A</option>
+                                            <option value="Sibling">Sibling</option>
+                                            <option value="Unrelated">Unrelated</option>
+                                            <option value="Haploidentical">Haploidentical</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="donor-type-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. Syngeneic">
+                                    </div>
+                                </div>
+
+                                <!-- 4. Stem Cell Source -->
+                                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="cell-source"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Stem
+                                        cell<br>source</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="cell-source" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: var(--text-primary);"
+                                            onchange="this.style.color = 'var(--text-primary)'; document.getElementById('cell-source-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                            <option value="PBSC" selected>PBSC</option>
+                                            <option value="Bone marrow">Bone marrow</option>
+                                            <option value="Cord blood">Cord blood</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="cell-source-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. PBSC + BM">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Additional Allogeneic Donor Details Sub-panel (Shown if Allogeneic) -->
+                            <div id="allogeneic-details-panel"
+                                style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: var(--bg-dark); border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                                <h4
+                                    style="margin: 0 0 1.25rem 0; color: var(--text-primary); font-size: 1.05rem; font-weight: 600;">
+                                    Allogeneic Matching Information</h4>
+                                <div
+                                    style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+
+                                    <!-- 1. Donor Age -->
+                                    <div
+                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="donor-age"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Donor
+                                            age</label>
+                                        <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                            <input type="text" id="donor-age" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                placeholder="e.g. 45">
+                                            <span class="unit-label">yrs</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Donor Sex -->
+                                    <div
+                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="donor-sex"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Donor
+                                            sex</label>
+                                        <div style="width: 60%;">
+                                            <select id="donor-sex" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                onchange="this.style.color = 'var(--text-primary)';">
+                                                <option value="Male" selected>Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 3. Donor Body Weight -->
+                                    <div
+                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="donor-weight"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Donor
+                                            body<br>weight</label>
+                                        <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                            <input type="text" id="donor-weight" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                placeholder="e.g. 70">
+                                            <span class="unit-label">kg</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Spacer for 4th column in row 1 -->
+                                    <div></div>
+
+                                    <!-- 4. HLA Match -->
+                                    <div
+                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="hla-match"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">HLA
+                                            match</label>
+                                        <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                            <select id="hla-match" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                onchange="this.style.color = 'var(--text-primary)'; document.getElementById('hla-match-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                                <option value="8/8" selected>8/8</option>
+                                                <option value="7/8">7/8</option>
+                                                <option value="6/8">6/8</option>
+                                                <option value="4/8 (Haplo)">4/8 (Haplo)</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <input type="text" id="hla-match-others" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                                placeholder="e.g. 10/10, 9/10">
+                                        </div>
+                                    </div>
+
+                                    <!-- 5. ABO Match -->
+                                    <div
+                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="abo-match"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">ABO
+                                            match</label>
+                                        <div style="width: 60%;">
+                                            <select id="abo-match" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                onchange="this.style.color = 'var(--text-primary)';">
+                                                <option value="Compatible" selected>Compatible</option>
+                                                <option value="Major mismatch">Major mismatch</option>
+                                                <option value="Minor mismatch">Minor mismatch</option>
+                                                <option value="Bidirectional">Bidirectional mismatch</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Section Submit Button -->
+                        <div
+                            style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <button type="button" class="btn-secondary"
+                                onclick="saveTransplantData('Transplant Type saved successfully')"
+                                style="padding: 0 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Conditioning Regimen -->
+                    <div class="card agent-selection-card">
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <h3 style="margin: 0;">2. Conditioning Regimen</h3>
+                            </div>
+                            <button class="btn-secondary" onclick="toggleSection('conditioning-regimen-content', this)"
+                                style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                Hide
+                            </button>
+                        </div>
+                        <div id="conditioning-regimen-content">
+                            <!-- 2.1 Select Conditioning Agents -->
+                            <div style="padding: 1.5rem 1.5rem 0.5rem 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h4 style="margin: 0; color: var(--accent-primary); font-size: 1.05rem; font-weight: 600;">2.1 Select Conditioning Agents</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body" id="conditioning-classes-container" style="padding: 0; width: 100%; box-sizing: border-box; column-count: 2; column-gap: 2rem;">
+                                    <!-- Dynamic Conditioning Agent checkboxes -->
+                                </div>
+                            </div>
+
+                            <!-- 2.2 Configure Dosing -->
+                            <div style="padding: 1.5rem; border-top: 1px dashed var(--border-glass); margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h4 style="margin: 0; color: var(--accent-primary); font-size: 1.05rem; font-weight: 600;">2.2 Configure Conditioning Dosing</h4>
+                                    </div>
+                                </div>
+                                <div id="conditioning-configs-container" style="width: 100%; box-sizing: border-box;">
+                                    <div class="empty-agents">No conditioning agents selected.</div>
+                                </div>
+                            </div>
+
+                            <!-- Section Submit Button -->
+                            <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <button type="button" class="btn-secondary"
+                                    onclick="saveTransplantData('Conditioning Regimen saved successfully')"
+                                    style="padding: 0 1rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    SUBMIT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: GVHD Prophylaxis -->
+                    <div class="card agent-selection-card" id="gvhd-card-section" style="transition: opacity 0.3s ease, filter 0.3s ease;">
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <h3 style="margin: 0;">3. GVHD Prophylaxis</h3>
+                            </div>
+                            <button class="btn-secondary" onclick="toggleSection('gvhd-regimen-content', this)"
+                                style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                Hide
+                            </button>
+                        </div>
+                        <div id="gvhd-regimen-content">
+                            <!-- 3.1 Select GVHD Prophylaxis Agents -->
+                            <div style="padding: 1.5rem 1.5rem 0.5rem 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h4 style="margin: 0; color: var(--accent-primary); font-size: 1.05rem; font-weight: 600;">3.1 Select GVHD Prophylaxis Agents</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body" id="gvhd-classes-container" style="padding: 0; width: 100%; box-sizing: border-box; column-count: 2; column-gap: 2rem;">
+                                    <!-- Dynamic GVHD Agent checkboxes -->
+                                </div>
+                            </div>
+
+                            <!-- 3.2 Configure GVHD Dosing -->
+                            <div style="padding: 1.5rem; border-top: 1px dashed var(--border-glass); margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <div>
+                                        <h4 style="margin: 0; color: var(--accent-primary); font-size: 1.05rem; font-weight: 600;">3.2 Configure GVHD Prophylaxis Dosing</h4>
+                                    </div>
+                                </div>
+                                <div id="gvhd-configs-container" style="width: 100%; box-sizing: border-box;">
+                                    <div class="empty-agents">No GVHD prophylaxis agents selected.</div>
+                                </div>
+                            </div>
+
+                            <!-- Section Submit Button -->
+                            <div style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <button type="button" class="btn-secondary"
+                                    onclick="saveTransplantData('GVHD Prophylaxis saved successfully')"
+                                    style="padding: 0 1rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    SUBMIT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Infusion Date & Infused Cell -->
+                    <div class="card">
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <h3 style="margin: 0;">4. Infusion Date & Infused Stem Cell</h3>
+                                <p class="subtitle" style="margin-top: 0.5rem; margin-bottom: 0;">Enter infusion dates
+                                    and infused cell counts</p>
+                            </div>
+                            <button class="btn-secondary" onclick="toggleSection('infused-cell-container', this)"
+                                style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                Hide
+                            </button>
+                        </div>
+                        <div class="card-body" id="infused-cell-container" style="width: 100%; box-sizing: border-box;">
+                            <div id="infused-cell-rows-list"
+                                style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%; box-sizing: border-box;">
+
+                                <!-- Infused Cell Row 1 -->
+                                <div class="infused-cell-row" style="width: 100%; box-sizing: border-box;">
+                                    <!-- Row 1: Date & Cell Counts (4 columns) -->
+                                    <div
+                                        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+
+                                        <!-- 1. Infusion Date (Day 0, Day 1, etc.) -->
+                                        <div
+                                            style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                            <label class="infused-date-label"
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Infusion<br>day
+                                                1 (D0)</label>
+                                            <div style="width: 60%;">
+                                                <input type="date" data-date="" id="transplant-date"
+                                                    class="custom-text-input custom-date-format infused-cell-date"
+                                                    style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; box-sizing: border-box;"
+                                                    onchange="updateTransplantSummary()">
+                                            </div>
+                                        </div>
+
+                                        <!-- Empty divs to push next items to the second row -->
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+
+                                        <!-- 2. Infused volume -->
+                                        <div
+                                            style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                            <label
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Infused volume</label>
+                                            <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                <input type="text" id="infused-volume"
+                                                    class="custom-text-input infused-volume-input"
+                                                    style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                    placeholder="e.g. 200"
+                                                    oninput="updateTransplantSummary()">
+                                                <span class="unit-label">mL</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- 3. Viability -->
+                                        <div
+                                            style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                            <label
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Viability</label>
+                                            <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                <input type="text" id="infused-viability"
+                                                    class="custom-text-input infused-viability-input"
+                                                    style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                    placeholder="e.g. 95"
+                                                    oninput="updateTransplantSummary()">
+                                                <span class="unit-label">%</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- 4. Infused CD34+ cell dose -->
+                                        <div
+                                            style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                            <label
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Infused<br>CD34+
+                                                cells</label>
+                                            <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                <input type="text" id="infused-cd34"
+                                                    class="custom-text-input infused-cd34-input"
+                                                    style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                    placeholder="e.g. 4.50"
+                                                    oninput="updateTransplantSummary()">
+                                                <span class="unit-label">&times;10<sup>6</sup>/kg</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- 5. Infused TNC dose -->
+                                        <div
+                                            style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                            <label
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Infused TNC</label>
+                                            <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                <input type="text" id="infused-tnc"
+                                                    class="custom-text-input infused-tnc-input"
+                                                    style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                    placeholder="e.g. 15.2"
+                                                    oninput="updateTransplantSummary()">
+                                                <span class="unit-label">&times;10<sup>8</sup>/kg</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- 6. Infused MNC dose -->
+                                        <div
+                                            style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                            <label
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Infused MNC</label>
+                                            <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                <input type="text" id="infused-mnc"
+                                                    class="custom-text-input infused-mnc-input"
+                                                    style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                    placeholder="e.g. 6.8"
+                                                    oninput="updateTransplantSummary()">
+                                                <span class="unit-label">&times;10<sup>8</sup>/kg</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Remove row button (hidden for single first row, shown when added) -->
+                                    <div class="cell-row-remove-container"
+                                        style="display: none; justify-content: flex-end; margin-top: 0.75rem;">
+                                        <button type="button" class="btn-secondary" onclick="removeInfusedCellRow(this)"
+                                            style="padding: 0 0.85rem; height: 2.1rem; font-size: 0.92rem;"
+                                            title="Remove Infusion Row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                style="margin-right: 0.25rem;">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path
+                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                </path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
+                                            REMOVE
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Add Infused Cell Button below items -->
+                            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                                <button type="button" class="btn-secondary" onclick="addInfusedCellRow()"
+                                    style="padding: 0 0.85rem; height: 2.1rem; font-size: 0.92rem;"
+                                    title="Add Infusion Date & Cell Parameters">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    ADD
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Section Submit Button -->
+                        <div
+                            style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <button type="button" class="btn-secondary"
+                                onclick="saveTransplantData('Infused Cell parameters saved successfully')"
+                                style="padding: 0 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: G-CSF and IVIG support -->
+                    <div class="card">
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <h3 style="margin: 0;">5. G-CSF and IVIG support</h3>
+                            </div>
+                            <button class="btn-secondary" onclick="toggleSection('support-container', this)"
+                                style="padding: 0 1rem; height: 2.1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                Hide
+                            </button>
+                        </div>
+                        <div class="card-body" id="support-container" style="width: 100%; box-sizing: border-box;">
+                            <!-- 4 Column Grid -->
+                            <div
+                                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+                                
+                                <!-- 1. G-CSF dose -->
+                                <div
+                                    style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="gcsf-dose"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">G-CSF<br>dose</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="gcsf-dose" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;"
+                                            onchange="document.getElementById('gcsf-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                            <option value="None">None</option>
+                                            <option value="5 mcg/kg" selected>5 mcg/kg</option>
+                                            <option value="10 mcg/kg">10 mcg/kg</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="gcsf-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. 10 mcg/kg">
+                                    </div>
+                                </div>
+
+                                <!-- 2. G-CSF start day -->
+                                <div
+                                    style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="gcsf-start-day"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">G-CSF<br>start day</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="gcsf-start-day" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;"
+                                            onchange="document.getElementById('gcsf-start-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                            <option value="From D+5" selected>From D+5</option>
+                                            <option value="From D+7">From D+7</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="gcsf-start-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. D+3">
+                                    </div>
+                                </div>
+
+                                <!-- 3. IVIG dose -->
+                                <div
+                                    style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="ivig-dose"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">IVIG dose</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="ivig-dose" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;"
+                                            onchange="document.getElementById('ivig-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                            <option value="None">None</option>
+                                            <option value="500 mg/kg" selected>500 mg/kg</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="ivig-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. 250 mg/kg">
+                                    </div>
+                                </div>
+
+                                <!-- 4. IVIG infusion day -->
+                                <div
+                                    style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                    <label for="ivig-infusion-day"
+                                        style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">IVIG<br>infusion day</label>
+                                    <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <select id="ivig-infusion-day" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;"
+                                            onchange="document.getElementById('ivig-infusion-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
+                                            <option value="D+7" selected>D+7</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <input type="text" id="ivig-infusion-others" class="custom-text-input"
+                                            style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                            placeholder="e.g. D+8">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Section Submit Button -->
+                        <div
+                            style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <button type="button" class="btn-secondary"
+                                onclick="saveTransplantData('Support parameters saved successfully')"
+                                style="padding: 0 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 6: Summary -->
+                    <div class="card summary-card">
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div>
+                                <h3 style="margin: 0;">6. Transplantation Schedule</h3>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button id="print-summary-btn" class="btn-secondary" onclick="window.print()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                                    Print
+                                </button>
+                                <button class="btn-secondary" onclick="toggleSection('summary-container', this)"
+                                    style="padding: 0 1rem; height: 2.1rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                        <path
+                                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                        </path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                    Hide
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" id="summary-container"
+                            style="width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 1.5rem;">
+
+                            <!-- Overview Badges -->
+                            <div
+                                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; background: var(--bg-dark); padding: 1.25rem 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); box-sizing: border-box;">
+                                <div>
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Transplant Type</div>
+                                    <div id="summary-badge-type"
+                                        style="font-size: 0.95rem; color: var(--text-primary); font-weight: 600; margin-top: 0.25rem;">
+                                        -</div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Infusion Date (D0)</div>
+                                    <div id="summary-badge-date"
+                                        style="font-size: 0.95rem; color: #a78bfa; font-weight: 600; margin-top: 0.25rem;">
+                                        -</div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Stem Cell Source</div>
+                                    <div id="summary-badge-cell"
+                                        style="font-size: 0.95rem; color: var(--text-primary); font-weight: 600; margin-top: 0.25rem;">
+                                        -</div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Donor & HLA Match</div>
+                                    <div id="summary-badge-donor"
+                                        style="font-size: 0.95rem; color: var(--text-primary); font-weight: 600; margin-top: 0.25rem;">
+                                        -</div>
+                                </div>
+                            </div>
+
+                            <!-- Schedule Table -->
+                            <div
+                                style="overflow-x: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-md); background: var(--bg-dark);">
+                                <table
+                                    style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+                                    <thead>
+                                        <tr
+                                            style="background: rgba(255, 255, 255, 0.04); border-bottom: 1px solid var(--border-glass);">
+                                            <th
+                                                style="padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; width: 120px;">
+                                                Day</th>
+                                            <th
+                                                style="padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; width: 200px;">
+                                                Calendar Date</th>
+                                            <th
+                                                style="padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; width: 260px;">
+                                                Agent / Event</th>
+                                            <th style="padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0;">Dose
+                                                & Administration Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="summary-schedule-tbody">
+                                        <!-- Dynamically generated rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- Section Submit Button -->
+                        <div
+                            style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <button type="button" class="btn-secondary"
+                                onclick="saveTransplantData('Transplant schedule and details saved successfully')"
+                                style="padding: 0 1rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                SUBMIT
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="toast-notification">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span id="toast-message">Data successfully saved</span>
+    </div>
+
+    <script>
+        // Unique ID Generator
+        function generateId() {
+            return Math.random().toString(36).substr(2, 9);
+        }
+
+        // ==========================================
+        // 1. DATA DEFINITIONS
+        // ==========================================
+        const conditioningAgentsData = [
+            {
+                Class: "Alkylating Agents",
+                Agent: "Melphalan",
+                Dose: "100 mg/m2, 70 mg/m2, 50 mg/m2, 200 mg/m2, 140 mg/m2",
+                Dosing_day: "D-4–-3, D-3–-2, D-3, D-2"
+            },
+            {
+                Class: "Alkylating Agents",
+                Agent: "Busulfan",
+                Dose: "3.2 mg/kg (IV)",
+                Dosing_day: "D-4–-3, D-5–-2, D-4–-2"
+            },
+            {
+                Class: "Alkylating Agents",
+                Agent: "Cyclophosphamide (Cy)",
+                Dose: "60 mg/kg, 50 mg/kg",
+                Dosing_day: "D-2–-1, D-6–-5, D-3–-2, D-2"
+            },
+            {
+                Class: "Alkylating Agents",
+                Agent: "Thiotepa",
+                Dose: "5 mg/kg, 250 mg/m2",
+                Dosing_day: "D-7–-6, D-4, D-3–-2"
+            },
+            {
+                Class: "Alkylating Agents",
+                Agent: "Carmustine",
+                Dose: "300 mg/m2",
+                Dosing_day: "D-6"
+            },
+            {
+                Class: "Antimetabolites",
+                Agent: "Fludarabine",
+                Dose: "30 mg/m2, 40 mg/m2",
+                Dosing_day: "D-6–-2, D-5–-2, D-4–-2, D-4–-1"
+            },
+            {
+                Class: "Antimetabolites",
+                Agent: "Cytarabine",
+                Dose: "400 mg/m2",
+                Dosing_day: "D-5–-2"
+            },
+            {
+                Class: "Topoisomerase Inhibitors",
+                Agent: "Etoposide",
+                Dose: "400 mg/m2",
+                Dosing_day: "D-5–-2"
+            },
+            {
+                Class: "Radiation",
+                Agent: "TBI",
+                Dose: "200 cGy, 300 cGy, 400 cGy",
+                Dosing_day: "D-6–-3, D-1, D-3–-1, D-4–-1"
+            },
+            {
+                Class: "Immunosuppressants / Antibodies",
+                Agent: "Rabbit ATG",
+                Dose: "1.25 mg/kg, 1.5 mg/kg, 2.0 mg/kg, 2.5 mg/kg, 3.75 mg/kg",
+                Dosing_day: "D-3–-2, D-3–-1, D-4–-2, D-4–-1"
+            },
+            {
+                Class: "Others",
+                Agent: "Others",
+                Dose: "",
+                Dosing_day: ""
+            }
+        ];
+
+        const gvhdProphylaxisData = [
+            {
+                Class: "Calcineurin Inhibitors (CNI)",
+                Agent: "Cyclosporin",
+                Dose: "3 mg/kg, 5 mg/kg",
+                Dosing_day: ["From D-1"]
+            },
+            {
+                Class: "Calcineurin Inhibitors (CNI)",
+                Agent: "Tacrolimus",
+                Dose: "0.03 mg/kg, 0.05 mg/kg",
+                Dosing_day: ["From D-1"]
+            },
+            {
+                Class: "Antimetabolites & Alkylators",
+                Agent: "MTX",
+                Dose: "5 mg/m2, 10 mg/m2, 15 mg/m2",
+                Dosing_day: ["D1, 3, 6, 11", "D1, 3, 6"]
+            },
+            {
+                Class: "Antimetabolites & Alkylators",
+                Agent: "PTCy",
+                Dose: "50 mg/kg, 25 mg/kg",
+                Dosing_day: ["D+3, +4", "D+3, +4, +5"]
+            },
+            {
+                Class: "Antimetabolites & Alkylators",
+                Agent: "MMF",
+                Dose: "15 mg/kg, 500 mg, 1000 mg",
+                Dosing_day: ["From D0", "From D+1"]
+            },
+            {
+                Class: "mTOR Inhibitors",
+                Agent: "Sirolimus",
+                Dose: "2 mg, 4 mg, Loading, 1 mg",
+                Dosing_day: ["From D-3", "From D-1"]
+            },
+            {
+                Class: "Others",
+                Agent: "Others",
+                Dose: "",
+                Dosing_day: []
+            }
+        ];
+
+        // State Objects
+        const transplantState = {
+            conditioningAgents: {}, // agentName -> { customName: '', schedules: [{ id, dose, customDose, dosingDays, customDays }] }
+            gvhdAgents: {}          // agentName -> { customName: '', schedules: [{ id, dose, customDose, dosingDays, customDays }] }
+        };
+
+        // Grouping Data
+        function groupDataByClass(dataList) {
+            const grouped = {};
+            dataList.forEach(item => {
+                if (!grouped[item.Class]) grouped[item.Class] = [];
+                grouped[item.Class].push(item);
+            });
+            return grouped;
+        }
+
+        // ==========================================
+        // 2. CONDITIONING REGIMEN LOGIC
+        // ==========================================
+        function renderConditioningCheckboxes() {
+            const container = document.getElementById('conditioning-classes-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const grouped = groupDataByClass(conditioningAgentsData);
+            for (const [className, agents] of Object.entries(grouped)) {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'agent-class-group';
+
+                const titleEl = document.createElement('h4');
+                titleEl.className = 'class-title';
+                titleEl.textContent = className;
+                groupEl.appendChild(titleEl);
+
+                const listEl = document.createElement('div');
+                listEl.className = 'checkbox-list';
+
+                agents.forEach(agent => {
+                    const itemContainer = document.createElement('div');
+                    itemContainer.className = 'checkbox-item-container';
+
+                    const label = document.createElement('label');
+                    label.className = 'custom-checkbox';
+
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.value = agent.Agent;
+                    input.id = `chk-cond-${agent.Agent.replace(/\s+/g, '-')}`;
+                    input.checked = !!transplantState.conditioningAgents[agent.Agent];
+
+                    input.addEventListener('change', (e) => {
+                        handleConditioningAgentSelection(agent, e.target.checked);
+                        if (agent.Agent === 'Others') {
+                            const othersContainer = document.getElementById('cond-others-container');
+                            if (othersContainer) {
+                                othersContainer.style.display = e.target.checked ? 'flex' : 'none';
+                                if (e.target.checked) {
+                                    const customInput = document.getElementById('cond-custom-agent-input');
+                                    if (customInput) customInput.focus();
+                                }
+                            }
+                        }
+                    });
+
+                    label.appendChild(input);
+
+                    const checkmark = document.createElement('div');
+                    checkmark.className = 'checkmark';
+                    label.appendChild(checkmark);
+
+                    const textContainer = document.createElement('div');
+                    textContainer.className = 'agent-label';
+                    textContainer.innerHTML = `<span class="agent-name">${agent.Agent}</span>`;
+                    label.appendChild(textContainer);
+
+                    itemContainer.appendChild(label);
+
+                    if (agent.Agent === 'Others') {
+                        const othersContainer = document.createElement('div');
+                        othersContainer.id = 'cond-others-container';
+                        othersContainer.style.marginTop = '0.5rem';
+                        othersContainer.style.display = input.checked ? 'flex' : 'none';
+                        othersContainer.style.flexDirection = 'column';
+                        othersContainer.style.gap = '0.4rem';
+
+                        const customInput = document.createElement('input');
+                        customInput.type = 'text';
+                        customInput.id = 'cond-custom-agent-input';
+                        customInput.className = 'custom-text-input';
+                        customInput.placeholder = 'Enter conditioning agent...';
+                        customInput.style.width = '50%';
+                        customInput.style.height = '2.1rem';
+                        customInput.style.margin = '0';
+                        customInput.value = transplantState.conditioningAgents['Others']?.customName || '';
+                        customInput.addEventListener('input', (e) => {
+                            if (!transplantState.conditioningAgents['Others']) {
+                                input.checked = true;
+                                handleConditioningAgentSelection(agent, true);
+                            }
+                            transplantState.conditioningAgents['Others'].customName = e.target.value;
+                            const title = document.getElementById('cond-config-title-Others');
+                            if (title) title.textContent = e.target.value || 'Others';
+                            updateTransplantSummary();
+                        });
+                        othersContainer.appendChild(customInput);
+
+                        // Container for extra dynamically added inputs
+                        const extraInputsContainer = document.createElement('div');
+                        extraInputsContainer.id = 'cond-extra-inputs-container';
+                        extraInputsContainer.style.display = 'flex';
+                        extraInputsContainer.style.flexDirection = 'column';
+                        extraInputsContainer.style.gap = '0.4rem';
+                        othersContainer.appendChild(extraInputsContainer);
+
+                        // Add button wrapper (오른쪽 아래)
+                        const addBtnWrapper = document.createElement('div');
+                        addBtnWrapper.style.display = 'flex';
+                        addBtnWrapper.style.justifyContent = 'flex-end';
+                        addBtnWrapper.style.marginTop = '0.25rem';
+
+                        const addBtn = document.createElement('button');
+                        addBtn.type = 'button';
+                        addBtn.id = 'cond-add-agent-btn';
+                        addBtn.className = 'btn-secondary';
+                        addBtn.style.padding = '0.25rem 0.75rem';
+                        addBtn.style.fontSize = '0.82rem';
+                        addBtn.style.display = 'inline-flex';
+                        addBtn.style.alignItems = 'center';
+                        addBtn.style.gap = '0.3rem';
+                        addBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add
+                        `;
+                        addBtn.onclick = () => {
+                            if (!input.checked) {
+                                input.checked = true;
+                                handleConditioningAgentSelection(agent, true);
+                            }
+                            addExtraConditioningAgent();
+                        };
+                        addBtnWrapper.appendChild(addBtn);
+                        othersContainer.appendChild(addBtnWrapper);
+
+                        itemContainer.appendChild(othersContainer);
+                    }
+
+                    listEl.appendChild(itemContainer);
+                });
+
+                groupEl.appendChild(listEl);
+                container.appendChild(groupEl);
+            }
+            renderExtraConditioningInputs();
+        }
+
+        let extraConditioningCount = 0;
+        function addExtraConditioningAgent() {
+            extraConditioningCount++;
+            const extraKey = `Others_${extraConditioningCount}`;
+            const defDays = { from: 'D-3', to: 'D-2' };
+            transplantState.conditioningAgents[extraKey] = {
+                customName: '',
+                isExtra: true,
+                schedules: [{
+                    id: generateId(),
+                    dose: 'Others',
+                    customDose: '',
+                    fromDay: defDays.from,
+                    toDay: defDays.to,
+                    isCustomDays: false,
+                    customDays: ''
+                }]
+            };
+            renderExtraConditioningInputs();
+            renderConditioningConfigs();
+            updateTransplantSummary();
+        }
+
+        function renderExtraConditioningInputs() {
+            const container = document.getElementById('cond-extra-inputs-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            Object.entries(transplantState.conditioningAgents).forEach(([key, state]) => {
+                if (!state.isExtra) return;
+
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.alignItems = 'center';
+                row.style.gap = '0.75rem';
+                row.style.width = '100%';
+
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'custom-text-input';
+                inp.placeholder = 'Enter conditioning agent...';
+                inp.value = state.customName || '';
+                inp.style.width = '50%';
+                inp.style.height = '2.1rem';
+                inp.style.margin = '0';
+                inp.style.boxSizing = 'border-box';
+                inp.addEventListener('input', (e) => {
+                    state.customName = e.target.value;
+                    const title = document.getElementById(`cond-config-title-${key}`);
+                    if (title) title.textContent = e.target.value || key;
+                    updateTransplantSummary();
+                });
+                row.appendChild(inp);
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'btn-secondary';
+                delBtn.style.height = '2.1rem';
+                delBtn.style.padding = '0 0.75rem';
+                delBtn.style.fontSize = '0.8rem';
+                delBtn.style.fontWeight = '500';
+                delBtn.style.display = 'inline-flex';
+                delBtn.style.alignItems = 'center';
+                delBtn.style.whiteSpace = 'nowrap';
+                delBtn.style.marginLeft = '0.5rem';
+                delBtn.style.flexShrink = '0';
+                delBtn.textContent = '- REMOVE';
+                delBtn.title = 'Remove agent';
+                delBtn.onclick = () => {
+                    delete transplantState.conditioningAgents[key];
+                    renderExtraConditioningInputs();
+                    renderConditioningConfigs();
+                    updateTransplantSummary();
+                };
+                row.appendChild(delBtn);
+
+                container.appendChild(row);
+            });
+        }
+
+        function getDefaultConditioningDays(agentName) {
+            if (agentName === 'Melphalan') return { from: 'D-4', to: 'D-3' };
+            if (agentName === 'Busulfan') return { from: 'D-4', to: 'D-3' };
+            if (agentName === 'Cyclophosphamide (Cy)') return { from: 'D-2', to: 'D-1' };
+            if (agentName === 'Thiotepa') return { from: 'D-7', to: 'D-6' };
+            if (agentName === 'Carmustine') return { from: 'D-6', to: 'D-6' };
+            if (agentName === 'Fludarabine') return { from: 'D-6', to: 'D-2' };
+            if (agentName === 'Cytarabine') return { from: 'D-5', to: 'D-2' };
+            if (agentName === 'Etoposide') return { from: 'D-5', to: 'D-2' };
+            if (agentName === 'TBI') return { from: 'D-6', to: 'D-3' };
+            if (agentName === 'Rabbit ATG') return { from: 'D-3', to: 'D-2' };
+            return { from: 'D-3', to: 'D-2' };
+        }
+
+        function handleConditioningAgentSelection(agent, isSelected) {
+            if (isSelected) {
+                const defaultDose = agent.Dose ? agent.Dose.split(',')[0].trim() : 'Others';
+                const defDays = getDefaultConditioningDays(agent.Agent);
+
+                transplantState.conditioningAgents[agent.Agent] = {
+                    customName: agent.Agent === 'Others' ? (document.getElementById('cond-custom-agent-input')?.value || '') : '',
+                    schedules: [{
+                        id: generateId(),
+                        dose: defaultDose,
+                        customDose: '',
+                        fromDay: defDays.from,
+                        toDay: defDays.to,
+                        isCustomDays: false,
+                        customDays: ''
+                    }]
+                };
+            } else {
+                delete transplantState.conditioningAgents[agent.Agent];
+            }
+            renderConditioningConfigs();
+            updateTransplantSummary();
+        }
+
+        function renderConditioningConfigs() {
+            const container = document.getElementById('conditioning-configs-container');
+            if (!container) return;
+
+            const selectedAgentNames = Object.keys(transplantState.conditioningAgents);
+            if (selectedAgentNames.length === 0) {
+                container.innerHTML = '<div class="empty-agents">No conditioning agents selected. Select agents above.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            const selectedAgents = [];
+            selectedAgentNames.forEach(name => {
+                const found = conditioningAgentsData.find(a => a.Agent === name);
+                if (found) {
+                    selectedAgents.push(found);
+                } else if (name.startsWith('Others_')) {
+                    selectedAgents.push({
+                        Class: 'Others',
+                        Agent: name,
+                        Dose: '',
+                        Dosing_day: ''
+                    });
+                }
+            });
+
+            selectedAgents.forEach(agent => {
+                const agentState = transplantState.conditioningAgents[agent.Agent];
+                if (!agentState) return;
+
+                const card = document.createElement('div');
+                card.className = 'config-card';
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'config-card-header';
+                const displayName = agent.Agent.startsWith('Others') && agentState.customName ? agentState.customName : agent.Agent;
+                const classSpan = agent.Agent.startsWith('Others') ? '' : ` <span class="config-agent-class">${agent.Class}</span>`;
+                header.innerHTML = `<div class="config-agent-name" id="cond-config-title-${agent.Agent.replace(/\s+/g, '-')}">${displayName}${classSpan}</div>`;
+                card.appendChild(header);
+
+                // Schedules Container
+                const schedulesContainer = document.createElement('div');
+                schedulesContainer.className = 'schedules-container';
+
+                agentState.schedules.forEach((schedule, index) => {
+                    const block = document.createElement('div');
+                    block.className = 'schedule-block';
+                    if (index > 0) {
+                        block.style.marginTop = '1rem';
+                        block.style.paddingTop = '1rem';
+                        block.style.borderTop = '1px dashed var(--border-glass)';
+                    }
+
+                    if (index > 0) {
+                        const schedHeader = document.createElement('div');
+                        schedHeader.style.display = 'flex';
+                        schedHeader.style.justifyContent = 'flex-end';
+                        schedHeader.style.alignItems = 'center';
+                        schedHeader.style.marginBottom = '0.5rem';
+
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'btn-secondary';
+                        deleteBtn.style.padding = '0.2rem 0.6rem';
+                        deleteBtn.style.fontSize = '0.8rem';
+                        deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>Remove`;
+                        deleteBtn.onclick = () => {
+                            agentState.schedules.splice(index, 1);
+                            renderConditioningConfigs();
+                            updateTransplantSummary();
+                        };
+                        schedHeader.appendChild(deleteBtn);
+                        block.appendChild(schedHeader);
+                    }
+
+                    // Dose Section
+                    const doseSection = document.createElement('div');
+                    doseSection.className = 'config-section';
+                    const doseTitle = document.createElement('div');
+                    doseTitle.className = 'config-label';
+                    doseTitle.textContent = 'Dose';
+                    doseSection.appendChild(doseTitle);
+
+                    const doseGroup = document.createElement('div');
+                    doseGroup.className = 'radio-group';
+                    doseGroup.style.alignItems = 'center';
+
+                    let doses = agent.Dose ? agent.Dose.split(',').map(d => d.trim()).filter(d => d) : [];
+                    doses.push('Others');
+
+                    const customDoseInput = document.createElement('input');
+                    customDoseInput.type = 'text';
+                    customDoseInput.className = 'custom-text-input hidden';
+                    customDoseInput.placeholder = 'Specify dose(s)...';
+                    customDoseInput.style.width = '180px';
+                    customDoseInput.style.height = '2.1rem';
+                    customDoseInput.style.padding = '0.25rem 0.6rem';
+                    customDoseInput.style.fontSize = '0.875rem';
+                    customDoseInput.style.margin = '0';
+                    customDoseInput.value = schedule.customDose || '';
+                    customDoseInput.addEventListener('input', (e) => {
+                        schedule.customDose = e.target.value;
+                        updateTransplantSummary();
+                    });
+
+                    doses.forEach((dVal, i) => {
+                        const radioId = `cond-dose-${agent.Agent.replace(/\s+/g, '-')}-${schedule.id}-${i}`;
+                        const opt = document.createElement('div');
+                        opt.className = 'radio-option';
+
+                        const rInput = document.createElement('input');
+                        rInput.type = 'radio';
+                        rInput.name = `cond-dose-${agent.Agent}-${schedule.id}`;
+                        rInput.id = radioId;
+                        rInput.value = dVal;
+                        if (schedule.dose === dVal) {
+                            rInput.checked = true;
+                            if (dVal === 'Others') customDoseInput.classList.remove('hidden');
+                        }
+
+                        rInput.addEventListener('change', () => {
+                            schedule.dose = dVal;
+                            if (dVal === 'Others') {
+                                customDoseInput.classList.remove('hidden');
+                                customDoseInput.focus();
+                            } else {
+                                customDoseInput.classList.add('hidden');
+                            }
+                            updateTransplantSummary();
+                        });
+
+                        const rLabel = document.createElement('label');
+                        rLabel.className = 'radio-label';
+                        rLabel.setAttribute('for', radioId);
+                        rLabel.textContent = dVal;
+
+                        opt.appendChild(rInput);
+                        opt.appendChild(rLabel);
+                        doseGroup.appendChild(opt);
+
+                        if (dVal === 'Others') {
+                            doseGroup.appendChild(customDoseInput);
+                        }
+                    });
+
+                    doseSection.appendChild(doseGroup);
+                    block.appendChild(doseSection);
+
+                    // Administration Days Section
+                    const daysSection = document.createElement('div');
+                    daysSection.className = 'config-section';
+                    const daysTitle = document.createElement('div');
+                    daysTitle.className = 'config-label';
+                    daysTitle.textContent = 'Administration day(s)';
+                    daysSection.appendChild(daysTitle);
+
+                    const daysRow = document.createElement('div');
+                    daysRow.style.display = 'flex';
+                    daysRow.style.alignItems = 'center';
+                    daysRow.style.gap = '0.75rem';
+                    daysRow.style.flexWrap = 'wrap';
+
+                    const dayValues = ['D-8', 'D-7', 'D-6', 'D-5', 'D-4', 'D-3', 'D-2', 'D-1'];
+
+                    // From
+                    const fromLabel = document.createElement('span');
+                    fromLabel.style.fontSize = '0.92rem';
+                    fromLabel.style.fontWeight = '500';
+                    fromLabel.style.color = 'var(--text-secondary)';
+                    fromLabel.textContent = 'From';
+                    daysRow.appendChild(fromLabel);
+
+                    const fromSelect = document.createElement('select');
+                    fromSelect.className = 'custom-text-input';
+                    fromSelect.style.height = '2.1rem';
+                    fromSelect.style.padding = '0.25rem 0.6rem';
+                    fromSelect.style.width = '100px';
+                    fromSelect.style.fontSize = '0.9rem';
+                    fromSelect.style.margin = '0';
+
+                    dayValues.forEach(dv => {
+                        const opt = document.createElement('option');
+                        opt.value = dv;
+                        opt.textContent = dv;
+                        if (schedule.fromDay === dv) opt.selected = true;
+                        fromSelect.appendChild(opt);
+                    });
+
+                    const isOthersAgent = agent.Agent.startsWith('Others');
+                    // toSelect isn't declared yet at this point -- its own "Others" dimming is
+                    // applied further down once it exists (see `if (isOthersAgent)` near its creation).
+                    if (isOthersAgent) {
+                        fromSelect.style.color = '#aaaaaa';
+                    }
+
+                    fromSelect.addEventListener('change', (e) => {
+                        fromSelect.style.color = 'var(--text-primary)';
+                        schedule.fromDay = e.target.value;
+                        updateTransplantSummary();
+                    });
+                    daysRow.appendChild(fromSelect);
+
+                    // To
+                    const toLabel = document.createElement('span');
+                    toLabel.style.fontSize = '0.92rem';
+                    toLabel.style.fontWeight = '500';
+                    toLabel.style.color = 'var(--text-secondary)';
+                    toLabel.style.marginLeft = '0.25rem';
+                    toLabel.textContent = 'To';
+                    daysRow.appendChild(toLabel);
+
+                    const toSelect = document.createElement('select');
+                    toSelect.className = 'custom-text-input';
+                    toSelect.style.height = '2.1rem';
+                    toSelect.style.padding = '0.25rem 0.6rem';
+                    toSelect.style.width = '100px';
+                    toSelect.style.fontSize = '0.9rem';
+                    toSelect.style.margin = '0';
+                    if (isOthersAgent) {
+                        toSelect.style.color = '#aaaaaa';
+                    }
+
+                    dayValues.forEach(dv => {
+                        const opt = document.createElement('option');
+                        opt.value = dv;
+                        opt.textContent = dv;
+                        if (schedule.toDay === dv) opt.selected = true;
+                        toSelect.appendChild(opt);
+                    });
+
+                    toSelect.addEventListener('change', (e) => {
+                        toSelect.style.color = 'var(--text-primary)';
+                        schedule.toDay = e.target.value;
+                        updateTransplantSummary();
+                    });
+                    daysRow.appendChild(toSelect);
+
+                    // Others radio button & custom input
+                    const othersOpt = document.createElement('div');
+                    othersOpt.className = 'radio-option';
+                    othersOpt.style.marginLeft = '0.5rem';
+
+                    const othersRadioId = `cond-days-others-${agent.Agent.replace(/\s+/g, '-')}-${schedule.id}`;
+
+                    const othersCheck = document.createElement('input');
+                    othersCheck.type = 'checkbox';
+                    othersCheck.id = othersRadioId;
+                    othersCheck.checked = !!schedule.isCustomDays;
+
+                    const othersLabel = document.createElement('label');
+                    othersLabel.className = 'radio-label';
+                    othersLabel.setAttribute('for', othersRadioId);
+                    othersLabel.textContent = 'Others';
+
+                    othersOpt.appendChild(othersCheck);
+                    othersOpt.appendChild(othersLabel);
+                    daysRow.appendChild(othersOpt);
+
+                    const customDaysInput = document.createElement('input');
+                    customDaysInput.type = 'text';
+                    customDaysInput.className = `custom-text-input ${schedule.isCustomDays ? '' : 'hidden'}`;
+                    customDaysInput.placeholder = 'e.g. D-1, -3, -5, -7';
+                    customDaysInput.style.width = '190px';
+                    customDaysInput.style.height = '2.1rem';
+                    customDaysInput.style.padding = '0.25rem 0.6rem';
+                    customDaysInput.style.fontSize = '0.875rem';
+                    customDaysInput.style.margin = '0';
+                    customDaysInput.value = schedule.customDays || '';
+
+                    customDaysInput.addEventListener('input', (e) => {
+                        schedule.customDays = e.target.value;
+                        updateTransplantSummary();
+                    });
+
+                    othersCheck.addEventListener('change', (e) => {
+                        schedule.isCustomDays = e.target.checked;
+                        if (e.target.checked) {
+                            customDaysInput.classList.remove('hidden');
+                            fromSelect.disabled = true;
+                            toSelect.disabled = true;
+                            fromSelect.style.opacity = '0.4';
+                            toSelect.style.opacity = '0.4';
+                            customDaysInput.focus();
+                        } else {
+                            customDaysInput.classList.add('hidden');
+                            fromSelect.disabled = false;
+                            toSelect.disabled = false;
+                            fromSelect.style.opacity = '1';
+                            toSelect.style.opacity = '1';
+                        }
+                        updateTransplantSummary();
+                    });
+
+                    if (schedule.isCustomDays) {
+                        fromSelect.disabled = true;
+                        toSelect.disabled = true;
+                        fromSelect.style.opacity = '0.4';
+                        toSelect.style.opacity = '0.4';
+                    }
+
+                    daysRow.appendChild(customDaysInput);
+
+                    daysSection.appendChild(daysRow);
+                    block.appendChild(daysSection);
+
+                    schedulesContainer.appendChild(block);
+                });
+
+                card.appendChild(schedulesContainer);
+
+                container.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // 3. GVHD PROPHYLAXIS LOGIC
+        // ==========================================
+        function renderGvhdCheckboxes() {
+            const container = document.getElementById('gvhd-classes-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const grouped = groupDataByClass(gvhdProphylaxisData);
+            for (const [className, agents] of Object.entries(grouped)) {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'agent-class-group';
+
+                const titleEl = document.createElement('h4');
+                titleEl.className = 'class-title';
+                titleEl.textContent = className;
+                groupEl.appendChild(titleEl);
+
+                const listEl = document.createElement('div');
+                listEl.className = 'checkbox-list';
+
+                agents.forEach(agent => {
+                    const itemContainer = document.createElement('div');
+                    itemContainer.className = 'checkbox-item-container';
+
+                    const label = document.createElement('label');
+                    label.className = 'custom-checkbox';
+
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.value = agent.Agent;
+                    input.id = `chk-gvhd-${agent.Agent.replace(/\s+/g, '-')}`;
+                    input.checked = !!transplantState.gvhdAgents[agent.Agent];
+
+                    input.addEventListener('change', (e) => {
+                        handleGvhdAgentSelection(agent, e.target.checked);
+                        if (agent.Agent === 'Others') {
+                            const othersContainer = document.getElementById('gvhd-others-container');
+                            if (othersContainer) {
+                                othersContainer.style.display = e.target.checked ? 'flex' : 'none';
+                                if (e.target.checked) {
+                                    const customInput = document.getElementById('gvhd-custom-agent-input');
+                                    if (customInput) customInput.focus();
+                                }
+                            }
+                        }
+                    });
+
+                    label.appendChild(input);
+
+                    const checkmark = document.createElement('div');
+                    checkmark.className = 'checkmark';
+                    label.appendChild(checkmark);
+
+                    const textContainer = document.createElement('div');
+                    textContainer.className = 'agent-label';
+                    textContainer.innerHTML = `<span class="agent-name">${agent.Agent}</span>`;
+                    label.appendChild(textContainer);
+
+                    itemContainer.appendChild(label);
+
+                    if (agent.Agent === 'Others') {
+                        const othersContainer = document.createElement('div');
+                        othersContainer.id = 'gvhd-others-container';
+                        othersContainer.style.marginTop = '0.5rem';
+                        othersContainer.style.display = input.checked ? 'flex' : 'none';
+                        othersContainer.style.flexDirection = 'column';
+                        othersContainer.style.gap = '0.4rem';
+
+                        const customInput = document.createElement('input');
+                        customInput.type = 'text';
+                        customInput.id = 'gvhd-custom-agent-input';
+                        customInput.className = 'custom-text-input';
+                        customInput.placeholder = 'Enter GVHD agent...';
+                        customInput.style.width = '50%';
+                        customInput.style.height = '2.1rem';
+                        customInput.style.margin = '0';
+                        customInput.value = transplantState.gvhdAgents['Others']?.customName || '';
+                        customInput.addEventListener('input', (e) => {
+                            if (!transplantState.gvhdAgents['Others']) {
+                                input.checked = true;
+                                handleGvhdAgentSelection(agent, true);
+                            }
+                            transplantState.gvhdAgents['Others'].customName = e.target.value;
+                            const title = document.getElementById('gvhd-config-title-Others');
+                            if (title) title.textContent = e.target.value || 'Others';
+                            updateTransplantSummary();
+                        });
+                        othersContainer.appendChild(customInput);
+
+                        // Container for extra dynamically added inputs
+                        const extraInputsContainer = document.createElement('div');
+                        extraInputsContainer.id = 'gvhd-extra-inputs-container';
+                        extraInputsContainer.style.display = 'flex';
+                        extraInputsContainer.style.flexDirection = 'column';
+                        extraInputsContainer.style.gap = '0.4rem';
+                        othersContainer.appendChild(extraInputsContainer);
+
+                        // Add button wrapper (오른쪽 아래)
+                        const addBtnWrapper = document.createElement('div');
+                        addBtnWrapper.style.display = 'flex';
+                        addBtnWrapper.style.justifyContent = 'flex-end';
+                        addBtnWrapper.style.marginTop = '0.25rem';
+
+                        const addBtn = document.createElement('button');
+                        addBtn.type = 'button';
+                        addBtn.id = 'gvhd-add-agent-btn';
+                        addBtn.className = 'btn-secondary';
+                        addBtn.style.padding = '0.25rem 0.75rem';
+                        addBtn.style.fontSize = '0.82rem';
+                        addBtn.style.display = 'inline-flex';
+                        addBtn.style.alignItems = 'center';
+                        addBtn.style.gap = '0.3rem';
+                        addBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add
+                        `;
+                        addBtn.onclick = () => {
+                            if (!input.checked) {
+                                input.checked = true;
+                                handleGvhdAgentSelection(agent, true);
+                            }
+                            addExtraGvhdAgent();
+                        };
+                        addBtnWrapper.appendChild(addBtn);
+                        othersContainer.appendChild(addBtnWrapper);
+
+                        itemContainer.appendChild(othersContainer);
+                    }
+
+                    listEl.appendChild(itemContainer);
+                });
+
+                groupEl.appendChild(listEl);
+                container.appendChild(groupEl);
+            }
+            renderExtraGvhdInputs();
+        }
+
+        let extraGvhdCount = 0;
+        function addExtraGvhdAgent() {
+            extraGvhdCount++;
+            const extraKey = `Others_${extraGvhdCount}`;
+            transplantState.gvhdAgents[extraKey] = {
+                customName: '',
+                isExtra: true,
+                schedules: [{
+                    id: generateId(),
+                    dose: 'Others',
+                    customDose: '',
+                    dosingDays: 'Others',
+                    customDays: ''
+                }]
+            };
+            renderExtraGvhdInputs();
+            renderGvhdConfigs();
+            updateTransplantSummary();
+        }
+
+        function renderExtraGvhdInputs() {
+            const container = document.getElementById('gvhd-extra-inputs-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            Object.entries(transplantState.gvhdAgents).forEach(([key, state]) => {
+                if (!state.isExtra) return;
+
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.alignItems = 'center';
+                row.style.gap = '0.75rem';
+                row.style.width = '100%';
+
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'custom-text-input';
+                inp.placeholder = 'Enter GVHD agent...';
+                inp.value = state.customName || '';
+                inp.style.width = '50%';
+                inp.style.height = '2.1rem';
+                inp.style.margin = '0';
+                inp.style.boxSizing = 'border-box';
+                inp.addEventListener('input', (e) => {
+                    state.customName = e.target.value;
+                    const title = document.getElementById(`gvhd-config-title-${key}`);
+                    if (title) title.textContent = e.target.value || key;
+                    updateTransplantSummary();
+                });
+                row.appendChild(inp);
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'btn-secondary';
+                delBtn.style.height = '2.1rem';
+                delBtn.style.padding = '0 0.75rem';
+                delBtn.style.fontSize = '0.8rem';
+                delBtn.style.fontWeight = '500';
+                delBtn.style.display = 'inline-flex';
+                delBtn.style.alignItems = 'center';
+                delBtn.style.whiteSpace = 'nowrap';
+                delBtn.style.marginLeft = '0.5rem';
+                delBtn.style.flexShrink = '0';
+                delBtn.textContent = '- REMOVE';
+                delBtn.title = 'Remove agent';
+                delBtn.onclick = () => {
+                    delete transplantState.gvhdAgents[key];
+                    renderExtraGvhdInputs();
+                    renderGvhdConfigs();
+                    updateTransplantSummary();
+                };
+                row.appendChild(delBtn);
+
+                container.appendChild(row);
+            });
+        }
+
+        function handleGvhdAgentSelection(agent, isSelected) {
+            if (isSelected) {
+                const defaultDose = agent.Dose ? (Array.isArray(agent.Dose) ? agent.Dose[0] : agent.Dose.split(',')[0].trim()) : 'Others';
+                let defaultDays = 'Others';
+                if (agent.Dosing_day) {
+                    if (Array.isArray(agent.Dosing_day)) {
+                        defaultDays = agent.Dosing_day[0] || 'Others';
+                    } else if (typeof agent.Dosing_day === 'string' && agent.Dosing_day.trim()) {
+                        defaultDays = agent.Dosing_day.split(',')[0].trim();
+                    }
+                }
+
+                transplantState.gvhdAgents[agent.Agent] = {
+                    customName: agent.Agent === 'Others' ? (document.getElementById('gvhd-custom-agent-input')?.value || '') : '',
+                    schedules: [{
+                        id: generateId(),
+                        dose: defaultDose,
+                        customDose: '',
+                        dosingDays: defaultDays,
+                        customDays: ''
+                    }]
+                };
+            } else {
+                delete transplantState.gvhdAgents[agent.Agent];
+            }
+            renderGvhdConfigs();
+            updateTransplantSummary();
+        }
+
+        function renderGvhdConfigs() {
+            const container = document.getElementById('gvhd-configs-container');
+            if (!container) return;
+
+            const selectedAgentNames = Object.keys(transplantState.gvhdAgents);
+            if (selectedAgentNames.length === 0) {
+                container.innerHTML = '<div class="empty-agents">No GVHD prophylaxis agents selected. Select agents above.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            const selectedAgents = [];
+            selectedAgentNames.forEach(name => {
+                const found = gvhdProphylaxisData.find(a => a.Agent === name);
+                if (found) {
+                    selectedAgents.push(found);
+                } else if (name.startsWith('Others_')) {
+                    selectedAgents.push({
+                        Class: 'Others',
+                        Agent: name,
+                        Dose: '',
+                        Dosing_day: []
+                    });
+                }
+            });
+
+            selectedAgents.forEach(agent => {
+                const agentState = transplantState.gvhdAgents[agent.Agent];
+                if (!agentState) return;
+
+                const card = document.createElement('div');
+                card.className = 'config-card';
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'config-card-header';
+                const displayName = agent.Agent === 'Others' && agentState.customName ? agentState.customName : agent.Agent;
+                const classSpan = agent.Agent === 'Others' ? '' : ` <span class="config-agent-class">${agent.Class}</span>`;
+                header.innerHTML = `<div class="config-agent-name" id="gvhd-config-title-${agent.Agent.replace(/\s+/g, '-')}">${displayName}${classSpan}</div>`;
+                card.appendChild(header);
+
+                // Schedules Container
+                const schedulesContainer = document.createElement('div');
+                schedulesContainer.className = 'schedules-container';
+
+                agentState.schedules.forEach((schedule, index) => {
+                    const block = document.createElement('div');
+                    block.className = 'schedule-block';
+                    if (index > 0) {
+                        block.style.marginTop = '1rem';
+                        block.style.paddingTop = '1rem';
+                        block.style.borderTop = '1px dashed var(--border-glass)';
+                    }
+
+                    if (index > 0) {
+                        const schedHeader = document.createElement('div');
+                        schedHeader.style.display = 'flex';
+                        schedHeader.style.justifyContent = 'flex-end';
+                        schedHeader.style.alignItems = 'center';
+                        schedHeader.style.marginBottom = '0.5rem';
+
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'btn-secondary';
+                        deleteBtn.style.padding = '0.2rem 0.6rem';
+                        deleteBtn.style.fontSize = '0.8rem';
+                        deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>Remove`;
+                        deleteBtn.onclick = () => {
+                            agentState.schedules.splice(index, 1);
+                            renderGvhdConfigs();
+                            updateTransplantSummary();
+                        };
+                        schedHeader.appendChild(deleteBtn);
+                        block.appendChild(schedHeader);
+                    }
+
+                    // Dose Section
+                    const doseSection = document.createElement('div');
+                    doseSection.className = 'config-section';
+                    const doseTitle = document.createElement('div');
+                    doseTitle.className = 'config-label';
+                    doseTitle.textContent = 'Dose';
+                    doseSection.appendChild(doseTitle);
+
+                    const doseGroup = document.createElement('div');
+                    doseGroup.className = 'radio-group';
+                    doseGroup.style.alignItems = 'center';
+
+                    let doses = agent.Dose ? agent.Dose.split(',').map(d => d.trim()).filter(d => d) : [];
+                    doses.push('Others');
+
+                    const customDoseInput = document.createElement('input');
+                    customDoseInput.type = 'text';
+                    customDoseInput.className = 'custom-text-input hidden';
+                    customDoseInput.placeholder = 'Specify dose(s)...';
+                    customDoseInput.style.width = '180px';
+                    customDoseInput.style.height = '2.1rem';
+                    customDoseInput.style.padding = '0.25rem 0.6rem';
+                    customDoseInput.style.fontSize = '0.875rem';
+                    customDoseInput.style.margin = '0';
+                    customDoseInput.value = schedule.customDose || '';
+                    customDoseInput.addEventListener('input', (e) => {
+                        schedule.customDose = e.target.value;
+                        updateTransplantSummary();
+                    });
+
+                    doses.forEach((dVal, i) => {
+                        const radioId = `gvhd-dose-${agent.Agent.replace(/\s+/g, '-')}-${schedule.id}-${i}`;
+                        const opt = document.createElement('div');
+                        opt.className = 'radio-option';
+
+                        const rInput = document.createElement('input');
+                        rInput.type = 'radio';
+                        rInput.name = `gvhd-dose-${agent.Agent}-${schedule.id}`;
+                        rInput.id = radioId;
+                        rInput.value = dVal;
+                        if (schedule.dose === dVal) {
+                            rInput.checked = true;
+                            if (dVal === 'Others') customDoseInput.classList.remove('hidden');
+                        }
+
+                        rInput.addEventListener('change', () => {
+                            schedule.dose = dVal;
+                            if (dVal === 'Others') {
+                                customDoseInput.classList.remove('hidden');
+                                customDoseInput.focus();
+                            } else {
+                                customDoseInput.classList.add('hidden');
+                            }
+                            updateTransplantSummary();
+                        });
+
+                        const rLabel = document.createElement('label');
+                        rLabel.className = 'radio-label';
+                        rLabel.setAttribute('for', radioId);
+                        rLabel.textContent = dVal;
+
+                        opt.appendChild(rInput);
+                        opt.appendChild(rLabel);
+                        doseGroup.appendChild(opt);
+
+                        if (dVal === 'Others') {
+                            doseGroup.appendChild(customDoseInput);
+                        }
+                    });
+
+                    doseSection.appendChild(doseGroup);
+                    block.appendChild(doseSection);
+
+                    // Administration Days Section
+                    const daysSection = document.createElement('div');
+                    daysSection.className = 'config-section';
+                    const daysTitle = document.createElement('div');
+                    daysTitle.className = 'config-label';
+                    daysTitle.textContent = 'Administration day(s)';
+                    daysSection.appendChild(daysTitle);
+
+                    const daysGroup = document.createElement('div');
+                    daysGroup.className = 'radio-group';
+                    daysGroup.style.alignItems = 'center';
+
+                    let dayOpts = [];
+                    if (agent.Dosing_day) {
+                        if (Array.isArray(agent.Dosing_day)) {
+                            dayOpts = [...agent.Dosing_day];
+                        } else if (typeof agent.Dosing_day === 'string' && agent.Dosing_day.trim()) {
+                            dayOpts = agent.Dosing_day.split(',').map(d => d.trim()).filter(d => d);
+                        }
+                    }
+                    dayOpts.push('Others');
+
+                    const customDaysInput = document.createElement('input');
+                    customDaysInput.type = 'text';
+                    customDaysInput.className = 'custom-text-input hidden';
+                    customDaysInput.placeholder = 'Specify day(s)...';
+                    customDaysInput.style.width = '200px';
+                    customDaysInput.style.height = '2.1rem';
+                    customDaysInput.style.padding = '0.25rem 0.6rem';
+                    customDaysInput.style.fontSize = '0.875rem';
+                    customDaysInput.style.margin = '0';
+                    customDaysInput.value = schedule.customDays || '';
+                    customDaysInput.addEventListener('input', (e) => {
+                        schedule.customDays = e.target.value;
+                        updateTransplantSummary();
+                    });
+
+                    dayOpts.forEach((dayVal, i) => {
+                        const radioId = `gvhd-days-${agent.Agent.replace(/\s+/g, '-')}-${schedule.id}-${i}`;
+                        const opt = document.createElement('div');
+                        opt.className = 'radio-option';
+
+                        const rInput = document.createElement('input');
+                        rInput.type = 'radio';
+                        rInput.name = `gvhd-days-${agent.Agent}-${schedule.id}`;
+                        rInput.id = radioId;
+                        rInput.value = dayVal;
+                        if (schedule.dosingDays === dayVal) {
+                            rInput.checked = true;
+                            if (dayVal === 'Others') customDaysInput.classList.remove('hidden');
+                        }
+
+                        rInput.addEventListener('change', () => {
+                            schedule.dosingDays = dayVal;
+                            if (dayVal === 'Others') {
+                                customDaysInput.classList.remove('hidden');
+                                customDaysInput.focus();
+                            } else {
+                                customDaysInput.classList.add('hidden');
+                            }
+                            updateTransplantSummary();
+                        });
+
+                        const rLabel = document.createElement('label');
+                        rLabel.className = 'radio-label';
+                        rLabel.setAttribute('for', radioId);
+                        rLabel.textContent = dayVal;
+
+                        opt.appendChild(rInput);
+                        opt.appendChild(rLabel);
+                        daysGroup.appendChild(opt);
+
+                        if (dayVal === 'Others') {
+                            daysGroup.appendChild(customDaysInput);
+                        }
+                    });
+
+                    daysSection.appendChild(daysGroup);
+                    block.appendChild(daysSection);
+
+                    schedulesContainer.appendChild(block);
+                });
+
+                card.appendChild(schedulesContainer);
+
+                container.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // 4. UI HELPER & INTERACTION FUNCTIONS
+        // ==========================================
+        function toggleSection(containerId, btn) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            if (container.style.display === 'none') {
+                container.style.display = '';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide`;
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>Show`;
+            }
+        }
+
+        function handleTransplantTypeChange(selectObj, isUserAction) {
+            if (!selectObj) return;
+            if (isUserAction) {
+                selectObj.style.color = 'var(--text-primary)';
+            }
+            const isAllogeneic = selectObj.value === 'Allogeneic';
+            const allogeneicPanel = document.getElementById('allogeneic-details-panel');
+            if (allogeneicPanel) {
+                allogeneicPanel.style.display = isAllogeneic ? 'block' : 'none';
+            }
+            const donorTypeSel = document.getElementById('donor-type');
+            const donorWrapper = document.getElementById('donor-type-wrapper');
+            const donorOthers = document.getElementById('donor-type-others');
+
+            const gvhdCard = document.getElementById('gvhd-card-section');
+            if (gvhdCard) {
+                if (isAllogeneic) {
+                    gvhdCard.style.opacity = '1';
+                    gvhdCard.style.pointerEvents = 'auto';
+                    gvhdCard.style.filter = 'none';
+                } else {
+                    gvhdCard.style.opacity = '0.38';
+                    gvhdCard.style.pointerEvents = 'none';
+                    gvhdCard.style.filter = 'grayscale(0.5)';
+                }
+            }
+
+            if (donorTypeSel) {
+                const naOption = Array.from(donorTypeSel.options).find(opt => opt.value === 'N/A');
+                if (isAllogeneic) {
+                    if (naOption) {
+                        naOption.hidden = true;
+                        naOption.disabled = true;
+                    }
+                    donorTypeSel.disabled = false;
+                    if (donorTypeSel.value === 'N/A' || donorTypeSel.value === 'Autologous') {
+                        donorTypeSel.value = 'Sibling';
+                    }
+                    donorTypeSel.style.color = 'var(--text-primary)';
+                    if (donorWrapper) donorWrapper.style.opacity = '1';
+                } else {
+                    if (naOption) {
+                        naOption.hidden = false;
+                        naOption.disabled = false;
+                    }
+                    donorTypeSel.value = 'N/A';
+                    donorTypeSel.disabled = true;
+                    donorTypeSel.style.color = '#aaaaaa';
+                    if (donorWrapper) donorWrapper.style.opacity = '0.5';
+                    if (donorOthers) donorOthers.style.display = 'none';
+                }
+            }
+
+            if (!isAllogeneic) {
+                // Autologous: Clear GVHD Prophylaxis
+                transplantState.gvhdAgents = {};
+                renderGvhdConfigs();
+                renderGvhdCheckboxes();
+            }
+
+            updateTransplantSummary();
+        }
+
+        function handleDonorTypeChange(selectObj) {
+            if (!selectObj) return;
+            selectObj.style.color = 'var(--text-primary)';
+            const isOthers = selectObj.value === 'Others';
+            const othersInput = document.getElementById('donor-type-others');
+            if (othersInput) {
+                othersInput.style.display = isOthers ? 'block' : 'none';
+            }
+            updateTransplantSummary();
+        }
+
+        function handleNeutrophilStatusChange(selectObj) {
+            const dateInput = document.getElementById('anc-date');
+            if (dateInput) {
+                if (selectObj.value === 'Yes') {
+                    dateInput.disabled = false;
+                    dateInput.style.opacity = '1';
+                } else {
+                    dateInput.disabled = true;
+                    dateInput.style.opacity = '0.4';
+                    dateInput.value = '';
+                    dateInput.setAttribute('data-date', '');
+                }
+            }
+        }
+
+        function handlePlateletStatusChange(selectObj) {
+            const dateInput = document.getElementById('plt-date');
+            if (dateInput) {
+                if (selectObj.value === 'Yes') {
+                    dateInput.disabled = false;
+                    dateInput.style.opacity = '1';
+                } else {
+                    dateInput.disabled = true;
+                    dateInput.style.opacity = '0.4';
+                    dateInput.value = '';
+                    dateInput.setAttribute('data-date', '');
+                }
+            }
+        }
+
+        function addInfusedCellRow() {
+            const container = document.getElementById('infused-cell-rows-list');
+            if (!container) return;
+
+            const firstRow = container.querySelector('.infused-cell-row');
+            if (!firstRow) return;
+
+            const newRow = firstRow.cloneNode(true);
+            newRow.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                if (input.type === 'date') {
+                    input.setAttribute('data-date', '');
+                }
+                if (input.hasAttribute('id')) {
+                    input.removeAttribute('id');
+                }
+            });
+
+            const removeContainer = newRow.querySelector('.cell-row-remove-container');
+            if (removeContainer) {
+                removeContainer.style.display = 'flex';
+            }
+
+            container.appendChild(newRow);
+            initDateInputs();
+            updateCellRemoveButtons();
+        }
+
+        function removeInfusedCellRow(btn) {
+            const row = btn.closest('.infused-cell-row');
+            if (row) {
+                row.remove();
+                updateCellRemoveButtons();
+            }
+        }
+
+        function updateCellRemoveButtons() {
+            const container = document.getElementById('infused-cell-rows-list');
+            if (!container) return;
+            const rows = container.querySelectorAll('.infused-cell-row');
+            rows.forEach((r, idx) => {
+                const label = r.querySelector('.infused-date-label');
+                if (label) {
+                    label.innerHTML = `Infusion<br>day ${idx + 1} (D${idx})`;
+                }
+                const removeCont = r.querySelector('.cell-row-remove-container');
+                if (removeCont) {
+                    removeCont.style.display = rows.length > 1 ? 'flex' : 'none';
+                }
+            });
+            updateTransplantSummary();
+        }
+
+        function initDateInputs() {
+            document.querySelectorAll('input[type="date"].custom-date-format').forEach(input => {
+                input.setAttribute('data-date', input.value || '');
+                input.oninput = function () {
+                    this.setAttribute('data-date', this.value || '');
+                };
+                input.onchange = function () {
+                    this.setAttribute('data-date', this.value || '');
+                    updateTransplantSummary();
+                };
+            });
+        }
+
+        function initInfusedCellInputs() {
+            const list = document.getElementById('infused-cell-rows-list');
+            if (list) {
+                list.addEventListener('input', (e) => {
+                    if (e.target && e.target.tagName === 'INPUT') {
+                        updateTransplantSummary();
+                    }
+                });
+                list.addEventListener('change', (e) => {
+                    if (e.target && e.target.tagName === 'INPUT') {
+                        updateTransplantSummary();
+                    }
+                });
+            }
+        }
+
+        // Parse Administration Days (e.g. "D-2", "D-3 ~ -2", "D-1 ~", "D1, 3, 6, 11")
+        function parseDayString(rawStr, defaultNum) {
+            if (!rawStr || !rawStr.trim()) {
+                if (defaultNum !== undefined) {
+                    const label = defaultNum === 0 ? 'D0' : (defaultNum > 0 ? `D+${defaultNum}` : `D${defaultNum}`);
+                    return [{ dayNum: defaultNum, dayText: label }];
+                }
+                return [{ dayNum: 0, dayText: 'D0' }];
+            }
+            const str = rawStr.trim();
+            if (str.toLowerCase().startsWith('from ')) {
+                const m = str.match(/(-?\d+)/);
+                const startNum = m ? parseInt(m[1], 10) : (defaultNum !== undefined ? defaultNum : 0);
+                return [{ dayNum: startNum, dayText: str }];
+            }
+            // Continuous range e.g. "D-1 ~" or "D-3 ~ -2"
+            if (str.includes('~') || str.toLowerCase().includes('to') || str.includes('–') || str.includes('—')) {
+                const parts = str.split(/[~–—]|to/i);
+                const firstPart = parts[0].trim();
+                const secondPart = parts.length > 1 ? parts[1].trim() : '';
+                
+                const m1 = firstPart.match(/(-?\d+)/);
+                const startNum = m1 ? parseInt(m1[1], 10) : (defaultNum !== undefined ? defaultNum : 0);
+                
+                if (secondPart) {
+                    const m2 = secondPart.match(/(-?\d+)/);
+                    if (m2) {
+                        const endNum = parseInt(m2[1], 10);
+                        if (!isNaN(startNum) && !isNaN(endNum) && startNum <= endNum) {
+                            const rangeResults = [];
+                            for (let n = startNum; n <= endNum; n++) {
+                                const label = n === 0 ? 'D0' : (n > 0 ? `D+${n}` : `D${n}`);
+                                rangeResults.push({ dayNum: n, dayText: label });
+                            }
+                            return rangeResults;
+                        }
+                    }
+                }
+                return [{ dayNum: startNum, dayText: str }];
+            }
+            // Split tokens by comma, slash, space
+            const tokens = str.split(/[,/ ]+/).filter(t => t.trim().length > 0);
+            const results = [];
+            tokens.forEach(tok => {
+                const clean = tok.replace(/[^0-9\-+]/g, '');
+                const num = parseInt(clean, 10);
+                if (!isNaN(num)) {
+                    const label = num === 0 ? 'D0' : (num > 0 ? `D+${num}` : `D${num}`);
+                    results.push({ dayNum: num, dayText: label });
+                } else {
+                    results.push({ dayNum: defaultNum !== undefined ? defaultNum : 0, dayText: tok });
+                }
+            });
+            return results.length > 0 ? results : [{ dayNum: defaultNum !== undefined ? defaultNum : 0, dayText: str }];
+        }
+
+        function getCalendarDateDisplay(baseD0DateStr, offsetDays) {
+            if (!baseD0DateStr || !baseD0DateStr.trim()) {
+                return '<span style="color: var(--text-muted); font-size: 0.92rem;">-</span>';
+            }
+            const parts = baseD0DateStr.split('-');
+            if (parts.length !== 3) return '<span style="color: var(--text-muted);">-</span>';
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            d.setDate(d.getDate() + offsetDays);
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const dayOfWeek = dayNames[d.getDay()];
+            return `<span style="font-weight: 600; color: var(--text-primary);">${yyyy}-${mm}-${dd} (${dayOfWeek})</span>`;
+        }
+
+        // ==========================================
+        // 5. SUMMARY & SCHEDULE TABLE GENERATOR
+        // ==========================================
+        function updateTransplantSummary() {
+            const typeVal = document.getElementById('transplant-type')?.value || 'Autologous';
+            const orderVal = document.getElementById('transplant-order')?.value || '1st';
+            const cellVal = document.getElementById('cell-source')?.value || 'PBSC';
+            const donorVal = document.getElementById('donor-type')?.value || 'N/A';
+            const hlaVal = document.getElementById('hla-match')?.value || '8/8';
+            const baseD0Date = document.getElementById('transplant-date')?.value || document.querySelector('.infused-cell-date')?.value || '';
+
+            const badgeType = document.getElementById('summary-badge-type');
+            if (badgeType) badgeType.textContent = `${typeVal} (${orderVal})`;
+
+            const badgeDate = document.getElementById('summary-badge-date');
+            if (badgeDate) {
+                badgeDate.textContent = baseD0Date ? baseD0Date : 'Not specified';
+                badgeDate.style.color = baseD0Date ? '#a78bfa' : 'var(--text-muted)';
+            }
+
+            const badgeCell = document.getElementById('summary-badge-cell');
+            if (badgeCell) badgeCell.textContent = cellVal;
+
+            const badgeDonor = document.getElementById('summary-badge-donor');
+            if (badgeDonor) {
+                if (typeVal === 'Autologous') {
+                    badgeDonor.textContent = 'Self';
+                } else {
+                    badgeDonor.textContent = `${donorVal} (${hlaVal})`;
+                }
+            }
+
+            const items = [];
+
+            // A. Conditioning Agents
+            for (const [agentName, agentState] of Object.entries(transplantState.conditioningAgents)) {
+                const displayName = agentName === 'Others' && agentState.customName ? agentState.customName : agentName;
+                agentState.schedules.forEach(sched => {
+                    const doseVal = sched.dose === 'Others' ? (sched.customDose || 'Custom Dose') : (sched.dose || '-');
+
+                    if (sched.isCustomDays) {
+                        const parsed = parseDayString(sched.customDays || 'D-2', -2);
+                        parsed.forEach(p => {
+                            items.push({
+                                dayNum: p.dayNum,
+                                dayText: p.dayText,
+                                category: 'Conditioning',
+                                categoryOrder: 1,
+                                agent: displayName,
+                                dose: doseVal
+                            });
+                        });
+                    } else {
+                        let startNum = sched.fromDay ? parseInt(sched.fromDay.replace('D', ''), 10) : -2;
+                        let endNum = sched.toDay ? parseInt(sched.toDay.replace('D', ''), 10) : startNum;
+                        if (isNaN(startNum)) startNum = -2;
+                        if (isNaN(endNum)) endNum = startNum;
+                        if (startNum > endNum) {
+                            const tmp = startNum; startNum = endNum; endNum = tmp;
+                        }
+
+                        for (let n = startNum; n <= endNum; n++) {
+                            const label = n === 0 ? 'D0' : (n > 0 ? `D+${n}` : `D${n}`);
+                            items.push({
+                                dayNum: n,
+                                dayText: label,
+                                category: 'Conditioning',
+                                categoryOrder: 1,
+                                agent: displayName,
+                                dose: doseVal
+                            });
+                        }
+                    }
+                });
+            }
+
+            // B. Infused Stem Cell Rows
+            const cellRows = document.querySelectorAll('.infused-cell-row');
+            cellRows.forEach((row, idx) => {
+                const dateVal = row.querySelector('.infused-cell-date')?.value || '';
+                const volume = row.querySelector('.infused-volume-input')?.value || '';
+                const cd34 = row.querySelector('.infused-cd34-input')?.value || '';
+                const tnc = row.querySelector('.infused-tnc-input')?.value || '';
+                const mnc = row.querySelector('.infused-mnc-input')?.value || '';
+                const viability = row.querySelector('.infused-viability-input')?.value || '';
+
+                let details = '';
+                if (cd34 && cd34.trim()) {
+                    details = `CD34+ cell dose: ${cd34.trim()} &times;10<sup>6</sup>/kg`;
+                }
+                const metrics = [];
+                if (volume && volume.trim()) metrics.push(`Volume: ${volume.trim()} mL`);
+                if (viability && viability.trim()) metrics.push(`Viability: ${viability.trim()}%`);
+                if (tnc && tnc.trim()) metrics.push(`TNC: ${tnc.trim()} &times;10<sup>8</sup>/kg`);
+                if (mnc && mnc.trim()) metrics.push(`MNC: ${mnc.trim()} &times;10<sup>8</sup>/kg`);
+
+                if (metrics.length > 0) {
+                    if (details) {
+                        details += ` (${metrics.join(', ')})`;
+                    } else {
+                        details = metrics.join(', ');
+                    }
+                }
+                if (!details) {
+                    details = '-';
+                }
+
+                const dayNum = idx;
+                items.push({
+                    dayNum: dayNum,
+                    dayText: dayNum === 0 ? 'D0' : `D+${dayNum}`,
+                    category: 'Stem Cell Infusion',
+                    categoryOrder: 2,
+                    agent: `Stem Cell Infusion (${cellVal})`,
+                    dose: details,
+                    overrideDate: dateVal
+                });
+            });
+
+            // C. GVHD Prophylaxis Agents
+            for (const [agentName, agentState] of Object.entries(transplantState.gvhdAgents)) {
+                const displayName = agentName === 'Others' && agentState.customName ? agentState.customName : agentName;
+                agentState.schedules.forEach((sched, sIdx) => {
+                    const doseVal = sched.dose === 'Others' ? (sched.customDose || 'Custom Dose') : (sched.dose || '-');
+                    const daysVal = sched.dosingDays === 'Others' ? (sched.customDays || 'D-1 ~') : (sched.dosingDays || 'D-1 ~');
+
+                    const parsed = parseDayString(daysVal, 1);
+                    parsed.forEach(p => {
+                        items.push({
+                            dayNum: p.dayNum,
+                            dayText: p.dayText,
+                            category: 'GVHD Prophylaxis',
+                            categoryOrder: 3,
+                            agent: displayName,
+                            dose: doseVal
+                        });
+                    });
+                });
+            }
+
+            // D. Support (G-CSF & IVIG)
+            const gcsfDoseSel = document.getElementById('gcsf-dose');
+            const gcsfOthers = document.getElementById('gcsf-others');
+            let gcsfDose = gcsfDoseSel ? gcsfDoseSel.value : '';
+            if (gcsfDose === 'Others' && gcsfOthers && gcsfOthers.value.trim()) gcsfDose = gcsfOthers.value.trim();
+            const gcsfStartSel = document.getElementById('gcsf-start-day');
+            let gcsfStart = gcsfStartSel ? gcsfStartSel.value : '';
+            if (gcsfStart === 'Others') {
+                const oth = document.getElementById('gcsf-start-others');
+                if (oth && oth.value.trim()) gcsfStart = oth.value.trim();
+            }
+
+            if (gcsfDose && gcsfDose !== 'None') {
+                let dayNum = 5;
+                if (gcsfStart) {
+                    const match = gcsfStart.match(/D\+?(\d+)/i);
+                    if (match) dayNum = parseInt(match[1], 10);
+                }
+                const formattedDayText = gcsfStart ? (gcsfStart.toLowerCase().startsWith('from ') ? gcsfStart : `From ${gcsfStart}`) : 'From D+5';
+                items.push({
+                    dayNum: dayNum,
+                    dayText: formattedDayText,
+                    category: 'Support',
+                    categoryOrder: 4,
+                    agent: 'G-CSF',
+                    dose: gcsfDose,
+                    overrideDate: ''
+                });
+            }
+
+            const ivigDoseSel = document.getElementById('ivig-dose');
+            const ivigOthers = document.getElementById('ivig-others');
+            let ivigDose = ivigDoseSel ? ivigDoseSel.value : '';
+            if (ivigDose === 'Others' && ivigOthers && ivigOthers.value.trim()) ivigDose = ivigOthers.value.trim();
+            const ivigDaySel = document.getElementById('ivig-infusion-day');
+            let ivigDay = ivigDaySel ? ivigDaySel.value : '';
+            if (ivigDay === 'Others') {
+                const oth = document.getElementById('ivig-infusion-others');
+                if (oth && oth.value.trim()) ivigDay = oth.value.trim();
+            }
+
+            if (ivigDose && ivigDose !== 'None') {
+                let dayNum = 7;
+                if (ivigDay) {
+                    const match = ivigDay.match(/D\+?(\d+)/i);
+                    if (match) dayNum = parseInt(match[1], 10);
+                }
+                items.push({
+                    dayNum: dayNum,
+                    dayText: ivigDay || 'D+7',
+                    category: 'Support',
+                    categoryOrder: 5,
+                    agent: 'IVIG',
+                    dose: ivigDose,
+                    overrideDate: ''
+                });
+            }
+
+            // Sort Items by DayNum Ascending, then CategoryOrder
+            items.sort((a, b) => {
+                if (a.dayNum !== b.dayNum) return a.dayNum - b.dayNum;
+                return a.categoryOrder - b.categoryOrder;
+            });
+
+            // Render Table Rows
+            const tbody = document.getElementById('summary-schedule-tbody');
+            if (!tbody) return;
+
+            if (items.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                            No conditioning regimen or medication schedule entered.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                const isInfusion = item.category === 'Stem Cell Infusion';
+                const rowBg = isInfusion ? 'background: rgba(139, 92, 246, 0.12);' : '';
+                const borderStyle = isInfusion ? 'border-bottom: 1px solid rgba(139, 92, 246, 0.3);' : 'border-bottom: 1px solid rgba(255, 255, 255, 0.05);';
+
+                let dateDisplay = '';
+                if (item.overrideDate) {
+                    const parts = item.overrideDate.split('-');
+                    if (parts.length === 3) {
+                        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                        dateDisplay = `<span style="font-weight: 600; color: var(--text-primary);">${item.overrideDate} (${dayNames[d.getDay()]})</span>`;
+                    } else {
+                        dateDisplay = `<span style="font-weight: 600; color: var(--text-primary);">${item.overrideDate}</span>`;
+                    }
+                } else {
+                    dateDisplay = getCalendarDateDisplay(baseD0Date, item.dayNum);
+                }
+
+                html += `
+                    <tr style="${rowBg} ${borderStyle} transition: background 0.15s ease;">
+                        <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary); font-size: 0.92rem;">
+                            ${item.dayText}
+                        </td>
+                        <td style="padding: 0.85rem 1.25rem;">
+                            ${dateDisplay}
+                        </td>
+                        <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary);">
+                            ${item.agent}
+                        </td>
+                        <td style="padding: 0.85rem 1.25rem; color: var(--text-secondary);">
+                            ${item.dose}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // ==========================================
+        // 6. SAVE & LOAD FUNCTIONS
+        // ==========================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgSpan = document.getElementById('toast-message');
+            if (toast && msgSpan) {
+                msgSpan.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3500);
+            }
+        }
+
+        function saveTransplantData(msg) {
+            showToast(msg || 'Transplant record successfully saved');
+
+            const infusedCellRows = [];
+            document.querySelectorAll('.infused-cell-row').forEach(row => {
+                infusedCellRows.push({
+                    date: row.querySelector('.infused-cell-date')?.value || '',
+                    volume: row.querySelector('.infused-volume-input')?.value || '',
+                    viability: row.querySelector('.infused-viability-input')?.value || '',
+                    cd34: row.querySelector('.infused-cd34-input')?.value || '',
+                    tnc: row.querySelector('.infused-tnc-input')?.value || '',
+                    mnc: row.querySelector('.infused-mnc-input')?.value || ''
+                });
+            });
+
+            const payload = {
+                type: document.getElementById('transplant-type')?.value,
+                order: document.getElementById('transplant-order')?.value,
+                orderOthers: document.getElementById('transplant-order-others')?.value,
+                cellSource: document.getElementById('cell-source')?.value,
+                cellSourceOthers: document.getElementById('cell-source-others')?.value,
+                donorType: document.getElementById('donor-type')?.value,
+                donorTypeOthers: document.getElementById('donor-type-others')?.value,
+                donorAge: document.getElementById('donor-age')?.value,
+                donorSex: document.getElementById('donor-sex')?.value,
+                donorWeight: document.getElementById('donor-weight')?.value,
+                hlaMatch: document.getElementById('hla-match')?.value,
+                hlaMatchOthers: document.getElementById('hla-match-others')?.value,
+                aboMatch: document.getElementById('abo-match')?.value,
+                conditioningAgents: transplantState.conditioningAgents,
+                gvhdAgents: transplantState.gvhdAgents,
+                infusedCells: infusedCellRows,
+                gcsfDose: document.getElementById('gcsf-dose')?.value,
+                gcsfOthers: document.getElementById('gcsf-others')?.value,
+                gcsfStartDay: document.getElementById('gcsf-start-day')?.value,
+                gcsfStartOthers: document.getElementById('gcsf-start-others')?.value,
+                ivigDose: document.getElementById('ivig-dose')?.value,
+                ivigOthers: document.getElementById('ivig-others')?.value,
+                ivigInfusionDay: document.getElementById('ivig-infusion-day')?.value,
+                ivigInfusionOthers: document.getElementById('ivig-infusion-others')?.value,
+                savedAt: new Date().toISOString()
+            };
+
+            try {
+                localStorage.setItem('hemaCDS_transplant_data', JSON.stringify(payload));
+            } catch (e) {
+                console.warn('LocalStorage error:', e);
+            }
+        }
+
+        // ==========================================
+        // 7. INITIALIZATION ON DOM READY
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initDateInputs();
+            initInfusedCellInputs();
+
+            renderConditioningCheckboxes();
+            renderConditioningConfigs();
+
+            renderGvhdCheckboxes();
+            renderGvhdConfigs();
+
+            handleTransplantTypeChange(document.getElementById('transplant-type'), false);
+
+            // Styling for selects
+            document.querySelectorAll('select.custom-text-input').forEach(sel => {
+                if (sel.value === '' || sel.options[sel.selectedIndex]?.disabled) {
+                    sel.style.color = '#aaaaaa';
+                }
+                sel.addEventListener('change', function () {
+                    this.style.color = 'var(--text-primary)';
+                });
+            });
+
+            // Initial summary render
+            updateTransplantSummary();
+        });
+    </script>
+</body>
+
+</html>

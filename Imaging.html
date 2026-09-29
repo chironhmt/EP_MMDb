@@ -1,0 +1,1130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemaCDS 2.0_Multiple myeloma</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=4">
+    <style>
+        .custom-textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            font-size: 0.9rem;
+            transition: border-color var(--transition-fast, 0.2s);
+        }
+        .custom-textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .radio-group-horizontal {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .radio-group-horizontal label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .radio-group-horizontal input[type="radio"] {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .checkbox-group-horizontal {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .checkbox-group-horizontal label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .checkbox-group-horizontal input[type="checkbox"] {
+            transform: scale(1.15);
+            cursor: pointer;
+        }
+        div[id$="checkboxes"] label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        div[id$="checkboxes"] input[type="checkbox"],
+        div[id$="checkboxes"] input[type="radio"] {
+            margin: 0;
+        }
+        div[id$="checkboxes"] .custom-text-input {
+            margin-top: 0;
+            width: 170px !important;
+            line-height: normal;
+        }
+        div[id$="checkboxes"] label + div {
+            margin-left: calc(0.5rem + 8px) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <h1 style="font-size: 1.5rem;">HemaCDS 2.0_<span>Multiple myeloma</span></h1>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <section class="content-area" id="content-area">
+                <div class="cycle-planner" id="planner-container" style="margin: 0; max-width: 900px;">
+                    
+                    <div class="planner-header">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                            <h2 style="font-size: 1.5rem; font-weight: 500; color: var(--text-light);">Imaging Studies</h2>
+                        </div>
+                    </div>
+
+                    <div class="planner-sections">
+                        
+                        <!-- Section 1: Conventional Skeletal Survey -->
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <h3>1. Conventional Skeletal Survey</h3>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <label for="date-css" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
+                                        <input type="date" data-date="" id="date-css" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
+                                        <input type="radio" id="sec1-not-done" name="sec1-done" value="not-done" style="transform: scale(1.2);"> Not done
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-weight: 500; color: var(--text-main); margin-bottom: 0.5rem;">Interpretation</label>
+                                    <textarea class="custom-textarea" placeholder="Enter interpretation for Conventional Skeletal Survey..." style="width: 80%;"></textarea>
+                                    <div style="width: 80%; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <button type="button" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0; background-color: #8b5cf6;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                            </svg>
+                                            AI Assistant
+                                        </button>
+                                        <label class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0;">
+                                            <input type="file" style="display: none;" accept=".dcm,.zip" multiple>
+                                            Upload DICOM
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 2rem; width: 100%;">
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Osteolytic lesions</label>
+                                        <select class="custom-select" id="sec1-osteolytic-yesno" onchange="document.getElementById('sec1-osteolytic-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec1-osteolytic-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec1-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-osteolytic" value="others"> Others</label>
+                                            <input type="text" id="sec1-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Fractures</label>
+                                        <select class="custom-select" id="sec1-fractures-yesno" onchange="document.getElementById('sec1-fractures-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec1-fractures-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec1-fractures-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec1-fractures-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec1-fractures" value="others"> Others</label>
+                                            <input type="text" id="sec1-fractures-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+</div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: 18F-FDG PET/CT -->
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <h3>2. <sup>18</sup>F-FDG PET/CT</h3>
+                                    <select class="custom-select" name="petct-type" onchange="document.getElementById('petct-other-input').style.display = (this.value === 'others') ? 'inline-block' : 'none'" style="padding: 0.3rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.9rem; outline: none;">
+                                        <option value="torso" style="color: #000;">Torso</option>
+                                        <option value="whole body" style="color: #000;">Whole-body</option>
+                                        <option value="others" style="color: #000;">Others</option>
+                                    </select>
+                                    <input type="text" id="petct-other-input" class="custom-text-input" placeholder="Specify..." style="display: none; width: 120px; padding: 0.3rem 0.5rem; font-size: 0.85rem; margin-left: 6px;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <label for="date-petct" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
+                                        <input type="date" data-date="" id="date-petct" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
+                                        <input type="radio" id="sec2-not-done" name="sec2-done" value="not-done" style="transform: scale(1.2);"> Not done
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-weight: 500; color: var(--text-main); margin-bottom: 0.5rem;">Interpretation</label>
+                                    <textarea class="custom-textarea" placeholder="Enter interpretation for 18F-FDG PET/CT..." style="width: 80%;"></textarea>
+                                    <div style="width: 80%; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <button type="button" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0; background-color: #8b5cf6;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                            </svg>
+                                            AI Assistant
+                                        </button>
+                                        <label class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0;">
+                                            <input type="file" style="display: none;" accept=".dcm,.zip" multiple>
+                                            Upload DICOM
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 2rem; width: 100%;">
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Osteolytic lesions</label>
+                                        <select class="custom-select" id="sec2-osteolytic-yesno" onchange="document.getElementById('sec2-osteolytic-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec2-osteolytic-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec2-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-osteolytic" value="others"> Others</label>
+                                            <input type="text" id="sec2-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Fractures</label>
+                                        <select class="custom-select" id="sec2-fractures-yesno" onchange="document.getElementById('sec2-fractures-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec2-fractures-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec2-fractures-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec2-fractures-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec2-fractures" value="others"> Others</label>
+                                            <input type="text" id="sec2-fractures-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+</div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: MRI -->
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <h3>3. MRI</h3>
+                                    <select class="custom-select" name="mri-type" onchange="document.getElementById('mri-other-input').style.display = (this.value === 'others') ? 'inline-block' : 'none'" style="padding: 0.3rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.9rem; outline: none;">
+                                        <option value="axial" style="color: #000;">Axial</option>
+                                        <option value="whole-body" style="color: #000;">Whole-body</option>
+                                        <option value="others" style="color: #000;">Others</option>
+                                    </select>
+                                    <input type="text" id="mri-other-input" class="custom-text-input" placeholder="Specify..." style="display: none; width: 120px; padding: 0.3rem 0.5rem; font-size: 0.85rem; margin-left: 6px;">
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; cursor: pointer; color: var(--text-main);">
+                                        <input type="radio" name="mri-dwi" value="DWI" checked style="transform: scale(1.15);"> DWI
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <label for="date-mri" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
+                                        <input type="date" data-date="" id="date-mri" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
+                                        <input type="radio" id="sec3-not-done" name="sec3-done" value="not-done" style="transform: scale(1.2);"> Not done
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-weight: 500; color: var(--text-main); margin-bottom: 0.5rem;">Interpretation</label>
+                                    <textarea class="custom-textarea" placeholder="Enter interpretation for MRI..." style="width: 80%;"></textarea>
+                                    <div style="width: 80%; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <button type="button" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0; background-color: #8b5cf6;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                            </svg>
+                                            AI Assistant
+                                        </button>
+                                        <label class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0;">
+                                            <input type="file" style="display: none;" accept=".dcm,.zip" multiple>
+                                            Upload DICOM
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 2rem; width: 100%;">
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Osteolytic lesions</label>
+                                        <select class="custom-select" id="sec3-osteolytic-yesno" onchange="document.getElementById('sec3-osteolytic-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec3-osteolytic-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec3-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-osteolytic" value="others"> Others</label>
+                                            <input type="text" id="sec3-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Fractures</label>
+                                        <select class="custom-select" id="sec3-fractures-yesno" onchange="document.getElementById('sec3-fractures-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec3-fractures-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec3-fractures-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec3-fractures-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec3-fractures" value="others"> Others</label>
+                                            <input type="text" id="sec3-fractures-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+</div>
+                                <div style="margin-top: 1.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Focal lesions</label>
+                                        <select class="custom-select" id="sec3-focal-yesno" onchange="document.getElementById('sec3-focal-count-container').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec3-focal-count-container" style="display: none; align-items: center; margin-top: 0.5rem;">
+                                        <label style="font-size: 0.85rem; color: var(--text-main); margin-right: 0.5rem; transform: translateY(-2px); display: inline-block;">Count</label>
+                                        <input type="number" id="sec3-focal-count" class="custom-text-input" placeholder="e.g. 3" style="width: 80px; padding: 0.2rem 0.5rem; font-size: 0.85rem; transform: translateY(-6px);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Low-dose whole-body CT -->
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <h3>4. Low-dose whole-body CT</h3>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <label for="date-ldct" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
+                                        <input type="date" data-date="" id="date-ldct" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
+                                        <input type="radio" id="sec4-not-done" name="sec4-done" value="not-done" style="transform: scale(1.2);"> Not done
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-weight: 500; color: var(--text-main); margin-bottom: 0.5rem;">Interpretation</label>
+                                    <textarea class="custom-textarea" placeholder="Enter interpretation for Low-dose whole-body CT..." style="width: 80%;"></textarea>
+                                    <div style="width: 80%; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <button type="button" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0; background-color: #8b5cf6;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                            </svg>
+                                            AI Assistant
+                                        </button>
+                                        <label class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0;">
+                                            <input type="file" style="display: none;" accept=".dcm,.zip" multiple>
+                                            Upload DICOM
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 2rem; width: 100%;">
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Osteolytic lesions</label>
+                                        <select class="custom-select" id="sec4-osteolytic-yesno" onchange="document.getElementById('sec4-osteolytic-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec4-osteolytic-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec4-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-osteolytic" value="others"> Others</label>
+                                            <input type="text" id="sec4-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Fractures</label>
+                                        <select class="custom-select" id="sec4-fractures-yesno" onchange="document.getElementById('sec4-fractures-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec4-fractures-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec4-fractures-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec4-fractures-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec4-fractures" value="others"> Others</label>
+                                            <input type="text" id="sec4-fractures-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+</div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Other Imaging Studies -->
+                        <div class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <h3>5. Other Imaging Studies</h3>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <label for="date-other" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
+                                        <input type="date" data-date="" id="date-other" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
+                                        <input type="radio" id="sec5-not-done" name="sec5-done" value="not-done" style="transform: scale(1.2);"> Not done
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                                    <label style="font-weight: 500; color: var(--text-main); margin: 0;">Modality</label>
+                                    <input type="text" class="custom-text-input" placeholder="Specify modality..." style="width: 300px; padding: 0.4rem 0.5rem; font-size: 0.9rem;">
+                                </div>
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-weight: 500; color: var(--text-main); margin-bottom: 0.5rem;">Interpretation</label>
+                                    <textarea class="custom-textarea" placeholder="Enter interpretation for Other Imaging Studies..." style="width: 80%;"></textarea>
+                                    <div style="width: 80%; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <button type="button" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0; background-color: #8b5cf6;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                            </svg>
+                                            AI Assistant
+                                        </button>
+                                        <label class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0;">
+                                            <input type="file" style="display: none;" accept=".dcm,.zip" multiple>
+                                            Upload DICOM
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: flex-start; gap: 2rem; width: 100%;">
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Osteolytic lesions</label>
+                                        <select class="custom-select" id="sec5-osteolytic-yesno" onchange="document.getElementById('sec5-osteolytic-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec5-osteolytic-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec5-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-osteolytic" value="others"> Others</label>
+                                            <input type="text" id="sec5-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+<div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Fractures</label>
+                                        <select class="custom-select" id="sec5-fractures-yesno" onchange="document.getElementById('sec5-fractures-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec5-fractures-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="vertebra"> Spine</label>
+                                            <input type="text" id="sec5-fractures-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="ribs"> Ribs</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-ribs-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-ribs-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-ribs-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="skull"> Skull</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="pelvis"> Pelvis</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-pelvis-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-pelvis-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-pelvis-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="femur"> Femur</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-femur-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-femur-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-femur-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="humerus"> Humerus</label>
+                                            <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-humerus-side" value="Rt."> Rt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-humerus-side" value="Lt."> Lt.</label>
+                                                <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5-fractures-humerus-side" value="Both"> Both</label>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5-fractures" value="others"> Others</label>
+                                            <input type="text" id="sec5-fractures-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                        </div>
+                                    </div>
+                                </div>
+</div>
+                                <div style="margin-top: 1.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                        <label style="font-weight: 500; color: var(--text-main);">Focal lesions</label>
+                                        <select class="custom-select" id="sec5-focal-yesno" onchange="document.getElementById('sec5-focal-count-container').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                            <option value="no" style="color: #000;">No</option>
+                                            <option value="yes" style="color: #000;">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div id="sec5-focal-count-container" style="display: none; align-items: center; margin-top: 0.5rem;">
+                                        <label style="font-size: 0.85rem; color: var(--text-main); margin-right: 0.5rem; transform: translateY(-2px); display: inline-block;">Count</label>
+                                        <input type="number" id="sec5-focal-count" class="custom-text-input" placeholder="e.g. 3" style="width: 80px; padding: 0.2rem 0.5rem; font-size: 0.85rem; transform: translateY(-6px);">
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                                    <button type="button" id="add-modality-btn" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; border-radius: 6px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; margin: 0; background-color: #8b5cf6;">
+                                        Add Study
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                        <div style="display: flex; justify-content: flex-end; margin-top: 2rem; margin-bottom: 1rem;">
+                            <button id="submit-btn" class="btn-primary" style="padding: 0.4rem 2rem; font-size: 0.875rem; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Submit</button>
+                        </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            const dateInputs = document.querySelectorAll('.date-input');
+            dateInputs.forEach(input => {
+                input.value = today;
+                input.setAttribute('data-date', today);
+                input.addEventListener('change', function() {
+                    this.setAttribute('data-date', this.value);
+                });
+            });
+
+            // Dynamic "Add modality" Logic for Section 5
+            const addModalityBtn = document.getElementById('add-modality-btn');
+            if (addModalityBtn) {
+                let modalityCount = 1; // 0 is the original
+                addModalityBtn.addEventListener('click', () => {
+                    const cardBody = addModalityBtn.closest('.card-body');
+                    const newBlock = document.createElement('div');
+                    newBlock.style.marginTop = '2rem';
+                    newBlock.style.paddingTop = '2rem';
+                    newBlock.style.borderTop = '1px solid rgba(255,255,255,0.2)';
+                    
+                    // The template HTML
+                    const templateHtml = `
+                        <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <label style="font-weight: 500; color: var(--text-main); margin: 0;">Modality</label>
+                                <input type="text" class="custom-text-input" placeholder="Specify modality..." style="width: 300px; padding: 0.4rem 0.5rem; font-size: 0.9rem;">
+                            </div>
+                            <button type="button" class="btn-primary remove-modality-btn" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; background-color: #ef4444; border-radius: 6px; border: none; cursor: pointer;">Remove</button>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: 500; color: var(--text-main); margin-bottom: 0.5rem;">Interpretation</label>
+                            <textarea class="custom-textarea" placeholder="Enter interpretation for Other Imaging Studies..." style="width: 80%;"></textarea>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 2rem; width: 100%;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <label style="font-weight: 500; color: var(--text-main);">Osteolytic lesions</label>
+                                    <select class="custom-select" id="sec5_\${modalityCount}-osteolytic-yesno" onchange="document.getElementById('sec5_\${modalityCount}-osteolytic-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                        <option value="no" style="color: #000;">No</option>
+                                        <option value="yes" style="color: #000;">Yes</option>
+                                    </select>
+                                </div>
+                                <div id="sec5_\${modalityCount}-osteolytic-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="vertebra"> Spine</label>
+                                        <input type="text" id="sec5_\${modalityCount}-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="ribs"> Ribs</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-ribs-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-ribs-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-ribs-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="skull"> Skull</label>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="pelvis"> Pelvis</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-pelvis-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-pelvis-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-pelvis-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="femur"> Femur</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-femur-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-femur-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-femur-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="humerus"> Humerus</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-humerus-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-humerus-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-humerus-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-osteolytic" value="others"> Others</label>
+                                        <input type="text" id="sec5_\${modalityCount}-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <label style="font-weight: 500; color: var(--text-main);">Fractures</label>
+                                    <select class="custom-select" id="sec5_\${modalityCount}-fractures-yesno" onchange="document.getElementById('sec5_\${modalityCount}-fractures-checkboxes').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                        <option value="no" style="color: #000;">No</option>
+                                        <option value="yes" style="color: #000;">Yes</option>
+                                    </select>
+                                </div>
+                                <div id="sec5_\${modalityCount}-fractures-checkboxes" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="vertebra"> Spine</label>
+                                        <input type="text" id="sec5_\${modalityCount}-fractures-vertebral-input" class="custom-text-input" placeholder="e.g. T3, T8-9, L1, 4, 5" style="display: inline-block; width: 170px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="ribs"> Ribs</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-ribs-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-ribs-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-ribs-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="skull"> Skull</label>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="pelvis"> Pelvis</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-pelvis-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-pelvis-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-pelvis-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="femur"> Femur</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-femur-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-femur-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-femur-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="humerus"> Humerus</label>
+                                        <div style="display: flex; gap: 0.8rem; align-items: center; margin-left: calc(0.5rem + 6px);">
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-humerus-side" value="Rt."> Rt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-humerus-side" value="Lt."> Lt.</label>
+                                            <label style="margin: 0; font-size: 0.85rem;"><input type="radio" name="sec5_\${modalityCount}-fractures-humerus-side" value="Both"> Both</label>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin: 0; width: 95px;"><input type="checkbox" name="sec5_\${modalityCount}-fractures" value="others"> Others</label>
+                                        <input type="text" id="sec5_\${modalityCount}-fractures-other-input" class="custom-text-input" placeholder="e.g. clavicle, scapula" style="display: inline-block; width: 150px; padding: 0.2rem 0.5rem; font-size: 0.85rem; margin-left: calc(0.5rem + 6px);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                <label style="font-weight: 500; color: var(--text-main);">Focal lesions</label>
+                                <select class="custom-select" id="sec5_\${modalityCount}-focal-yesno" onchange="document.getElementById('sec5_\${modalityCount}-focal-count-container').style.display = (this.value === 'yes') ? 'flex' : 'none'" style="padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.85rem; outline: none;">
+                                    <option value="no" style="color: #000;">No</option>
+                                    <option value="yes" style="color: #000;">Yes</option>
+                                </select>
+                            </div>
+                            <div id="sec5_\${modalityCount}-focal-count-container" style="display: none; align-items: center; margin-top: 0.5rem;">
+                                <label style="font-size: 0.85rem; color: var(--text-main); margin-right: 0.5rem; transform: translateY(-2px); display: inline-block;">Count</label>
+                                <input type="number" id="sec5_\${modalityCount}-focal-count" class="custom-text-input" placeholder="e.g. 3" style="width: 80px; padding: 0.2rem 0.5rem; font-size: 0.85rem; transform: translateY(-6px);">
+                            </div>
+                        </div>
+                    `;
+                    newBlock.innerHTML = templateHtml;
+
+                    // Attach removal handler
+                    newBlock.querySelector('.remove-modality-btn').addEventListener('click', () => {
+                        newBlock.remove();
+                    });
+
+                    // Attach radio toggle handler to new radios in this block
+                    const newRadios = newBlock.querySelectorAll('input[type="radio"]');
+                    newRadios.forEach(radio => {
+                        let isChecked = false;
+                        radio.addEventListener('mousedown', function(e) {
+                            isChecked = this.checked;
+                        });
+                        radio.addEventListener('click', function(e) {
+                            if (isChecked) {
+                                this.checked = false;
+                            } else {
+                                this.checked = true;
+                            }
+                        });
+                    });
+
+                    cardBody.insertBefore(newBlock, addModalityBtn.parentElement);
+                    modalityCount++;
+                });
+            }
+
+            // Make all radio buttons deselectable (toggleable)
+            const allRadios = document.querySelectorAll('input[type="radio"]');
+            allRadios.forEach(radio => {
+                let isChecked = false;
+                radio.addEventListener('mousedown', function(e) {
+                    isChecked = this.checked;
+                });
+                radio.addEventListener('click', function(e) {
+                    if (isChecked) {
+                        this.checked = false;
+                        
+                        // Special handling for 'Not done' radio buttons
+                        if (this.value === 'not-done') {
+                            const card = this.closest('.card');
+                            if (card) {
+                                const cardBody = card.querySelector('.card-body');
+                                if (cardBody) {
+                                    const inputs = cardBody.querySelectorAll('input, select, textarea, button');
+                                    inputs.forEach(input => input.disabled = false);
+                                    cardBody.style.opacity = '1';
+                                    cardBody.style.pointerEvents = 'auto';
+                                }
+                            }
+                        }
+                    } else {
+                        // Special handling for 'Not done' radio buttons
+                        if (this.value === 'not-done') {
+                            const card = this.closest('.card');
+                            if (card) {
+                                const cardBody = card.querySelector('.card-body');
+                                if (cardBody) {
+                                    const inputs = cardBody.querySelectorAll('input, select, textarea, button');
+                                    inputs.forEach(input => input.disabled = true);
+                                    cardBody.style.opacity = '0.5';
+                                    cardBody.style.pointerEvents = 'none';
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
