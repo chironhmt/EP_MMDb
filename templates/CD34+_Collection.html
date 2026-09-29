@@ -539,8 +539,6 @@
                         const inputTnc = document.getElementById(`day-${i}-tnc`);
                         if (inputTnc) inputTnc.value = '';
                         const inputBags = document.getElementById(`day-${i}-bags`);
-                        if (inputBags) inputBags.value = '1';
-                        const inputBags = document.getElementById(`day-${i}-bags`);
                         if (inputBags) inputBags.value = '';
                     }
                 }
@@ -603,11 +601,8 @@
                 if (inputTnc) inputTnc.addEventListener('input', calculateTotalYield);
                 const inputBags = document.getElementById(`day-${i}-bags`);
                 if (inputBags) inputBags.addEventListener('input', calculateTotalYield);
-                const inputBags = document.getElementById(`day-${i}-bags`);
-                if (inputBags) inputBags.addEventListener('input', calculateTotalYield);
             }
         });
     </script>
-    <script src="/static/app.js"></script>
 </body>
 </html>
