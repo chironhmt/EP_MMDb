@@ -4,7 +4,7 @@ Vercel deployment.
 
 This talks to a real, presumably remote Postgres instance and writes real patient records to
 it -- run it deliberately, not as part of any automated workflow. It is NOT invoked by
-Chemotherapy.bat or by Vercel itself.
+EP_MMDb.bat or by Vercel itself.
 
 Usage:
     1. Provision a Postgres database (e.g. Vercel Postgres from the Vercel dashboard) and

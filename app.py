@@ -1,7 +1,7 @@
 """
 Eunpyeong Myeloma Center Database API -- the single Flask app for every environment.
 
-    Local:  Chemotherapy.bat -> `python app.py` (SQLite, port 5001)
+    Local:  EP_MMDb.bat -> `python app.py` (SQLite, port 5001)
     Vercel: api/index.py imports `app` from here (Postgres via POSTGRES_URL). vercel.json
             sends every request that isn't an existing file to this app, so /static/* is
             served by Vercel's CDN and pages + /api/* come here.
@@ -271,9 +271,9 @@ if __name__ == '__main__':
     print("Starting Eunpyeong Myeloma Center Database API Server on port 5001...")
     print("Note: Port 5001 is used because Port 5000 is often reserved by AirPlay Receiver on macOS.")
 
-    # Open the Chemotherapy page in the default web browser via localhost
+    # Open the Dashboard in the default web browser via localhost
     if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
         import webbrowser
-        webbrowser.open("http://127.0.0.1:5001/chemotherapy")
+        webbrowser.open("http://127.0.0.1:5001/")
 
     app.run(debug=True, port=5001)

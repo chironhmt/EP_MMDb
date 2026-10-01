@@ -8,10 +8,10 @@ HemaCDS 2.0 is a clinical data management tool for the Multiple Myeloma Center a
 
 ## Running the app
 
-Start the server (installs `flask` and launches the app, opening `/chemotherapy` in the browser):
+Start the server (installs `flask` and launches the app, opening the Dashboard (`/`) in the browser):
 
 ```
-Chemotherapy.bat
+EP_MMDb.bat
 ```
 
 This runs `python app.py`, which serves on `http://127.0.0.1:5001`. **Pages must be loaded through this server, not opened directly via `file://`** — they reference assets and the API by absolute path (`/static/...`, `/api/...`), and `app.js` fetches the reference JSON files, none of which works under `file://`.

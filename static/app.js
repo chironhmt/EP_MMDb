@@ -71,7 +71,7 @@ async function loadData() {
         await init();
     } catch (err) {
         console.error(err);
-        loadingText.textContent = 'Failed to load data. Do not open the HTML file directly in a web browser. Please run the local server by double-clicking Chemotherapy.bat and use the page it opens.';
+        loadingText.textContent = 'Failed to load data. Do not open the HTML file directly in a web browser. Please run the local server by double-clicking EP_MMDb.bat and use the page it opens.';
         loadingText.style.color = '#ef4444'; // danger color
         const spinner = document.querySelector('.spinner');
         if (spinner) spinner.style.display = 'none';
