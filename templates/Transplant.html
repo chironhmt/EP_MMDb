@@ -56,7 +56,6 @@
         #conditioning-regimen-content,
         #gvhd-regimen-content,
         #infused-cell-container,
-        #support-container,
         #summary-container {
             width: 100% !important;
             box-sizing: border-box !important;
@@ -148,6 +147,107 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
             white-space: nowrap;
+        }
+
+        /* Donor info (left) / Recipient info (right), split by a vertical divider */
+        .allo-info-columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: stretch;
+        }
+
+        .allo-info-col:first-child {
+            padding-right: 2rem;
+        }
+
+        .allo-info-col + .allo-info-col {
+            padding-left: 2rem;
+            border-left: 1px solid var(--border-glass);
+        }
+
+        /* Push each HLA typing panel to the bottom so Donor/Recipient panels line up */
+        .allo-info-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .allo-info-col > .allo-subtitle + div {
+            margin-bottom: 1.5rem;
+        }
+
+        .allo-info-col.is-disabled,
+        .hla-panel.is-disabled {
+            opacity: 0.38;
+            pointer-events: none;
+            filter: grayscale(0.5);
+        }
+
+        .allo-info-col > .hla-panel {
+            margin-top: auto;
+        }
+
+        /* Same look as the Chemotherapy page's agent class titles (.class-title): text + trailing line */
+        .allo-subtitle {
+            margin: 0 0 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: var(--accent-secondary);
+        }
+
+        .allo-subtitle::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-glass);
+        }
+
+        /* HLA typing input (Allogeneic) */
+        .hla-panel {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            background: var(--bg-panel);
+        }
+
+        .hla-panel-title {
+            margin: 0 0 0.75rem 0;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .hla-grid {
+            display: grid;
+            grid-template-columns: 6rem repeat(2, 1fr);
+            gap: 0.5rem 0.75rem;
+            align-items: center;
+        }
+
+        .hla-grid .hla-locus {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .hla-grid .hla-row-label {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .hla-grid .custom-text-input {
+            margin: 0;
+            padding: 0.25rem 0.5rem;
+            width: 100%;
+            font-size: 0.95rem;
+            height: 2.1rem;
+            box-sizing: border-box;
         }
 
         /* Print only Transplantation Schedule */
@@ -282,7 +382,7 @@
                         <div class="card-header"
                             style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                             <div>
-                                <h3 style="margin: 0;">1. Transplant Type</h3>
+                                <h3 style="margin: 0;">1. Transplant Information</h3>
                             </div>
                             <button class="btn-secondary" onclick="toggleSection('type-date-container', this)"
                                 style="padding: 0 1rem; height: 2.1rem;">
@@ -381,100 +481,266 @@
 
                             </div>
 
-                            <!-- Additional Allogeneic Donor Details Sub-panel (Shown if Allogeneic) -->
+                            <!-- Donor / Recipient Details Sub-panel (Donor side disabled if Autologous) -->
                             <div id="allogeneic-details-panel"
-                                style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: var(--bg-dark); border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
-                                <h4
-                                    style="margin: 0 0 1.25rem 0; color: var(--text-primary); font-size: 1.05rem; font-weight: 600;">
-                                    Allogeneic Matching Information</h4>
-                                <div
-                                    style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+                                style="margin-top: 1.5rem; padding: 1.5rem; background: var(--bg-dark); border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                                <!-- Donor info (left) / Recipient info (right) -->
+                                <div class="allo-info-columns">
+                                    <div class="allo-info-col" id="donor-info-col">
+                                        <h5 class="allo-subtitle">Donor info</h5>
+                                        <div
+                                            style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
 
-                                    <!-- 1. Donor Age -->
-                                    <div
-                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
-                                        <label for="donor-age"
-                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Donor
-                                            age</label>
-                                        <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
-                                            <input type="text" id="donor-age" class="custom-text-input"
-                                                style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
-                                                placeholder="e.g. 45">
-                                            <span class="unit-label">yrs</span>
+                                            <!-- Donor Stem Cell Bank (공여기관) -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-center"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Stem cell<br>bank</label>
+                                                <div style="width: 60%;">
+                                                    <input type="text" id="donor-center" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; box-sizing: border-box;"
+                                                        placeholder="e.g. KMDP">
+                                                </div>
+                                            </div>
+
+                                            <!-- Donor ID -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-id"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Donor ID</label>
+                                                <div style="width: 60%;">
+                                                    <input type="text" id="donor-id" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; box-sizing: border-box;"
+                                                        placeholder="e.g. D-12345">
+                                                </div>
+                                            </div>
+
+                                            <!-- Donor Age -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-age"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Age</label>
+                                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                    <input type="text" id="donor-age" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                        placeholder="e.g. 45">
+                                                    <span class="unit-label">yrs</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Donor Sex -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-sex"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Sex</label>
+                                                <div style="width: 60%;">
+                                                    <select id="donor-sex" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="Male" selected>Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Donor Body Weight -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-weight"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Body<br>weight</label>
+                                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                    <input type="text" id="donor-weight" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                        placeholder="e.g. 70">
+                                                    <span class="unit-label">kg</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Donor ABO -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-abo"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">ABO / Rh</label>
+                                                <div style="width: 60%; display: flex; gap: 0.5rem;">
+                                                    <select id="donor-abo" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; min-width: 0; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="A">A</option>
+                                                        <option value="B">B</option>
+                                                        <option value="AB">AB</option>
+                                                        <option value="O" selected>O</option>
+                                                    </select>
+                                                    <select id="donor-rh" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; min-width: 0; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="+" selected>+</option>
+                                                        <option value="-">−</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Donor CMV Status -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="donor-cmv"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">CMV<br>status</label>
+                                                <div style="width: 60%;">
+                                                    <select id="donor-cmv" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="Positive" selected>Positive</option>
+                                                        <option value="Negative">Negative</option>
+                                                        <option value="Unknown">Unknown</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <!-- Donor HLA typing -->
+                                        <div id="donor-hla-panel" class="hla-panel" data-hla-role="donor"></div>
                                     </div>
 
-                                    <!-- 2. Donor Sex -->
-                                    <div
-                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
-                                        <label for="donor-sex"
-                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Donor
-                                            sex</label>
-                                        <div style="width: 60%;">
-                                            <select id="donor-sex" class="custom-text-input"
-                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: var(--text-primary);"
-                                                onchange="this.style.color = 'var(--text-primary)';">
-                                                <option value="Male" selected>Male</option>
-                                                <option value="Female">Female</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <div class="allo-info-col" id="recipient-info-col">
+                                        <h5 class="allo-subtitle">Recipient info</h5>
+                                        <div
+                                            style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
 
-                                    <!-- 3. Donor Body Weight -->
-                                    <div
-                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
-                                        <label for="donor-weight"
-                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Donor
-                                            body<br>weight</label>
-                                        <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
-                                            <input type="text" id="donor-weight" class="custom-text-input"
-                                                style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
-                                                placeholder="e.g. 70">
-                                            <span class="unit-label">kg</span>
-                                        </div>
-                                    </div>
+                                            <!-- Recipient Age -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-age"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Age</label>
+                                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                    <input type="text" id="recipient-age" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                        placeholder="e.g. 60">
+                                                    <span class="unit-label">yrs</span>
+                                                </div>
+                                            </div>
 
-                                    <!-- Spacer for 4th column in row 1 -->
-                                    <div></div>
+                                            <!-- Recipient Sex -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-sex"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Sex</label>
+                                                <div style="width: 60%;">
+                                                    <select id="recipient-sex" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="Male" selected>Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                                    <!-- 4. HLA Match -->
-                                    <div
-                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
-                                        <label for="hla-match"
-                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">HLA
-                                            match</label>
-                                        <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
-                                            <select id="hla-match" class="custom-text-input"
-                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: var(--text-primary);"
-                                                onchange="this.style.color = 'var(--text-primary)'; document.getElementById('hla-match-others').style.display = this.value === 'Others' ? 'block' : 'none'; updateTransplantSummary();">
-                                                <option value="8/8" selected>8/8</option>
-                                                <option value="7/8">7/8</option>
-                                                <option value="6/8">6/8</option>
-                                                <option value="4/8 (Haplo)">4/8 (Haplo)</option>
-                                                <option value="Others">Others</option>
-                                            </select>
-                                            <input type="text" id="hla-match-others" class="custom-text-input"
-                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
-                                                placeholder="e.g. 10/10, 9/10">
-                                        </div>
-                                    </div>
+                                            <!-- Recipient Body Weight -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-weight"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Body<br>weight</label>
+                                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                    <input type="text" id="recipient-weight" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                        placeholder="e.g. 65">
+                                                    <span class="unit-label">kg</span>
+                                                </div>
+                                            </div>
 
-                                    <!-- 5. ABO Match -->
-                                    <div
-                                        style="display: flex; align-items: flex-start; justify-content: space-between;">
-                                        <label for="abo-match"
-                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">ABO
-                                            match</label>
-                                        <div style="width: 60%;">
-                                            <select id="abo-match" class="custom-text-input"
-                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: var(--text-primary);"
-                                                onchange="this.style.color = 'var(--text-primary)';">
-                                                <option value="Compatible" selected>Compatible</option>
-                                                <option value="Major mismatch">Major mismatch</option>
-                                                <option value="Minor mismatch">Minor mismatch</option>
-                                                <option value="Bidirectional">Bidirectional mismatch</option>
-                                            </select>
+                                            <!-- Recipient ABO -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-abo"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">ABO / Rh</label>
+                                                <div style="width: 60%; display: flex; gap: 0.5rem;">
+                                                    <select id="recipient-abo" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; min-width: 0; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="A">A</option>
+                                                        <option value="B">B</option>
+                                                        <option value="AB">AB</option>
+                                                        <option value="O" selected>O</option>
+                                                    </select>
+                                                    <select id="recipient-rh" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; min-width: 0; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="+" selected>+</option>
+                                                        <option value="-">−</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Recipient CMV Status -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-cmv"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">CMV<br>status</label>
+                                                <div style="width: 60%;">
+                                                    <select id="recipient-cmv" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="Positive" selected>Positive</option>
+                                                        <option value="Negative">Negative</option>
+                                                        <option value="Unknown">Unknown</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Recipient ECOG PS -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-ecog"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">ECOG PS</label>
+                                                <div style="width: 60%;">
+                                                    <select id="recipient-ecog" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="0">0</option>
+                                                        <option value="1" selected>1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Recipient KPS -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-kps"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">KPS</label>
+                                                <div style="width: 60%;">
+                                                    <select id="recipient-kps" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; color: #aaaaaa;"
+                                                        onchange="this.style.color = 'var(--text-primary)';">
+                                                        <option value="100">100</option>
+                                                        <option value="90" selected>90</option>
+                                                        <option value="80">80</option>
+                                                        <option value="70">70</option>
+                                                        <option value="60">60</option>
+                                                        <option value="50">50</option>
+                                                        <option value="40">40</option>
+                                                        <option value="30">30</option>
+                                                        <option value="20">20</option>
+                                                        <option value="10">10</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Recipient HCT-CI -->
+                                            <div
+                                                style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                                <label for="recipient-hct-ci"
+                                                    style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">HCT-CI</label>
+                                                <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
+                                                    <input type="text" id="recipient-hct-ci" class="custom-text-input"
+                                                        style="margin: 0; padding: 0.25rem 0.5rem; flex: 1; font-size: 0.95rem; height: 2.1rem;"
+                                                        placeholder="e.g. 2">
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <!-- Recipient HLA typing -->
+                                        <div id="recipient-hla-panel" class="hla-panel" data-hla-role="recipient"></div>
                                     </div>
                                 </div>
                             </div>
@@ -484,7 +750,7 @@
                         <div
                             style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
                             <button type="button" class="btn-secondary"
-                                onclick="saveTransplantData('Transplant Type saved successfully')"
+                                onclick="saveTransplantData('Transplant Information saved successfully')"
                                 style="padding: 0 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -618,14 +884,12 @@
                         </div>
                     </div>
 
-                    <!-- Section 4: Infusion Date & Infused Cell -->
+                    <!-- Section 4: Stem Cell Infusion & Supportive Care (infused cells + G-CSF/IVIG) -->
                     <div class="card">
                         <div class="card-header"
                             style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                             <div>
-                                <h3 style="margin: 0;">4. Infusion Date & Infused Stem Cell</h3>
-                                <p class="subtitle" style="margin-top: 0.5rem; margin-bottom: 0;">Enter infusion dates
-                                    and infused cell counts</p>
+                                <h3 style="margin: 0;">4. Stem Cell Infusion & Supportive Care</h3>
                             </div>
                             <button class="btn-secondary" onclick="toggleSection('infused-cell-container', this)"
                                 style="padding: 0 1rem; height: 2.1rem;">
@@ -641,12 +905,13 @@
                             </button>
                         </div>
                         <div class="card-body" id="infused-cell-container" style="width: 100%; box-sizing: border-box;">
+                            <h5 class="allo-subtitle">Infused stem cell</h5>
                             <div id="infused-cell-rows-list"
                                 style="display: flex; flex-direction: column; gap: 1.5rem; width: 100%; box-sizing: border-box;">
 
                                 <!-- Infused Cell Row 1 -->
                                 <div class="infused-cell-row" style="width: 100%; box-sizing: border-box;">
-                                    <!-- Row 1: Date & Cell Counts (4 columns) -->
+                                    <!-- Date & Cell Counts (4 columns x 2 rows) -->
                                     <div
                                         style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
 
@@ -664,16 +929,11 @@
                                             </div>
                                         </div>
 
-                                        <!-- Empty divs to push next items to the second row -->
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-
                                         <!-- 2. Infused volume -->
                                         <div
                                             style="display: flex; align-items: flex-start; justify-content: space-between;">
                                             <label
-                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Infused volume</label>
+                                                style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: -0.1rem; line-height: 1.25;">Infused<br>volume</label>
                                             <div style="display: flex; align-items: center; width: 60%; gap: 0.5rem;">
                                                 <input type="text" id="infused-volume"
                                                     class="custom-text-input infused-volume-input"
@@ -745,27 +1005,26 @@
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <!-- Remove row button (hidden for single first row, shown when added) -->
-                                    <div class="cell-row-remove-container"
-                                        style="display: none; justify-content: flex-end; margin-top: 0.75rem;">
-                                        <button type="button" class="btn-secondary" onclick="removeInfusedCellRow(this)"
-                                            style="padding: 0 1rem; height: 2.1rem;"
-                                            title="Remove Infusion Row">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                style="margin-right: 0.25rem;">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path
-                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                </path>
-                                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                                            </svg>
-                                            REMOVE
-                                        </button>
+                                        <!-- Remove row button: last cell of row 2 (hidden for single first row, shown when added) -->
+                                        <div class="cell-row-remove-container"
+                                            style="display: none; grid-column: 4; justify-content: flex-end;">
+                                            <button type="button" class="btn-secondary" onclick="removeInfusedCellRow(this)"
+                                                style="padding: 0 1rem; height: 2.1rem;"
+                                                title="Remove Infusion Row">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    style="margin-right: 0.25rem;">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path
+                                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                    </path>
+                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                </svg>
+                                                REMOVE
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -785,45 +1044,9 @@
                                     ADD
                                 </button>
                             </div>
-                        </div>
-                        <!-- Section Submit Button -->
-                        <div
-                            style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
-                            <button type="button" class="btn-secondary"
-                                onclick="saveTransplantData('Infused Cell parameters saved successfully')"
-                                style="padding: 0 1rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                                SUBMIT
-                            </button>
-                        </div>
-                    </div>
 
-                    <!-- Section 5: G-CSF and IVIG support -->
-                    <div class="card">
-                        <div class="card-header"
-                            style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <div>
-                                <h3 style="margin: 0;">5. G-CSF and IVIG support</h3>
-                            </div>
-                            <button class="btn-secondary" onclick="toggleSection('support-container', this)"
-                                style="padding: 0 1rem; height: 2.1rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" style="margin-right: 0.25rem;">
-                                    <path
-                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
-                                    </path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                                Hide
-                            </button>
-                        </div>
-                        <div class="card-body" id="support-container" style="width: 100%; box-sizing: border-box;">
-                            <!-- 4 Column Grid -->
+                            <h5 class="allo-subtitle" style="margin-top: 1.5rem;">G-CSF &amp; IVIG support</h5>
+                            <!-- G-CSF / IVIG: 4 Column Grid -->
                             <div
                                 style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
                                 
@@ -909,7 +1132,7 @@
                         <div
                             style="padding: 1rem 1.5rem; text-align: right; border-top: 1px solid rgba(255,255,255,0.1);">
                             <button type="button" class="btn-secondary"
-                                onclick="saveTransplantData('Support parameters saved successfully')"
+                                onclick="saveTransplantData('Stem Cell Infusion & Supportive Care saved successfully')"
                                 style="padding: 0 1rem;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -921,12 +1144,12 @@
                         </div>
                     </div>
 
-                    <!-- Section 6: Summary -->
+                    <!-- Section 5: Summary -->
                     <div class="card summary-card">
                         <div class="card-header"
                             style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                             <div>
-                                <h3 style="margin: 0;">6. Transplantation Schedule</h3>
+                                <h3 style="margin: 0;">5. Transplantation Schedule</h3>
                             </div>
                             <div style="display: flex; gap: 0.5rem;">
                                 <button id="print-summary-btn" class="btn-secondary" onclick="window.print()">
@@ -980,7 +1203,7 @@
                                 <div>
                                     <div
                                         style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        Donor & HLA Match</div>
+                                        Donor</div>
                                     <div id="summary-badge-donor"
                                         style="font-size: 0.95rem; color: var(--text-primary); font-weight: 600; margin-top: 0.25rem;">
                                         -</div>
@@ -2258,10 +2481,25 @@
                 selectObj.style.color = 'var(--text-primary)';
             }
             const isAllogeneic = selectObj.value === 'Allogeneic';
-            const allogeneicPanel = document.getElementById('allogeneic-details-panel');
-            if (allogeneicPanel) {
-                allogeneicPanel.style.display = isAllogeneic ? 'block' : 'none';
-            }
+            // Donor info and Recipient HLA typing only apply to Allogeneic;
+            // the rest of Recipient info stays active for both types
+            ['donor-info-col', 'recipient-hla-panel'].forEach(id => {
+                const section = document.getElementById(id);
+                if (!section) return;
+                section.classList.toggle('is-disabled', !isAllogeneic);
+                section.querySelectorAll('input, select').forEach(el => {
+                    el.disabled = !isAllogeneic;
+                    if (isAllogeneic) return;
+                    // Autologous: clear values back to their initial state
+                    if (el.tagName === 'SELECT') {
+                        const defaultOpt = Array.from(el.options).find(opt => opt.defaultSelected) || el.options[0];
+                        el.value = defaultOpt ? defaultOpt.value : '';
+                        el.style.color = '#aaaaaa';
+                    } else {
+                        el.value = '';
+                    }
+                });
+            });
             const donorTypeSel = document.getElementById('donor-type');
             const donorWrapper = document.getElementById('donor-type-wrapper');
             const donorOthers = document.getElementById('donor-type-others');
@@ -2313,6 +2551,37 @@
             }
 
             updateTransplantSummary();
+        }
+
+        const HLA_LOCI = ['A', 'B', 'C', 'DRB1', 'DQB1', 'DPB1'];
+
+        function renderHlaPanels() {
+            document.querySelectorAll('.hla-panel').forEach(panel => {
+                const role = panel.dataset.hlaRole;
+                const title = role === 'donor' ? 'Donor HLA typing' : 'Recipient HLA typing';
+                let html = `<h5 class="hla-panel-title">${title}</h5><div class="hla-grid"><div></div>`;
+                [1, 2].forEach(allele => {
+                    html += `<div class="hla-locus">Allele ${allele}</div>`;
+                });
+                HLA_LOCI.forEach(locus => {
+                    html += `<div class="hla-row-label">HLA-${locus}</div>`;
+                    [1, 2].forEach(allele => {
+                        html += `<input type="text" class="custom-text-input hla-input" id="${role}-hla-${locus.toLowerCase()}-${allele}" data-locus="${locus}" data-allele="${allele}" placeholder="e.g. 02:01">`;
+                    });
+                });
+                html += '</div>';
+                panel.innerHTML = html;
+            });
+        }
+
+        function collectHlaTyping(role) {
+            const typing = {};
+            document.querySelectorAll(`#${role}-hla-panel .hla-input`).forEach(input => {
+                const locus = input.dataset.locus;
+                if (!typing[locus]) typing[locus] = ['', ''];
+                typing[locus][Number(input.dataset.allele) - 1] = input.value.trim();
+            });
+            return typing;
         }
 
         function handleDonorTypeChange(selectObj) {
@@ -2518,7 +2787,6 @@
             const orderVal = document.getElementById('transplant-order')?.value || '1st';
             const cellVal = document.getElementById('cell-source')?.value || 'PBSC';
             const donorVal = document.getElementById('donor-type')?.value || 'N/A';
-            const hlaVal = document.getElementById('hla-match')?.value || '8/8';
             const baseD0Date = document.getElementById('transplant-date')?.value || document.querySelector('.infused-cell-date')?.value || '';
 
             const badgeType = document.getElementById('summary-badge-type');
@@ -2538,7 +2806,7 @@
                 if (typeVal === 'Autologous') {
                     badgeDonor.textContent = 'Self';
                 } else {
-                    badgeDonor.textContent = `${donorVal} (${hlaVal})`;
+                    badgeDonor.textContent = donorVal;
                 }
             }
 
@@ -2808,12 +3076,25 @@
                 cellSourceOthers: document.getElementById('cell-source-others')?.value,
                 donorType: document.getElementById('donor-type')?.value,
                 donorTypeOthers: document.getElementById('donor-type-others')?.value,
+                donorCenter: document.getElementById('donor-center')?.value,
+                donorId: document.getElementById('donor-id')?.value,
                 donorAge: document.getElementById('donor-age')?.value,
                 donorSex: document.getElementById('donor-sex')?.value,
                 donorWeight: document.getElementById('donor-weight')?.value,
-                hlaMatch: document.getElementById('hla-match')?.value,
-                hlaMatchOthers: document.getElementById('hla-match-others')?.value,
-                aboMatch: document.getElementById('abo-match')?.value,
+                donorAbo: document.getElementById('donor-abo')?.value,
+                donorRh: document.getElementById('donor-rh')?.value,
+                recipientAge: document.getElementById('recipient-age')?.value,
+                recipientSex: document.getElementById('recipient-sex')?.value,
+                recipientWeight: document.getElementById('recipient-weight')?.value,
+                recipientAbo: document.getElementById('recipient-abo')?.value,
+                recipientRh: document.getElementById('recipient-rh')?.value,
+                donorCmv: document.getElementById('donor-cmv')?.value,
+                recipientCmv: document.getElementById('recipient-cmv')?.value,
+                recipientEcog: document.getElementById('recipient-ecog')?.value,
+                recipientKps: document.getElementById('recipient-kps')?.value,
+                recipientHctCi: document.getElementById('recipient-hct-ci')?.value,
+                donorHla: collectHlaTyping('donor'),
+                recipientHla: collectHlaTyping('recipient'),
                 conditioningAgents: transplantState.conditioningAgents,
                 gvhdAgents: transplantState.gvhdAgents,
                 infusedCells: infusedCellRows,
@@ -2841,6 +3122,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initDateInputs();
             initInfusedCellInputs();
+            renderHlaPanels();
 
             renderConditioningCheckboxes();
             renderConditioningConfigs();
