@@ -94,5 +94,13 @@
   {
     "Code": "QWF8",
     "Dosing_days": "D8, 15, 22"
+  },
+  {
+    "Code": "Q8W",
+    "Dosing_days": "D1"
+  },
+  {
+    "Code": "SU1",
+    "Dosing_days": "D1"
   }
 ]

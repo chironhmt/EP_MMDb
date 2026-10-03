@@ -124,5 +124,12 @@
     "Abbrevations": "X",
     "Dose": "100 mg, 80 mg, 60 mg, 40 mg",
     "Dosing_day": "X"
+  },
+  {
+    "Class": "TsAb",
+    "Agent": "Ramantamig",
+    "Abbrevations": "Ramantamig",
+    "Dose": "5 mg, 200 mg",
+    "Dosing_day": "SU1, Q4W, Q8W"
   }
 ]

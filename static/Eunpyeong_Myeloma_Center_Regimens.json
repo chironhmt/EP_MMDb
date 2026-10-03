@@ -431,5 +431,53 @@
         ]
       }
     ]
+  },
+  {
+    "Regimen": "Ramantamig + Dara (Triolog-7)",
+    "Cycles": [
+      {
+        "Cycle": "SUD",
+        "Length": 7,
+        "Agents": [
+          {
+            "Agent": "Ramantamig",
+            "Dose": "5 mg",
+            "Dosing_day": "SU1"
+          }
+        ]
+      },
+      {
+        "Cycle": "1-5",
+        "Length": 28,
+        "Agents": [
+          {
+            "Agent": "Ramantamig",
+            "Dose": "200 mg",
+            "Dosing_day": "Q4W"
+          },
+          {
+            "Agent": "Daratumumab (SC)",
+            "Dose": "1800 mg",
+            "Dosing_day": "Q4W"
+          }
+        ]
+      },
+      {
+        "Cycle": "6-24",
+        "Length": 56,
+        "Agents": [
+          {
+            "Agent": "Ramantamig",
+            "Dose": "200 mg",
+            "Dosing_day": "Q8W"
+          },
+          {
+            "Agent": "Daratumumab (SC)",
+            "Dose": "1800 mg",
+            "Dosing_day": "Q8W"
+          }
+        ]
+      }
+    ]
   }
 ]
