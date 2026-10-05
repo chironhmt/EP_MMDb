@@ -242,6 +242,11 @@ function parseCycleRange(cycleStr) {
     });
     return hasValidNumber ? Array.from(result).sort((a, b) => a - b) : [];
 }
+// Step-up dosing cycles are labelled "SUD" rather than "Cycle SUD"
+// (older saves may also hold "SUD (step-up dose)")
+function normalizeCycleName(name) {
+    return /^(Cycle\s*)?SUD(\s*\(step-up dose\))?$/i.test((name || '').trim()) ? 'SUD' : name;
+}
 function applyRegimen(regimenObj) {
     // Clear existing cycles
     cycles = [];
@@ -256,7 +261,7 @@ function applyRegimen(regimenObj) {
         if (config.Length) lengthDays = config.Length.toString();
         if (config.Agents) agentsConfig = config.Agents;
         const parsedCycles = parseCycleRange(config.Cycle);
-        const cycleNames = parsedCycles.length > 0 ? parsedCycles.map(n => `Cycle ${n}`) : [config.Cycle ? `Cycle ${config.Cycle}` : `Cycle ${cycles.length + 1}`];
+        const cycleNames = parsedCycles.length > 0 ? parsedCycles.map(n => `Cycle ${n}`) : [config.Cycle ? normalizeCycleName(`Cycle ${config.Cycle}`) : `Cycle ${cycles.length + 1}`];
         cycleNames.forEach(cycleName => {
             const newCycle = {
                 id: generateId(),
@@ -377,7 +382,7 @@ function addCycle() {
         if (parsed.length > 0) {
             cycleNames = parsed.map(n => `Cycle ${n}`);
         } else {
-            cycleNames = [customName];
+            cycleNames = [normalizeCycleName(customName)];
         }
     } else {
         const cycleNum = cycles.length + 1;
@@ -533,7 +538,7 @@ async function findLatestChemoLineId(upn) {
 function buildCycleFromRow(cycleRow) {
     const newCycle = {
         id: generateId(),
-        name: cycleRow.cycle_number || 'Cycle 1',
+        name: normalizeCycleName(cycleRow.cycle_number || 'Cycle 1'),
         startDate: cycleRow.start_date || '',
         lengthDays: cycleRow.cycle_length_days != null ? String(cycleRow.cycle_length_days) : '28',
         selectedAgents: {}

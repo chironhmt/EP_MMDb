@@ -4,21 +4,21 @@
     "Agent": "Daratumumab",
     "Abbrevations": "D",
     "Dose": "8 mg/kg, 16 mg/kg",
-    "Dosing_day": "QW4, Q2W, Q4W, QW3, QW"
+    "Dosing_day": "QW4, Q2W, C1, QW3, QW"
   },
   {
     "Class": "Anti-CD38 mAb",
     "Agent": "Daratumumab (SC)",
     "Abbrevations": "D(SC)",
     "Dose": "1800 mg",
-    "Dosing_day": "QW4, Q2W, Q4W"
+    "Dosing_day": "QW4, Q2W, C1"
   },
   {
     "Class": "Anti-CD38 mAb",
     "Agent": "Isatuximab",
     "Abbrevations": "Isa",
     "Dose": "10 mg/kg",
-    "Dosing_day": "QW4, Q2W, Q4W"
+    "Dosing_day": "QW4, Q2W, C1"
   },
   {
     "Class": "PI",
@@ -102,14 +102,14 @@
     "Agent": "Teclistamab",
     "Abbrevations": "Tec",
     "Dose": "0.06 mg/kg, 0.3 mg/kg, 1.5 mg/kg",
-    "Dosing_day": "TEC#1, QW, Q2W, Q4W"
+    "Dosing_day": "TEC#1, QW, Q2W, C1"
   },
   {
     "Class": "BsAb",
     "Agent": "Talquetamab",
     "Abbrevations": "Tal",
     "Dose": "0.01 mg/kg, 0.06 mg/kg, 0.4 mg/kg, 0.8 mg/kg",
-    "Dosing_day": "TAL#1QW, TAL#1Q2W, QW, Q2W, Q4W"
+    "Dosing_day": "TAL#1QW, TAL#1Q2W, QW, Q2W, C1"
   },
   {
     "Class": "BsAb",
@@ -130,6 +130,6 @@
     "Agent": "Ramantamig",
     "Abbrevations": "Ramantamig",
     "Dose": "5 mg, 200 mg",
-    "Dosing_day": "SU1, Q4W, Q8W"
+    "Dosing_day": "C1"
   }
 ]

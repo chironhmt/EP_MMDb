@@ -295,7 +295,7 @@
           {
             "Agent": "Daratumumab",
             "Dose": "16 mg/kg",
-            "Dosing_day": "Q4W"
+            "Dosing_day": "C1"
           }
         ]
       }
@@ -353,7 +353,7 @@
           {
             "Agent": "Daratumumab",
             "Dose": "16 mg/kg",
-            "Dosing_day": "Q4W"
+            "Dosing_day": "C1"
           }
         ]
       }
@@ -442,7 +442,7 @@
           {
             "Agent": "Ramantamig",
             "Dose": "5 mg",
-            "Dosing_day": "SU1"
+            "Dosing_day": "C1"
           }
         ]
       },
@@ -453,12 +453,12 @@
           {
             "Agent": "Ramantamig",
             "Dose": "200 mg",
-            "Dosing_day": "Q4W"
+            "Dosing_day": "C1"
           },
           {
             "Agent": "Daratumumab (SC)",
             "Dose": "1800 mg",
-            "Dosing_day": "Q4W"
+            "Dosing_day": "C1"
           }
         ]
       },
@@ -469,12 +469,12 @@
           {
             "Agent": "Ramantamig",
             "Dose": "200 mg",
-            "Dosing_day": "Q8W"
+            "Dosing_day": "C1"
           },
           {
             "Agent": "Daratumumab (SC)",
             "Dose": "1800 mg",
-            "Dosing_day": "Q8W"
+            "Dosing_day": "C1"
           }
         ]
       }

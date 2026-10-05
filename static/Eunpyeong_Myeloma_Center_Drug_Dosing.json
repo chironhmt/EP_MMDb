@@ -56,10 +56,6 @@
     "Dosing_days": "D1, 15"
   },
   {
-    "Code": "Q4W",
-    "Dosing_days": "D1"
-  },
-  {
     "Code": "QW3",
     "Dosing_days": "D1, 8, 15"
   },
@@ -94,13 +90,5 @@
   {
     "Code": "QWF8",
     "Dosing_days": "D8, 15, 22"
-  },
-  {
-    "Code": "Q8W",
-    "Dosing_days": "D1"
-  },
-  {
-    "Code": "SU1",
-    "Dosing_days": "D1"
   }
 ]
