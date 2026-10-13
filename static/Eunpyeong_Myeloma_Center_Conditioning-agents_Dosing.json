@@ -1,0 +1,74 @@
+[
+  {
+    "Code": "D-1",
+    "Dosing_days": "D-1"
+  },
+  {
+    "Code": "D-2",
+    "Dosing_days": "D-2"
+  },
+  {
+    "Code": "D-3",
+    "Dosing_days": "D-3"
+  },
+  {
+    "Code": "D-4",
+    "Dosing_days": "D-4"
+  },
+  {
+    "Code": "D-6",
+    "Dosing_days": "D-6"
+  },
+  {
+    "Code": "D-2~-1",
+    "Dosing_days": "D-2, -1"
+  },
+  {
+    "Code": "D-3~-1",
+    "Dosing_days": "D-3, -2, -1"
+  },
+  {
+    "Code": "D-3~-2",
+    "Dosing_days": "D-3, -2"
+  },
+  {
+    "Code": "D-4~-1",
+    "Dosing_days": "D-4, -3, -2, -1"
+  },
+  {
+    "Code": "D-4~-2",
+    "Dosing_days": "D-4, -3, -2"
+  },
+  {
+    "Code": "D-4~-3",
+    "Dosing_days": "D-4, -3"
+  },
+  {
+    "Code": "D-5~-2",
+    "Dosing_days": "D-5, -4, -3, -2"
+  },
+  {
+    "Code": "D-5~-4",
+    "Dosing_days": "D-5, -4"
+  },
+  {
+    "Code": "D-6~-2",
+    "Dosing_days": "D-6, -5, -4, -3, -2"
+  },
+  {
+    "Code": "D-6~-3",
+    "Dosing_days": "D-6, -5, -4, -3"
+  },
+  {
+    "Code": "D-6~-5",
+    "Dosing_days": "D-6, -5"
+  },
+  {
+    "Code": "D-7~-5",
+    "Dosing_days": "D-7, -6, -5"
+  },
+  {
+    "Code": "D-7~-6",
+    "Dosing_days": "D-7, -6"
+  }
+]

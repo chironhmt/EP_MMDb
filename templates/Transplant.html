@@ -783,6 +783,27 @@
                             </button>
                         </div>
                         <div id="conditioning-regimen-content">
+                            <!-- Regimen preset -->
+                            <div style="padding: 1.5rem 1.5rem 0 1.5rem;">
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="conditioning-regimen"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Regimen</label>
+                                        <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                            <select id="conditioning-regimen" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;"
+                                                onchange="handleConditioningRegimenChange(this)">
+                                                <option value="" disabled selected>Choose regimen</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <input type="text" id="conditioning-regimen-others" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                                placeholder="e.g. MEL200">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- 2.1 Select Conditioning Agents -->
                             <div style="padding: 1.5rem 1.5rem 0.5rem 1.5rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -1279,74 +1300,44 @@
         // ==========================================
         // 1. DATA DEFINITIONS
         // ==========================================
-        const conditioningAgentsData = [
-            {
-                Class: "Alkylating Agents",
-                Agent: "Melphalan",
-                Dose: "100 mg/m2, 70 mg/m2, 50 mg/m2, 200 mg/m2, 140 mg/m2",
-                Dosing_day: "D-4–-3, D-3–-2, D-3, D-2"
-            },
-            {
-                Class: "Alkylating Agents",
-                Agent: "Busulfan",
-                Dose: "3.2 mg/kg (IV)",
-                Dosing_day: "D-4–-3, D-5–-2, D-4–-2"
-            },
-            {
-                Class: "Alkylating Agents",
-                Agent: "Cyclophosphamide (Cy)",
-                Dose: "60 mg/kg, 50 mg/kg",
-                Dosing_day: "D-2–-1, D-6–-5, D-3–-2, D-2"
-            },
-            {
-                Class: "Alkylating Agents",
-                Agent: "Thiotepa",
-                Dose: "5 mg/kg, 250 mg/m2",
-                Dosing_day: "D-7–-6, D-4, D-3–-2"
-            },
-            {
-                Class: "Alkylating Agents",
-                Agent: "Carmustine",
-                Dose: "300 mg/m2",
-                Dosing_day: "D-6"
-            },
-            {
-                Class: "Antimetabolites",
-                Agent: "Fludarabine",
-                Dose: "30 mg/m2, 40 mg/m2",
-                Dosing_day: "D-6–-2, D-5–-2, D-4–-2, D-4–-1"
-            },
-            {
-                Class: "Antimetabolites",
-                Agent: "Cytarabine",
-                Dose: "400 mg/m2",
-                Dosing_day: "D-5–-2"
-            },
-            {
-                Class: "Topoisomerase Inhibitors",
-                Agent: "Etoposide",
-                Dose: "400 mg/m2",
-                Dosing_day: "D-5–-2"
-            },
-            {
-                Class: "Radiation",
-                Agent: "TBI",
-                Dose: "200 cGy, 300 cGy, 400 cGy",
-                Dosing_day: "D-6–-3, D-1, D-3–-1, D-4–-1"
-            },
-            {
-                Class: "Immunosuppressants / Antibodies",
-                Agent: "Rabbit ATG",
-                Dose: "1.25 mg/kg, 1.5 mg/kg, 2.0 mg/kg, 2.5 mg/kg, 3.75 mg/kg",
-                Dosing_day: "D-3–-2, D-3–-1, D-4–-2, D-4–-1"
-            },
-            {
-                Class: "Others",
-                Agent: "Others",
-                Dose: "",
-                Dosing_day: ""
+        // Conditioning reference data, loaded from the JSON files under /static (see loadConditioningData)
+        let conditioningAgentsData = [];
+        let conditioningDosingDaysMap = {};   // dosing code -> day list, e.g. "D-4~-3" -> "D-4, -3"
+        let conditioningRegimensData = [];
+
+        async function loadConditioningData() {
+            try {
+                const [agentsRes, daysRes, regimensRes] = await Promise.all([
+                    fetch('/static/Eunpyeong_Myeloma_Center_Conditioning-agents.json?v=' + Date.now()),
+                    fetch('/static/Eunpyeong_Myeloma_Center_Conditioning-agents_Dosing.json?v=' + Date.now()),
+                    fetch('/static/Eunpyeong_Myeloma_Center_Conditioning-regimens.json?v=' + Date.now())
+                ]);
+                if (!agentsRes.ok || !daysRes.ok || !regimensRes.ok) {
+                    throw new Error('Failed to fetch conditioning JSON files.');
+                }
+                conditioningAgentsData = await agentsRes.json();
+                const dosingDaysData = await daysRes.json();
+                conditioningRegimensData = await regimensRes.json();
+
+                conditioningDosingDaysMap = {};
+                dosingDaysData.forEach(d => {
+                    conditioningDosingDaysMap[d.Code] = d.Dosing_days;
+                });
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to load conditioning agents/regimens. Run the app via EP_MMDb.bat.');
             }
-        ];
+            // Ensure "Others" is in conditioningAgentsData if not present
+            if (!conditioningAgentsData.find(a => a.Agent === 'Others')) {
+                conditioningAgentsData.push({
+                    Class: "Others",
+                    Agent: "Others",
+                    Abbrevations: "",
+                    Dose: "",
+                    Dosing_day: ""
+                });
+            }
+        }
 
         const gvhdProphylaxisData = [
             {
@@ -1628,35 +1619,93 @@
             });
         }
 
-        function getDefaultConditioningDays(agentName) {
-            if (agentName === 'Melphalan') return { from: 'D-4', to: 'D-3' };
-            if (agentName === 'Busulfan') return { from: 'D-4', to: 'D-3' };
-            if (agentName === 'Cyclophosphamide (Cy)') return { from: 'D-2', to: 'D-1' };
-            if (agentName === 'Thiotepa') return { from: 'D-7', to: 'D-6' };
-            if (agentName === 'Carmustine') return { from: 'D-6', to: 'D-6' };
-            if (agentName === 'Fludarabine') return { from: 'D-6', to: 'D-2' };
-            if (agentName === 'Cytarabine') return { from: 'D-5', to: 'D-2' };
-            if (agentName === 'Etoposide') return { from: 'D-5', to: 'D-2' };
-            if (agentName === 'TBI') return { from: 'D-6', to: 'D-3' };
-            if (agentName === 'Rabbit ATG') return { from: 'D-3', to: 'D-2' };
-            return { from: 'D-3', to: 'D-2' };
+        // Resolve a dosing code (e.g. "D-4~-3") into the From/To state used by the day selectors.
+        // A day list that isn't one contiguous run falls back to the free-text "Others" field.
+        function conditioningDaysFromCode(code) {
+            const fallback = { fromDay: 'D-3', toDay: 'D-2', isCustomDays: false, customDays: '' };
+            if (!code) return fallback;
+            const text = conditioningDosingDaysMap[code] || code;
+            const nums = (text.match(/-?\d+/g) || []).map(n => parseInt(n, 10)).sort((x, y) => x - y);
+            if (nums.length === 0) return fallback;
+            const min = nums[0];
+            const max = nums[nums.length - 1];
+            const contiguous = nums.every((n, i) => i === 0 || n === nums[i - 1] + 1);
+            if (!contiguous) {
+                return { fromDay: `D${min}`, toDay: `D${max}`, isCustomDays: true, customDays: text };
+            }
+            return { fromDay: `D${min}`, toDay: `D${max}`, isCustomDays: false, customDays: '' };
+        }
+
+        function getDefaultConditioningDays(agent) {
+            const firstCode = agent.Dosing_day ? agent.Dosing_day.split(',')[0].trim() : '';
+            return conditioningDaysFromCode(firstCode);
+        }
+
+        // Bulk-apply a preset from Eunpyeong_Myeloma_Center_Conditioning-regimens.json (replaces the current selection)
+        function applyConditioningRegimen(regimenObj) {
+            transplantState.conditioningAgents = {};
+            (regimenObj.Agents || []).forEach(entry => {
+                const agent = conditioningAgentsData.find(a => a.Agent === entry.Agent);
+                if (!agent) {
+                    console.warn('Conditioning regimen refers to an unknown agent:', entry.Agent);
+                    return;
+                }
+                const presetDoses = agent.Dose ? agent.Dose.split(',').map(d => d.trim()).filter(d => d) : [];
+                const isPresetDose = presetDoses.includes(entry.Dose);
+                const schedule = {
+                    id: generateId(),
+                    dose: isPresetDose ? entry.Dose : 'Others',
+                    customDose: isPresetDose ? '' : (entry.Dose || ''),
+                    ...conditioningDaysFromCode(entry.Dosing_day)
+                };
+                if (transplantState.conditioningAgents[agent.Agent]) {
+                    transplantState.conditioningAgents[agent.Agent].schedules.push(schedule);
+                } else {
+                    transplantState.conditioningAgents[agent.Agent] = { customName: '', schedules: [schedule] };
+                }
+            });
+            renderConditioningCheckboxes();
+            renderConditioningConfigs();
+            updateTransplantSummary();
+        }
+
+        function populateConditioningRegimens() {
+            const regimenSelect = document.getElementById('conditioning-regimen');
+            if (!regimenSelect) return;
+            conditioningRegimensData.forEach(r => {
+                const option = document.createElement('option');
+                option.value = r.Regimen;
+                option.textContent = r.Regimen;
+                regimenSelect.insertBefore(option, regimenSelect.querySelector('option[value="Others"]'));
+            });
+        }
+
+        function handleConditioningRegimenChange(select) {
+            const val = select.value;
+            const othersInput = document.getElementById('conditioning-regimen-others');
+            if (othersInput) othersInput.style.display = val === 'Others' ? 'block' : 'none';
+            if (val === 'Others') {
+                if (othersInput) othersInput.focus();
+                return;
+            }
+            const regimenObj = conditioningRegimensData.find(r => r.Regimen === val);
+            if (!regimenObj) return;
+            const hasAgents = Object.keys(transplantState.conditioningAgents).length > 0;
+            if (!hasAgents || confirm(`Apply preset "${val}"? This will replace the currently selected conditioning agents.`)) {
+                applyConditioningRegimen(regimenObj);
+            }
         }
 
         function handleConditioningAgentSelection(agent, isSelected) {
             if (isSelected) {
                 const defaultDose = agent.Dose ? agent.Dose.split(',')[0].trim() : 'Others';
-                const defDays = getDefaultConditioningDays(agent.Agent);
-
                 transplantState.conditioningAgents[agent.Agent] = {
                     customName: agent.Agent === 'Others' ? (document.getElementById('cond-custom-agent-input')?.value || '') : '',
                     schedules: [{
                         id: generateId(),
                         dose: defaultDose,
                         customDose: '',
-                        fromDay: defDays.from,
-                        toDay: defDays.to,
-                        isCustomDays: false,
-                        customDays: ''
+                        ...getDefaultConditioningDays(agent)
                     }]
                 };
             } else {
@@ -3095,6 +3144,8 @@
                 recipientHctCi: document.getElementById('recipient-hct-ci')?.value,
                 donorHla: collectHlaTyping('donor'),
                 recipientHla: collectHlaTyping('recipient'),
+                conditioningRegimen: document.getElementById('conditioning-regimen')?.value,
+                conditioningRegimenOthers: document.getElementById('conditioning-regimen-others')?.value,
                 conditioningAgents: transplantState.conditioningAgents,
                 gvhdAgents: transplantState.gvhdAgents,
                 infusedCells: infusedCellRows,
@@ -3119,11 +3170,13 @@
         // ==========================================
         // 7. INITIALIZATION ON DOM READY
         // ==========================================
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             initDateInputs();
             initInfusedCellInputs();
             renderHlaPanels();
 
+            await loadConditioningData();
+            populateConditioningRegimens();
             renderConditioningCheckboxes();
             renderConditioningConfigs();
 

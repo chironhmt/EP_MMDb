@@ -63,11 +63,11 @@ Pages navigate each other via plain `window.location.href` (e.g. Dashboard → `
 
 Drives `Chemotherapy.html`'s cycle-builder UI. On load it fetches three reference JSON files and builds in-memory lookup structures:
 
-- `Eunpyeong_Myeloma_Center_Agents.json` → grouped by `Class` into `groupedAgents` (drug class → agent list, each with dose/dosing-day info).
-- `Eunpyeong_Myeloma_Center_Drug_Dosing.json` → `dosingDaysMap` (dosing code → human-readable schedule).
-- `Eunpyeong_Myeloma_Center_Regimens.json` → `regimensData`, used to populate the regimen dropdown and to bulk-apply a preset regimen's agents/cycles (destructive — prompts for confirmation since it replaces current cycles).
+- `Eunpyeong_Myeloma_Center_Chemo-agents.json` → grouped by `Class` into `groupedAgents` (drug class → agent list, each with dose/dosing-day info).
+- `Eunpyeong_Myeloma_Center_Chemo-agents_Dosing.json` → `dosingDaysMap` (dosing code → human-readable schedule).
+- `Eunpyeong_Myeloma_Center_Chemo-regimens.json` → `regimensData`, used to populate the regimen dropdown and to bulk-apply a preset regimen's agents/cycles (destructive — prompts for confirmation since it replaces current cycles).
 
-Cycles are held in an in-memory `cycles` array (`currentCycleId` tracks the active one), and `currentLineId` tracks the saved `chemo_lines` row the page is editing. `buildLinePayload()` flattens that in-memory state into the API's JSON shape and `applyLineData()`/`buildCycleFromRow()` rebuild it on load — the two are mirror images, so any new per-cycle or per-schedule field must be added to both or it will silently fail to persist. Note the asymmetry they handle: a dose/dosing-day value that isn't one of the agent's presets in `Eunpyeong_Myeloma_Center_Agents.json` is stored flat in the DB but must be split back into `dose: 'Others'` + `customDose` for the radio-button UI.
+Cycles are held in an in-memory `cycles` array (`currentCycleId` tracks the active one), and `currentLineId` tracks the saved `chemo_lines` row the page is editing. `buildLinePayload()` flattens that in-memory state into the API's JSON shape and `applyLineData()`/`buildCycleFromRow()` rebuild it on load — the two are mirror images, so any new per-cycle or per-schedule field must be added to both or it will silently fail to persist. Note the asymmetry they handle: a dose/dosing-day value that isn't one of the agent's presets in `Eunpyeong_Myeloma_Center_Chemo-agents.json` is stored flat in the DB but must be split back into `dose: 'Others'` + `customDose` for the radio-button UI.
 
 ### UI design system — mandatory for any HTML/CSS work
 
@@ -85,8 +85,9 @@ Cycles are held in an in-memory `cycles` array (`currentCycleId` tracks the acti
 
 ### Reference/config JSON files (`static/`)
 
-- `Eunpyeong_Myeloma_Center_Agents.json` — chemo agent catalog (class, name, abbreviation, dose options, dosing-day codes).
-- `Eunpyeong_Myeloma_Center_Drug_Dosing.json` — dosing-day code → schedule text lookup.
-- `Eunpyeong_Myeloma_Center_Regimens.json` — named regimen presets (agent + cycle composition) applied in bulk from the Chemotherapy page.
+- `Eunpyeong_Myeloma_Center_Chemo-agents.json` — chemo agent catalog (class, name, abbreviation, dose options, dosing-day codes).
+- `Eunpyeong_Myeloma_Center_Chemo-agents_Dosing.json` — dosing-day code → schedule text lookup.
+- `Eunpyeong_Myeloma_Center_Chemo-regimens.json` — named regimen presets (agent + cycle composition) applied in bulk from the Chemotherapy page.
+- `Eunpyeong_Myeloma_Center_Conditioning-agents.json`, `..._Conditioning-agents_Dosing.json`, `..._Conditioning-regimens.json` — the same three-file shape for the Transplant page's "2. Conditioning Regimen" section (fetched by the inline script in `templates/Transplant.html`). Dosing codes are day ranges relative to D0 (e.g. `D-4~-3` → `D-4, -3`), and a regimen is a flat `Agents` list with no cycles.
 
 These are static data files consumed client-side via `fetch`; editing them changes dropdown/preset content across the app without any code change.

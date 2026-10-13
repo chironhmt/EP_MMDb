@@ -1,0 +1,72 @@
+[
+  {
+    "Class": "Alkylating Agents",
+    "Agent": "Melphalan",
+    "Abbrevations": "Mel",
+    "Dose": "100 mg/m2, 70 mg/m2, 50 mg/m2, 200 mg/m2, 140 mg/m2",
+    "Dosing_day": "D-4~-3, D-3~-2, D-3, D-2, D-1"
+  },
+  {
+    "Class": "Alkylating Agents",
+    "Agent": "Busulfan",
+    "Abbrevations": "Bu",
+    "Dose": "3.2 mg/kg (IV)",
+    "Dosing_day": "D-4~-3, D-5~-2, D-4~-2, D-7~-5, D-5~-4"
+  },
+  {
+    "Class": "Alkylating Agents",
+    "Agent": "Cyclophosphamide (Cy)",
+    "Abbrevations": "Cy",
+    "Dose": "60 mg/kg, 50 mg/kg",
+    "Dosing_day": "D-2~-1, D-6~-5, D-3~-2, D-2"
+  },
+  {
+    "Class": "Alkylating Agents",
+    "Agent": "Thiotepa",
+    "Abbrevations": "TT",
+    "Dose": "5 mg/kg, 250 mg/m2",
+    "Dosing_day": "D-7~-6, D-4, D-3~-2"
+  },
+  {
+    "Class": "Alkylating Agents",
+    "Agent": "Carmustine",
+    "Abbrevations": "BCNU",
+    "Dose": "300 mg/m2",
+    "Dosing_day": "D-6"
+  },
+  {
+    "Class": "Antimetabolites",
+    "Agent": "Fludarabine",
+    "Abbrevations": "Flu",
+    "Dose": "30 mg/m2, 40 mg/m2",
+    "Dosing_day": "D-6~-2, D-5~-2, D-4~-2, D-4~-1"
+  },
+  {
+    "Class": "Antimetabolites",
+    "Agent": "Cytarabine",
+    "Abbrevations": "Ara-C",
+    "Dose": "400 mg/m2",
+    "Dosing_day": "D-5~-2"
+  },
+  {
+    "Class": "Topoisomerase Inhibitors",
+    "Agent": "Etoposide",
+    "Abbrevations": "VP-16",
+    "Dose": "400 mg/m2",
+    "Dosing_day": "D-5~-2"
+  },
+  {
+    "Class": "Radiation",
+    "Agent": "TBI",
+    "Abbrevations": "TBI",
+    "Dose": "200 cGy, 300 cGy, 400 cGy",
+    "Dosing_day": "D-6~-3, D-1, D-3~-1, D-4~-1"
+  },
+  {
+    "Class": "Immunosuppressants / Antibodies",
+    "Agent": "Rabbit ATG",
+    "Abbrevations": "ATG",
+    "Dose": "1.25 mg/kg, 1.5 mg/kg, 2.0 mg/kg, 2.5 mg/kg, 3.75 mg/kg",
+    "Dosing_day": "D-3~-2, D-3~-1, D-4~-2, D-4~-1"
+  }
+]

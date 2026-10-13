@@ -34,9 +34,9 @@ const loadingText = document.getElementById('loading-text');
 async function loadData() {
     try {
         const [agentsRes, daysRes, regimensRes] = await Promise.all([
-            fetch('/static/Eunpyeong_Myeloma_Center_Agents.json?v=' + Date.now()),
-            fetch('/static/Eunpyeong_Myeloma_Center_Drug_Dosing.json?v=' + Date.now()),
-            fetch('/static/Eunpyeong_Myeloma_Center_Regimens.json?v=' + Date.now())
+            fetch('/static/Eunpyeong_Myeloma_Center_Chemo-agents.json?v=' + Date.now()),
+            fetch('/static/Eunpyeong_Myeloma_Center_Chemo-agents_Dosing.json?v=' + Date.now()),
+            fetch('/static/Eunpyeong_Myeloma_Center_Chemo-regimens.json?v=' + Date.now())
         ]);
         if (!agentsRes.ok || !daysRes.ok || !regimensRes.ok) {
             throw new Error('Failed to fetch JSON files. Ensure you are running via a local web server (eg, 실행하기.bat).');

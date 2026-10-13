@@ -1,0 +1,102 @@
+[
+  {
+    "Regimen": "MEL200",
+    "Agents": [
+      {
+        "Agent": "Melphalan",
+        "Dose": "100 mg/m2",
+        "Dosing_day": "D-4~-3"
+      }
+    ]
+  },
+  {
+    "Regimen": "MEL140",
+    "Agents": [
+      {
+        "Agent": "Melphalan",
+        "Dose": "70 mg/m2",
+        "Dosing_day": "D-4~-3"
+      }
+    ]
+  },
+  {
+    "Regimen": "MEL100",
+    "Agents": [
+      {
+        "Agent": "Melphalan",
+        "Dose": "50 mg/m2",
+        "Dosing_day": "D-4~-3"
+      }
+    ]
+  },
+  {
+    "Regimen": "BuMel",
+    "Agents": [
+      {
+        "Agent": "Busulfan",
+        "Dose": "3.2 mg/kg (IV)",
+        "Dosing_day": "D-7~-5"
+      },
+      {
+        "Agent": "Melphalan",
+        "Dose": "70 mg/m2",
+        "Dosing_day": "D-4~-3"
+      }
+    ]
+  },
+  {
+    "Regimen": "BEAM",
+    "Agents": [
+      {
+        "Agent": "Carmustine",
+        "Dose": "300 mg/m2",
+        "Dosing_day": "D-6"
+      },
+      {
+        "Agent": "Etoposide",
+        "Dose": "400 mg/m2",
+        "Dosing_day": "D-5~-2"
+      },
+      {
+        "Agent": "Cytarabine",
+        "Dose": "400 mg/m2",
+        "Dosing_day": "D-5~-2"
+      },
+      {
+        "Agent": "Melphalan",
+        "Dose": "140 mg/m2",
+        "Dosing_day": "D-1"
+      }
+    ]
+  },
+  {
+    "Regimen": "Flu/Mel",
+    "Agents": [
+      {
+        "Agent": "Fludarabine",
+        "Dose": "30 mg/m2",
+        "Dosing_day": "D-6~-2"
+      },
+      {
+        "Agent": "Melphalan",
+        "Dose": "140 mg/m2",
+        "Dosing_day": "D-2"
+      }
+    ]
+  },
+  {
+    "Regimen": "Flu/Bu2",
+    "Agents": [
+      {
+        "Agent": "Fludarabine",
+        "Dose": "30 mg/m2",
+        "Dosing_day": "D-6~-2"
+      },
+      {
+        "Agent": "Busulfan",
+        "Dose": "3.2 mg/kg (IV)",
+        "Dosing_day": "D-5~-4"
+      }
+    ]
+  }
+]
