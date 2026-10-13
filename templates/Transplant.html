@@ -1304,6 +1304,8 @@
         let conditioningAgentsData = [];
         let conditioningDosingDaysMap = {};   // dosing code -> day list, e.g. "D-4~-3" -> "D-4, -3"
         let conditioningRegimensData = [];
+        // Regimen preselected for each transplant type
+        const DEFAULT_CONDITIONING_REGIMENS = { Autologous: 'MEL200', Allogeneic: 'Bu/Mel' };
 
         async function loadConditioningData() {
             try {
@@ -1339,50 +1341,46 @@
             }
         }
 
-        const gvhdProphylaxisData = [
-            {
-                Class: "Calcineurin Inhibitors (CNI)",
-                Agent: "Cyclosporin",
-                Dose: "3 mg/kg, 5 mg/kg",
-                Dosing_day: ["From D-1"]
-            },
-            {
-                Class: "Calcineurin Inhibitors (CNI)",
-                Agent: "Tacrolimus",
-                Dose: "0.03 mg/kg, 0.05 mg/kg",
-                Dosing_day: ["From D-1"]
-            },
-            {
-                Class: "Antimetabolites & Alkylators",
-                Agent: "MTX",
-                Dose: "5 mg/m2, 10 mg/m2, 15 mg/m2",
-                Dosing_day: ["D1, 3, 6, 11", "D1, 3, 6"]
-            },
-            {
-                Class: "Antimetabolites & Alkylators",
-                Agent: "PTCy",
-                Dose: "50 mg/kg, 25 mg/kg",
-                Dosing_day: ["D+3, +4", "D+3, +4, +5"]
-            },
-            {
-                Class: "Antimetabolites & Alkylators",
-                Agent: "MMF",
-                Dose: "15 mg/kg, 500 mg, 1000 mg",
-                Dosing_day: ["From D0", "From D+1"]
-            },
-            {
-                Class: "mTOR Inhibitors",
-                Agent: "Sirolimus",
-                Dose: "2 mg, 4 mg, Loading, 1 mg",
-                Dosing_day: ["From D-3", "From D-1"]
-            },
-            {
-                Class: "Others",
-                Agent: "Others",
-                Dose: "",
-                Dosing_day: []
+        // GVHD prophylaxis reference data, loaded from the JSON files under /static (see loadGvhdData)
+        let gvhdProphylaxisData = [];
+
+        async function loadGvhdData() {
+            try {
+                const [agentsRes, daysRes] = await Promise.all([
+                    fetch('/static/Eunpyeong_Myeloma_Center_GVHD-agents.json?v=' + Date.now()),
+                    fetch('/static/Eunpyeong_Myeloma_Center_GVHD-agents_Dosing.json?v=' + Date.now())
+                ]);
+                if (!agentsRes.ok || !daysRes.ok) {
+                    throw new Error('Failed to fetch GVHD prophylaxis JSON files.');
+                }
+                const agentsData = await agentsRes.json();
+                const dosingDaysData = await daysRes.json();
+
+                const dosingDaysMap = {};
+                dosingDaysData.forEach(d => {
+                    dosingDaysMap[d.Code] = d.Dosing_days;
+                });
+                // Resolve each agent's dosing codes (e.g. "D+1/3/6") into the schedule text shown in the UI ("D1, 3, 6")
+                gvhdProphylaxisData = agentsData.map(agent => ({
+                    ...agent,
+                    Dosing_day: (agent.Dosing_day || '').split(',').map(c => c.trim()).filter(c => c)
+                        .map(code => dosingDaysMap[code] || code)
+                }));
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to load GVHD prophylaxis agents. Run the app via EP_MMDb.bat.');
             }
-        ];
+            // Ensure "Others" is in gvhdProphylaxisData if not present
+            if (!gvhdProphylaxisData.find(a => a.Agent === 'Others')) {
+                gvhdProphylaxisData.push({
+                    Class: "Others",
+                    Agent: "Others",
+                    Abbrevations: "",
+                    Dose: "",
+                    Dosing_day: []
+                });
+            }
+        }
 
         // State Objects
         const transplantState = {
@@ -1667,6 +1665,22 @@
             renderConditioningCheckboxes();
             renderConditioningConfigs();
             updateTransplantSummary();
+        }
+
+        // Select and apply the default regimen for the current transplant type. With onlyIfDefault,
+        // a regimen the user picked themselves (anything but a type default) is left alone.
+        function applyDefaultConditioningRegimen(onlyIfDefault) {
+            const regimenSelect = document.getElementById('conditioning-regimen');
+            const type = document.getElementById('transplant-type')?.value;
+            const regimenObj = conditioningRegimensData.find(r => r.Regimen === DEFAULT_CONDITIONING_REGIMENS[type]);
+            if (!regimenSelect || !regimenObj || regimenSelect.value === regimenObj.Regimen) return;
+            const isTypeDefault = Object.values(DEFAULT_CONDITIONING_REGIMENS).includes(regimenSelect.value);
+            if (onlyIfDefault && regimenSelect.value !== '' && !isTypeDefault) return;
+            regimenSelect.value = regimenObj.Regimen;
+            regimenSelect.style.color = 'var(--text-primary)';
+            const othersInput = document.getElementById('conditioning-regimen-others');
+            if (othersInput) othersInput.style.display = 'none';
+            applyConditioningRegimen(regimenObj);
         }
 
         function populateConditioningRegimens() {
@@ -2528,6 +2542,7 @@
             if (!selectObj) return;
             if (isUserAction) {
                 selectObj.style.color = 'var(--text-primary)';
+                applyDefaultConditioningRegimen(true);
             }
             const isAllogeneic = selectObj.value === 'Allogeneic';
             // Donor info and Recipient HLA typing only apply to Allogeneic;
@@ -3175,7 +3190,7 @@
             initInfusedCellInputs();
             renderHlaPanels();
 
-            await loadConditioningData();
+            await Promise.all([loadConditioningData(), loadGvhdData()]);
             populateConditioningRegimens();
             renderConditioningCheckboxes();
             renderConditioningConfigs();
@@ -3184,6 +3199,9 @@
             renderGvhdConfigs();
 
             handleTransplantTypeChange(document.getElementById('transplant-type'), false);
+
+            // Preselect the default conditioning regimen
+            applyDefaultConditioningRegimen(false);
 
             // Styling for selects
             document.querySelectorAll('select.custom-text-input').forEach(sel => {

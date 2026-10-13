@@ -30,7 +30,7 @@
     ]
   },
   {
-    "Regimen": "BuMel",
+    "Regimen": "Bu/Mel",
     "Agents": [
       {
         "Agent": "Busulfan",

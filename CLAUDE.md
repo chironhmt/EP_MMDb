@@ -89,5 +89,6 @@ Cycles are held in an in-memory `cycles` array (`currentCycleId` tracks the acti
 - `Eunpyeong_Myeloma_Center_Chemo-agents_Dosing.json` — dosing-day code → schedule text lookup.
 - `Eunpyeong_Myeloma_Center_Chemo-regimens.json` — named regimen presets (agent + cycle composition) applied in bulk from the Chemotherapy page.
 - `Eunpyeong_Myeloma_Center_Conditioning-agents.json`, `..._Conditioning-agents_Dosing.json`, `..._Conditioning-regimens.json` — the same three-file shape for the Transplant page's "2. Conditioning Regimen" section (fetched by the inline script in `templates/Transplant.html`). Dosing codes are day ranges relative to D0 (e.g. `D-4~-3` → `D-4, -3`), and a regimen is a flat `Agents` list with no cycles.
+- `Eunpyeong_Myeloma_Center_GVHD-agents.json`, `..._GVHD-agents_Dosing.json` — agent catalog and dosing codes for the Transplant page's "3. GVHD Prophylaxis" section (no regimens file). Codes such as `D-1~` → `From D-1` and `D+1/3/6` → `D1, 3, 6` are resolved to their schedule text on load, and that text is what the page stores.
 
 These are static data files consumed client-side via `fetch`; editing them changes dropdown/preset content across the app without any code change.
