@@ -865,6 +865,27 @@
                             </button>
                         </div>
                         <div id="gvhd-regimen-content">
+                            <!-- Regimen preset -->
+                            <div style="padding: 1.5rem 1.5rem 0 1.5rem;">
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem 2rem; align-items: start; width: 100%; box-sizing: border-box;">
+                                    <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+                                        <label for="gvhd-prophylaxis-regimen"
+                                            style="font-size: 0.92rem; font-weight: 600; color: #e2e8f0; flex: 0 0 40%; margin-top: 0.45rem;">Regimen</label>
+                                        <div style="width: 60%; display: flex; flex-direction: column; gap: 0.5rem;">
+                                            <select id="gvhd-prophylaxis-regimen" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem;"
+                                                onchange="handleGvhdRegimenChange(this)">
+                                                <option value="" disabled selected>Choose regimen</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <input type="text" id="gvhd-prophylaxis-regimen-others" class="custom-text-input"
+                                                style="margin: 0; padding: 0.25rem 0.5rem; width: 100%; font-size: 0.95rem; height: 2.1rem; display: none; box-sizing: border-box;"
+                                                placeholder="e.g. PTCy + Tac + MMF">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- 3.1 Select GVHD Prophylaxis Agents -->
                             <div style="padding: 1.5rem 1.5rem 0.5rem 1.5rem;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -1343,28 +1364,35 @@
 
         // GVHD prophylaxis reference data, loaded from the JSON files under /static (see loadGvhdData)
         let gvhdProphylaxisData = [];
+        let gvhdDosingDaysMap = {};   // dosing code -> schedule text, e.g. "D+1/3/6" -> "D+1, +3, +6"
+        let gvhdRegimensData = [];
+        // Regimen preselected by donor type: Sibling -> CsA + MTX, any other donor -> FK506 + MTX
+        const GVHD_REGIMEN_SIBLING = 'CsA + MTX';
+        const GVHD_REGIMEN_OTHER_DONOR = 'FK506 + MTX';
 
         async function loadGvhdData() {
             try {
-                const [agentsRes, daysRes] = await Promise.all([
+                const [agentsRes, daysRes, regimensRes] = await Promise.all([
                     fetch('/static/Eunpyeong_Myeloma_Center_GVHD-agents.json?v=' + Date.now()),
-                    fetch('/static/Eunpyeong_Myeloma_Center_GVHD-agents_Dosing.json?v=' + Date.now())
+                    fetch('/static/Eunpyeong_Myeloma_Center_GVHD-agents_Dosing.json?v=' + Date.now()),
+                    fetch('/static/Eunpyeong_Myeloma_Center_GVHD-regimens.json?v=' + Date.now())
                 ]);
-                if (!agentsRes.ok || !daysRes.ok) {
+                if (!agentsRes.ok || !daysRes.ok || !regimensRes.ok) {
                     throw new Error('Failed to fetch GVHD prophylaxis JSON files.');
                 }
                 const agentsData = await agentsRes.json();
                 const dosingDaysData = await daysRes.json();
+                gvhdRegimensData = await regimensRes.json();
 
-                const dosingDaysMap = {};
+                gvhdDosingDaysMap = {};
                 dosingDaysData.forEach(d => {
-                    dosingDaysMap[d.Code] = d.Dosing_days;
+                    gvhdDosingDaysMap[d.Code] = d.Dosing_days;
                 });
-                // Resolve each agent's dosing codes (e.g. "D+1/3/6") into the schedule text shown in the UI ("D1, 3, 6")
+                // Resolve each agent's dosing codes (e.g. "D+1/3/6") into the schedule text shown in the UI ("D+1, +3, +6")
                 gvhdProphylaxisData = agentsData.map(agent => ({
                     ...agent,
                     Dosing_day: (agent.Dosing_day || '').split(',').map(c => c.trim()).filter(c => c)
-                        .map(code => dosingDaysMap[code] || code)
+                        .map(code => gvhdDosingDaysMap[code] || code)
                 }));
             } catch (err) {
                 console.error(err);
@@ -2038,6 +2066,32 @@
 
                 card.appendChild(schedulesContainer);
 
+                // Add another dose/day schedule for the same agent (e.g. a different dose on another day)
+                const btnWrapper = document.createElement('div');
+                btnWrapper.style.display = 'flex';
+                btnWrapper.style.justifyContent = 'flex-end';
+                btnWrapper.style.marginTop = '1rem';
+                const addScheduleBtn = document.createElement('button');
+                addScheduleBtn.type = 'button';
+                addScheduleBtn.className = 'btn-secondary';
+                addScheduleBtn.style.padding = '0 1rem';
+                addScheduleBtn.style.height = '2.1rem';
+                addScheduleBtn.title = 'Add another dose / administration day(s)';
+                addScheduleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>ADD`;
+                addScheduleBtn.onclick = () => {
+                    // The From/To selects always show a day, so start from the agent's default days
+                    agentState.schedules.push({
+                        id: generateId(),
+                        dose: null,
+                        customDose: '',
+                        ...getDefaultConditioningDays(agent)
+                    });
+                    renderConditioningConfigs();
+                    updateTransplantSummary();
+                };
+                btnWrapper.appendChild(addScheduleBtn);
+                card.appendChild(btnWrapper);
+
                 container.appendChild(card);
             });
         }
@@ -2256,6 +2310,96 @@
 
                 container.appendChild(row);
             });
+        }
+
+        // Bulk-apply a preset from Eunpyeong_Myeloma_Center_GVHD-regimens.json (replaces the current selection).
+        // A dose or day text that isn't one of the agent's presets goes into the "Others" free-text field.
+        function applyGvhdRegimen(regimenObj) {
+            transplantState.gvhdAgents = {};
+            (regimenObj.Agents || []).forEach(entry => {
+                const agent = gvhdProphylaxisData.find(a => a.Agent === entry.Agent);
+                if (!agent) {
+                    console.warn('GVHD regimen refers to an unknown agent:', entry.Agent);
+                    return;
+                }
+                const presetDoses = agent.Dose ? agent.Dose.split(',').map(d => d.trim()).filter(d => d) : [];
+                const isPresetDose = presetDoses.includes(entry.Dose);
+                const daysText = gvhdDosingDaysMap[entry.Dosing_day] || entry.Dosing_day || '';
+                const isPresetDays = (agent.Dosing_day || []).includes(daysText);
+                const schedule = {
+                    id: generateId(),
+                    dose: isPresetDose ? entry.Dose : 'Others',
+                    customDose: isPresetDose ? '' : (entry.Dose || ''),
+                    dosingDays: isPresetDays ? daysText : 'Others',
+                    customDays: isPresetDays ? '' : daysText
+                };
+                if (transplantState.gvhdAgents[agent.Agent]) {
+                    transplantState.gvhdAgents[agent.Agent].schedules.push(schedule);
+                } else {
+                    transplantState.gvhdAgents[agent.Agent] = { customName: '', schedules: [schedule] };
+                }
+            });
+            renderGvhdCheckboxes();
+            renderGvhdConfigs();
+            updateTransplantSummary();
+        }
+
+        // Select and apply the default regimen for the current donor type (Allogeneic only). With onlyIfDefault,
+        // a regimen the user picked themselves (anything but a donor-type default) is left alone.
+        function applyDefaultGvhdRegimen(onlyIfDefault) {
+            if (document.getElementById('transplant-type')?.value !== 'Allogeneic') return;
+            const regimenSelect = document.getElementById('gvhd-prophylaxis-regimen');
+            const donorType = document.getElementById('donor-type')?.value;
+            const name = donorType === 'Sibling' ? GVHD_REGIMEN_SIBLING : GVHD_REGIMEN_OTHER_DONOR;
+            const regimenObj = gvhdRegimensData.find(r => r.Regimen === name);
+            if (!regimenSelect || !regimenObj || regimenSelect.value === regimenObj.Regimen) return;
+            const isDonorDefault = [GVHD_REGIMEN_SIBLING, GVHD_REGIMEN_OTHER_DONOR].includes(regimenSelect.value);
+            if (onlyIfDefault && regimenSelect.value !== '' && !isDonorDefault) return;
+            regimenSelect.value = regimenObj.Regimen;
+            regimenSelect.style.color = 'var(--text-primary)';
+            const othersInput = document.getElementById('gvhd-prophylaxis-regimen-others');
+            if (othersInput) othersInput.style.display = 'none';
+            applyGvhdRegimen(regimenObj);
+        }
+
+        function resetGvhdRegimen() {
+            const regimenSelect = document.getElementById('gvhd-prophylaxis-regimen');
+            if (regimenSelect) {
+                regimenSelect.value = '';
+                regimenSelect.style.color = '#aaaaaa';
+            }
+            const othersInput = document.getElementById('gvhd-prophylaxis-regimen-others');
+            if (othersInput) {
+                othersInput.value = '';
+                othersInput.style.display = 'none';
+            }
+        }
+
+        function populateGvhdRegimens() {
+            const regimenSelect = document.getElementById('gvhd-prophylaxis-regimen');
+            if (!regimenSelect) return;
+            gvhdRegimensData.forEach(r => {
+                const option = document.createElement('option');
+                option.value = r.Regimen;
+                option.textContent = r.Regimen;
+                regimenSelect.insertBefore(option, regimenSelect.querySelector('option[value="Others"]'));
+            });
+        }
+
+        function handleGvhdRegimenChange(select) {
+            const val = select.value;
+            const othersInput = document.getElementById('gvhd-prophylaxis-regimen-others');
+            if (othersInput) othersInput.style.display = val === 'Others' ? 'block' : 'none';
+            if (val === 'Others') {
+                if (othersInput) othersInput.focus();
+                return;
+            }
+            const regimenObj = gvhdRegimensData.find(r => r.Regimen === val);
+            if (!regimenObj) return;
+            const hasAgents = Object.keys(transplantState.gvhdAgents).length > 0;
+            if (!hasAgents || confirm(`Apply preset "${val}"? This will replace the currently selected GVHD prophylaxis agents.`)) {
+                applyGvhdRegimen(regimenObj);
+            }
         }
 
         function handleGvhdAgentSelection(agent, isSelected) {
@@ -2519,6 +2663,32 @@
 
                 card.appendChild(schedulesContainer);
 
+                // Add another dose/day schedule for the same agent (e.g. CsA 5 mg/kg D-1, then 3 mg/kg from D0)
+                const btnWrapper = document.createElement('div');
+                btnWrapper.style.display = 'flex';
+                btnWrapper.style.justifyContent = 'flex-end';
+                btnWrapper.style.marginTop = '1rem';
+                const addScheduleBtn = document.createElement('button');
+                addScheduleBtn.type = 'button';
+                addScheduleBtn.className = 'btn-secondary';
+                addScheduleBtn.style.padding = '0 1rem';
+                addScheduleBtn.style.height = '2.1rem';
+                addScheduleBtn.title = 'Add another dose / administration day(s)';
+                addScheduleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>ADD`;
+                addScheduleBtn.onclick = () => {
+                    agentState.schedules.push({
+                        id: generateId(),
+                        dose: null,
+                        customDose: '',
+                        dosingDays: null,
+                        customDays: ''
+                    });
+                    renderGvhdConfigs();
+                    updateTransplantSummary();
+                };
+                btnWrapper.appendChild(addScheduleBtn);
+                card.appendChild(btnWrapper);
+
                 container.appendChild(card);
             });
         }
@@ -2607,9 +2777,12 @@
                 }
             }
 
-            if (!isAllogeneic) {
+            if (isAllogeneic) {
+                applyDefaultGvhdRegimen(true);
+            } else {
                 // Autologous: Clear GVHD Prophylaxis
                 transplantState.gvhdAgents = {};
+                resetGvhdRegimen();
                 renderGvhdConfigs();
                 renderGvhdCheckboxes();
             }
@@ -2618,6 +2791,15 @@
         }
 
         const HLA_LOCI = ['A', 'B', 'C', 'DRB1', 'DQB1', 'DPB1'];
+        // Placeholder examples per locus: [allele 1, allele 2]
+        const HLA_PLACEHOLDERS = {
+            A: ['33:03', '02:07'],
+            B: ['44:03', '46:01'],
+            C: ['14:03', '01:02'],
+            DRB1: ['13:02', '08:03'],
+            DQB1: ['06:04', '06:01'],
+            DPB1: ['04:01', '05:01']
+        };
 
         function renderHlaPanels() {
             document.querySelectorAll('.hla-panel').forEach(panel => {
@@ -2630,7 +2812,7 @@
                 HLA_LOCI.forEach(locus => {
                     html += `<div class="hla-row-label">HLA-${locus}</div>`;
                     [1, 2].forEach(allele => {
-                        html += `<input type="text" class="custom-text-input hla-input" id="${role}-hla-${locus.toLowerCase()}-${allele}" data-locus="${locus}" data-allele="${allele}" placeholder="e.g. 02:01">`;
+                        html += `<input type="text" class="custom-text-input hla-input" id="${role}-hla-${locus.toLowerCase()}-${allele}" data-locus="${locus}" data-allele="${allele}" placeholder="e.g. ${HLA_PLACEHOLDERS[locus][allele - 1]}">`;
                     });
                 });
                 html += '</div>';
@@ -2656,6 +2838,7 @@
             if (othersInput) {
                 othersInput.style.display = isOthers ? 'block' : 'none';
             }
+            applyDefaultGvhdRegimen(true);
             updateTransplantSummary();
         }
 
@@ -2965,6 +3148,7 @@
             for (const [agentName, agentState] of Object.entries(transplantState.gvhdAgents)) {
                 const displayName = agentName === 'Others' && agentState.customName ? agentState.customName : agentName;
                 agentState.schedules.forEach((sched, sIdx) => {
+                    if (!sched.dosingDays) return;   // newly added schedule with no day(s) picked yet
                     const doseVal = sched.dose === 'Others' ? (sched.customDose || 'Custom Dose') : (sched.dose || '-');
                     const daysVal = sched.dosingDays === 'Others' ? (sched.customDays || 'D-1 ~') : (sched.dosingDays || 'D-1 ~');
 
@@ -3061,42 +3245,80 @@
                 return;
             }
 
-            let html = '';
+            // Group items falling on the same day so the Day/Date cells are shown once per day (rowspan)
+            const dayGroups = [];
             items.forEach(item => {
-                const isInfusion = item.category === 'Stem Cell Infusion';
-                const rowBg = isInfusion ? 'background: rgba(139, 92, 246, 0.12);' : '';
-                const borderStyle = isInfusion ? 'border-bottom: 1px solid rgba(139, 92, 246, 0.3);' : 'border-bottom: 1px solid rgba(255, 255, 255, 0.05);';
+                const last = dayGroups[dayGroups.length - 1];
+                if (last && last.dayNum === item.dayNum) {
+                    last.items.push(item);
+                } else {
+                    dayGroups.push({ dayNum: item.dayNum, items: [item] });
+                }
+            });
 
+            let html = '';
+            dayGroups.forEach(group => {
+                const hasInfusion = group.items.some(item => item.category === 'Stem Cell Infusion');
+                const rowBg = hasInfusion ? 'background: rgba(139, 92, 246, 0.12);' : '';
+                const groupBorder = hasInfusion ? 'border-bottom: 1px solid rgba(139, 92, 246, 0.3);' : 'border-bottom: 1px solid rgba(255, 255, 255, 0.05);';
+
+                // The Date cell spans the whole day; the Day cell spans each run of items sharing a label,
+                // so e.g. D0 shows "D0" beside the infusion and "From D0" beside CsA. Items keep their
+                // category order, with each label's items kept together in order of first appearance.
+                const labelOrder = [...new Set(group.items.map(item => item.dayText))];
+                group.items.sort((a, b) => labelOrder.indexOf(a.dayText) - labelOrder.indexOf(b.dayText));
+
+                const overrideDate = group.items.find(item => item.overrideDate)?.overrideDate;
                 let dateDisplay = '';
-                if (item.overrideDate) {
-                    const parts = item.overrideDate.split('-');
+                if (overrideDate) {
+                    const parts = overrideDate.split('-');
                     if (parts.length === 3) {
                         const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
                         const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                        dateDisplay = `<span style="font-weight: 600; color: var(--text-primary);">${item.overrideDate} (${dayNames[d.getDay()]})</span>`;
+                        dateDisplay = `<span style="font-weight: 600; color: var(--text-primary);">${overrideDate} (${dayNames[d.getDay()]})</span>`;
                     } else {
-                        dateDisplay = `<span style="font-weight: 600; color: var(--text-primary);">${item.overrideDate}</span>`;
+                        dateDisplay = `<span style="font-weight: 600; color: var(--text-primary);">${overrideDate}</span>`;
                     }
                 } else {
-                    dateDisplay = getCalendarDateDisplay(baseD0Date, item.dayNum);
+                    dateDisplay = getCalendarDateDisplay(baseD0Date, group.dayNum);
                 }
 
-                html += `
-                    <tr style="${rowBg} ${borderStyle} transition: background 0.15s ease;">
-                        <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary); font-size: 0.92rem;">
+                const rowspan = group.items.length;
+                group.items.forEach((item, idx) => {
+                    const isLast = idx === rowspan - 1;
+                    const borderStyle = isLast ? groupBorder : 'border-bottom: none;';
+                    const vPad = `${idx === 0 ? '0.85rem' : '0.3rem'} 1.25rem ${isLast ? '0.85rem' : '0.3rem'} 1.25rem`;
+                    const isLabelStart = idx === 0 || group.items[idx - 1].dayText !== item.dayText;
+                    let dayCells = '';
+                    if (isLabelStart) {
+                        const labelSpan = group.items.slice(idx).findIndex(other => other.dayText !== item.dayText);
+                        const labelRowspan = labelSpan === -1 ? rowspan - idx : labelSpan;
+                        const endsGroup = idx + labelRowspan === rowspan;
+                        const labelBorder = endsGroup ? groupBorder : 'border-bottom: none;';
+                        const labelPad = `${idx === 0 ? '0.85rem' : '0.3rem'} 1.25rem ${endsGroup ? '0.85rem' : '0.3rem'} 1.25rem`;
+                        dayCells += `
+                        <td rowspan="${labelRowspan}" style="padding: ${labelPad}; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; vertical-align: top; ${labelBorder}">
                             ${item.dayText}
-                        </td>
-                        <td style="padding: 0.85rem 1.25rem;">
+                        </td>`;
+                    }
+                    if (idx === 0) {
+                        dayCells += `
+                        <td rowspan="${rowspan}" style="padding: 0.85rem 1.25rem; vertical-align: top; ${groupBorder}">
                             ${dateDisplay}
-                        </td>
-                        <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: var(--text-primary);">
+                        </td>`;
+                    }
+
+                    html += `
+                    <tr style="${rowBg} ${borderStyle} transition: background 0.15s ease;">${dayCells}
+                        <td style="padding: ${vPad}; font-weight: 600; color: var(--text-primary);">
                             ${item.agent}
                         </td>
-                        <td style="padding: 0.85rem 1.25rem; color: var(--text-secondary);">
+                        <td style="padding: ${vPad}; color: var(--text-secondary);">
                             ${item.dose}
                         </td>
                     </tr>
                 `;
+                });
             });
 
             tbody.innerHTML = html;
@@ -3162,6 +3384,8 @@
                 conditioningRegimen: document.getElementById('conditioning-regimen')?.value,
                 conditioningRegimenOthers: document.getElementById('conditioning-regimen-others')?.value,
                 conditioningAgents: transplantState.conditioningAgents,
+                gvhdRegimen: document.getElementById('gvhd-prophylaxis-regimen')?.value,
+                gvhdRegimenOthers: document.getElementById('gvhd-prophylaxis-regimen-others')?.value,
                 gvhdAgents: transplantState.gvhdAgents,
                 infusedCells: infusedCellRows,
                 gcsfDose: document.getElementById('gcsf-dose')?.value,
@@ -3192,6 +3416,7 @@
 
             await Promise.all([loadConditioningData(), loadGvhdData()]);
             populateConditioningRegimens();
+            populateGvhdRegimens();
             renderConditioningCheckboxes();
             renderConditioningConfigs();
 

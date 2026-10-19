@@ -4,6 +4,18 @@
     "Dosing_days": "From D-3"
   },
   {
+    "Code": "D-3",
+    "Dosing_days": "D-3"
+  },
+  {
+    "Code": "D-2~",
+    "Dosing_days": "From D-2"
+  },
+  {
+    "Code": "D-1",
+    "Dosing_days": "D-1"
+  },
+  {
     "Code": "D-1~",
     "Dosing_days": "From D-1"
   },
@@ -17,11 +29,11 @@
   },
   {
     "Code": "D+1/3/6",
-    "Dosing_days": "D1, 3, 6"
+    "Dosing_days": "D+1, +3, +6"
   },
   {
     "Code": "D+1/3/6/11",
-    "Dosing_days": "D1, 3, 6, 11"
+    "Dosing_days": "D+1, +3, +6, +11"
   },
   {
     "Code": "D+3/4",

@@ -4,7 +4,7 @@
     "Agent": "Cyclosporin",
     "Abbrevations": "CsA",
     "Dose": "3 mg/kg, 5 mg/kg",
-    "Dosing_day": "D-1~"
+    "Dosing_day": "D-1~, D-1, D0~"
   },
   {
     "Class": "Calcineurin Inhibitors (CNI)",
@@ -15,21 +15,21 @@
   },
   {
     "Class": "Antimetabolites & Alkylators",
-    "Agent": "MTX",
+    "Agent": "Methotrexate",
     "Abbrevations": "MTX",
     "Dose": "5 mg/m2, 10 mg/m2, 15 mg/m2",
     "Dosing_day": "D+1/3/6/11, D+1/3/6"
   },
   {
     "Class": "Antimetabolites & Alkylators",
-    "Agent": "PTCy",
+    "Agent": "Post-transplant Cy",
     "Abbrevations": "PTCy",
-    "Dose": "50 mg/kg, 25 mg/kg",
-    "Dosing_day": "D+3/4, D+3/4/5"
+    "Dose": "20 mg/kg, 25 mg/kg, 30 mg/kg, 35 mg/kg, 55 mg/kg",
+    "Dosing_day": "D+3/4"
   },
   {
     "Class": "Antimetabolites & Alkylators",
-    "Agent": "MMF",
+    "Agent": "Mycophenolate mofetil",
     "Abbrevations": "MMF",
     "Dose": "15 mg/kg, 500 mg, 1000 mg",
     "Dosing_day": "D0~, D+1~"
@@ -38,7 +38,7 @@
     "Class": "mTOR Inhibitors",
     "Agent": "Sirolimus",
     "Abbrevations": "Sir",
-    "Dose": "2 mg, 4 mg, Loading, 1 mg",
-    "Dosing_day": "D-3~, D-1~"
+    "Dose": "12 mg, 4 mg",
+    "Dosing_day": "D-3, D-2~"
   }
 ]
