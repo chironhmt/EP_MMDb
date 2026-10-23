@@ -1,7 +1,7 @@
 """
 Vercel serverless entry point. vercel.json rewrites every /api/* request here; the actual
 app (routes, database access) lives in the project-root app.py, shared with local
-development. On Vercel, db.py picks Postgres because POSTGRES_URL / DATABASE_URL is set.
+development. db.py connects to the PostgreSQL database named by POSTGRES_URL / DATABASE_URL.
 """
 
 import os

@@ -172,7 +172,7 @@ erDiagram
 | **`override_id`** | INTEGER | **PK** | 예외 항목 고유 ID |
 | **`cycle_agent_id`** | INTEGER | **FK** | 대상 스케줄 ID (`chemo_cycle_agents.cycle_agent_id`) |
 | `origin_day` | INTEGER | NN | 원래 패턴상의 투약일차 (사이클 시작일 기준 D-number) |
-| `is_deleted` | BOOLEAN | Y | 해당 투약일을 캘린더에서 삭제했는지 여부 (기본값 `0`) |
+| `is_deleted` | BOOLEAN | Y | 해당 투약일을 캘린더에서 삭제했는지 여부 (기본값 `FALSE`) |
 | `moved_to_day` | INTEGER | Y | 다른 날짜로 옮긴 경우 이동한 목적지 일차. 이동하지 않았으면 NULL |
 | `override_dose` | VARCHAR(50) | Y | 이 투약일에만 적용되는 용량. 스케줄 기본 용량과 다르게 수정한 경우에만 값이 들어감 |
 
@@ -337,7 +337,7 @@ erDiagram
 
 ---
 
-## 3. SQLite DDL 생성 스크립트
+## 3. PostgreSQL DDL 생성 스크립트
 
 ```sql
 -- ==========================================================
@@ -417,7 +417,7 @@ CREATE TABLE IF NOT EXISTS patients (
 
 -- 2. 항암화학요법 테이블군
 CREATE TABLE IF NOT EXISTS chemo_lines (
-    line_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    line_id SERIAL PRIMARY KEY,
     upn VARCHAR(20) NOT NULL,
     line_number VARCHAR(30),
     regimen VARCHAR(100),
@@ -439,7 +439,7 @@ CREATE TABLE IF NOT EXISTS chemo_lines (
 );
 
 CREATE TABLE IF NOT EXISTS chemo_cycles (
-    cycle_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cycle_id SERIAL PRIMARY KEY,
     line_id INTEGER NOT NULL,
     cycle_number VARCHAR(20),
     start_date DATE,
@@ -448,7 +448,7 @@ CREATE TABLE IF NOT EXISTS chemo_cycles (
 );
 
 CREATE TABLE IF NOT EXISTS chemo_cycle_agents (
-    cycle_agent_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cycle_agent_id SERIAL PRIMARY KEY,
     cycle_id INTEGER NOT NULL,
     agent_class VARCHAR(50),
     agent_name VARCHAR(100),
@@ -459,10 +459,10 @@ CREATE TABLE IF NOT EXISTS chemo_cycle_agents (
 );
 
 CREATE TABLE IF NOT EXISTS chemo_cycle_agent_day_overrides (
-    override_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    override_id SERIAL PRIMARY KEY,
     cycle_agent_id INTEGER NOT NULL,
     origin_day INTEGER NOT NULL,
-    is_deleted BOOLEAN DEFAULT 0,
+    is_deleted BOOLEAN DEFAULT FALSE,
     moved_to_day INTEGER,
     override_dose VARCHAR(50),
     UNIQUE (cycle_agent_id, origin_day),
@@ -471,7 +471,7 @@ CREATE TABLE IF NOT EXISTS chemo_cycle_agent_day_overrides (
 
 -- 3. 조혈모세포 가동화 및 채집 테이블군
 CREATE TABLE IF NOT EXISTS cd34_collections (
-    collection_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    collection_id SERIAL PRIMARY KEY,
     upn VARCHAR(20) NOT NULL,
     gcsf_type VARCHAR(50),
     gcsf_dose VARCHAR(50),
@@ -488,7 +488,7 @@ CREATE TABLE IF NOT EXISTS cd34_collections (
 );
 
 CREATE TABLE IF NOT EXISTS cd34_daily_yields (
-    yield_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    yield_id SERIAL PRIMARY KEY,
     collection_id INTEGER NOT NULL,
     day_number INTEGER,
     collection_date DATE,
@@ -500,7 +500,7 @@ CREATE TABLE IF NOT EXISTS cd34_daily_yields (
 
 -- 4. 조혈모세포이식 테이블군
 CREATE TABLE IF NOT EXISTS transplant_records (
-    transplant_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    transplant_id SERIAL PRIMARY KEY,
     upn VARCHAR(20) NOT NULL,
     transplant_order VARCHAR(30),
     transplant_type VARCHAR(30),
@@ -521,7 +521,7 @@ CREATE TABLE IF NOT EXISTS transplant_records (
 );
 
 CREATE TABLE IF NOT EXISTS transplant_infused_cells (
-    infused_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    infused_id SERIAL PRIMARY KEY,
     transplant_id INTEGER NOT NULL,
     infusion_day_label VARCHAR(20),
     infusion_date DATE,
@@ -535,7 +535,7 @@ CREATE TABLE IF NOT EXISTS transplant_infused_cells (
 
 -- 5. GVHD 평가 및 치료 테이블군
 CREATE TABLE IF NOT EXISTS gvhd_assessments (
-    gvhd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    gvhd_id SERIAL PRIMARY KEY,
     upn VARCHAR(20) NOT NULL,
     transplant_id INTEGER,
     agvhd_status VARCHAR(20) DEFAULT 'No',
@@ -557,7 +557,7 @@ CREATE TABLE IF NOT EXISTS gvhd_assessments (
 );
 
 CREATE TABLE IF NOT EXISTS gvhd_treatments (
-    treatment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    treatment_id SERIAL PRIMARY KEY,
     gvhd_id INTEGER NOT NULL,
     treatment_line VARCHAR(30),
     agent_name VARCHAR(100),
@@ -569,7 +569,7 @@ CREATE TABLE IF NOT EXISTS gvhd_treatments (
 
 -- 6. 방사선치료 테이블
 CREATE TABLE IF NOT EXISTS radiotherapy_records (
-    rt_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rt_id SERIAL PRIMARY KEY,
     upn VARCHAR(20) NOT NULL,
     modality VARCHAR(50),
     modality_specify VARCHAR(100),
@@ -586,11 +586,11 @@ CREATE TABLE IF NOT EXISTS radiotherapy_records (
 
 -- 7. 영상의학 검사 테이블
 CREATE TABLE IF NOT EXISTS imaging_studies (
-    study_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    study_id SERIAL PRIMARY KEY,
     upn VARCHAR(20) NOT NULL,
     modality_type VARCHAR(50) NOT NULL,
     study_date DATE,
-    is_not_done BOOLEAN DEFAULT 0,
+    is_not_done BOOLEAN DEFAULT FALSE,
     sub_type VARCHAR(50),
     dwi_performed BOOLEAN,
     interpretation TEXT,

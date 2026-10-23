@@ -3,3 +3,6 @@
 
 # Python bytecode cache
 __pycache__/
+
+# Local database files (the app uses PostgreSQL only)
+*.db
