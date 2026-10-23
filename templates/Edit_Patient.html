@@ -1,440 +1,187 @@
 {% extends "base.html" %}
-{% block title %}Add New Patient - Myeloma Center{% endblock %}
-{% block stylesheet %}{% endblock %}
+{% from "_macros.html" import app_header %}
+{% block title %}HemaCDS 2.0 Multiple Myeloma - Edit Patient{% endblock %}
 {% block head %}
     <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: rgba(20, 25, 35, 0.65);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-primary: #3b82f6;
-            --accent-hover: #2563eb;
-            --success-bg: rgba(16, 185, 129, 0.15);
-            --success-text: #34d399;
-            --danger-bg: rgba(239, 68, 68, 0.15);
-            --danger-text: #f87171;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .app-container {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 2rem;
-            width: 100%;
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--card-border);
-            animation: fadeInDown 0.6s ease-out;
-        }
-
-        .logo h1 {
-            font-size: 1.75rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
-        }
-
-        .content-area {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-            animation-delay: 0.2s;
-        }
-
-        .planner-header {
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: baseline;
-            gap: 1rem;
-        }
-        
-        .planner-header h2 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
-        }
-        
-        .planner-header .subtitle {
-            font-size: 0.95rem;
-            color: #a5b4fc;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-lg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .card-body {
-            padding: 1.25rem 2.5rem 0.9rem 2.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 2rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.8rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 1.25rem;
-        }
-
-        .emr-textarea {
-            width: 100%;
-            height: 175px;
-            padding: 0.75rem 1.5rem;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: var(--transition);
-            outline: none;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            resize: vertical;
-            line-height: 1.6;
-        }
-
-        .emr-textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        .emr-textarea:focus {
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-            color: white;
-            border: 1px solid transparent;
-            padding: 0.3rem 1.2rem;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: calc(0.9rem - 1pt);
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            box-sizing: border-box;
-            background: transparent;
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            height: 2.1rem; /* Same height as inputs */
-            padding: 0 1.25rem;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: calc(0.75rem + 1pt);
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .result-card {
-            margin-top: 2rem;
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-
-        .result-grid {
+        /* 4-column field grid shared by every section (same spacing as Transplant / Chemotherapy). */
+        .patient-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.42rem 0.85rem;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1.5rem 2rem;
+            align-items: start;
+            width: 100%;
         }
 
-        .result-item {
-            background: transparent;
-            border-radius: 0;
-            padding: 0.25rem 0.5rem;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: var(--transition);
-        }
-
-        .result-label {
-            font-size: 0.75rem;
-            color: #e2e8f0;
-            margin-right: 0.75rem;
-            margin-bottom: 0;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            flex: 1;
-            line-height: 1.2;
-        }
-
-        .result-input {
-            width: 55%;
-            height: 2.1rem; /* Unify height for input, select, and div elements */
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.3); /* Brighter color for empty/default fields */
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0.35rem 0.6rem;
-            border-radius: 4px;
-            font-family: inherit;
-            transition: var(--transition);
-            box-sizing: border-box;
-        }
-
-        .result-input.filled {
-            color: #ffffff; /* Bright white when filled */
-        }
-
-        .result-input option {
-            color: #0b0f19;
-            background-color: #ffffff;
-        }
-        
-        .empty-date::-webkit-datetime-edit {
-            color: transparent;
-        }
-        
-        .empty-date::-webkit-calendar-picker-indicator {
-            opacity: 0.15;
-            cursor: pointer;
-        }
-
-        .result-input:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.4);
-            color: #ffffff; /* Bright white while typing */
-        }
-
-        .result-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.2s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .modal-content {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            width: 90%;
-            max-width: 800px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            animation: slideIn 0.3s ease-out forwards;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .modal-header h3 {
+        .patient-subsection {
+            grid-column: 1 / -1;
             margin: 0;
-            color: var(--text-primary);
-            font-size: 1.25rem;
+        }
+
+        .patient-subsection:not(:first-child) {
+            border-top: 1px dashed var(--border-glass);
+            padding-top: 1.5rem;
+        }
+
+        .patient-item {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            min-width: 0;
+        }
+
+        .patient-label {
+            font-size: 0.92rem;
             font-weight: 600;
+            color: #e2e8f0;
+            flex: 0 0 45%;
+            margin-top: 0.45rem;
+            padding-right: 0.5rem;
         }
-        .close-btn {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-            line-height: 1;
+
+        .patient-label.two-line {
+            margin-top: -0.1rem;
+            line-height: 1.25;
         }
-        .close-btn:hover {
-            color: #ffffff;
+
+        /* Label column width for items spanning 2 grid columns: the same 45% of ONE column. */
+        .patient-item.span-2 {
+            grid-column: span 2;
         }
-        .modal-body {
-            padding: 1.5rem;
+
+        .patient-item.span-2 .patient-label {
+            flex: 0 0 calc((100% - 2rem) / 2 * 0.45);
         }
-        .modal-footer {
+
+        .patient-field.custom-text-input {
+            margin: 0;
+            padding: 0.25rem 0.5rem !important;
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            font-size: 0.95rem;
+            height: 2.1rem;
+        }
+
+        /* Read-only value boxes in the "Clinical findings for myeloma staging" summary. */
+        .patient-readout {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .section-footer {
             padding: 1rem 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: flex-end;
             gap: 0.8rem;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        /* EMR modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn var(--transition-medium);
+        }
+
+        .modal-content .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-content textarea.custom-text-input {
+            margin: 0;
+            max-width: none;
+            height: 350px;
+            padding: 0.75rem 1rem !important;
+            line-height: 1.6;
+            resize: vertical;
         }
     </style>
 {% endblock %}
 {% block body %}
     <div class="app-container">
-        <header class="app-header">
-            <div class="logo">
-                <h1>Eunpyeong St. Mary's Myeloma Center Database</h1>
-            </div>
-            <a href="/" class="btn-secondary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                Back to Dashboard
-            </a>
-        </header>
+        {{ app_header() }}
 
-        <main class="app-main">
+        <main class="app-main" style="flex-direction: column;">
             <section class="content-area" id="content-area">
-                <div class="planner-header">
-                    <h2>Edit Patient Data</h2>
-                </div>
-
-
-                <div id="result-container" class="card result-card">
-                    <div class="card-body">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
-                            <h3 style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0;">1. Baseline Demographics and Disease-Related Characteristics</h3>
-                            <button class="btn-secondary" onclick="toggleSection('baseline-content', this)" style="padding: 0 1rem;">Hide</button>
-                        </div>
-                        <div id="baseline-content">
-                            <div class="result-grid" id="result-grid">
-                                <!-- Results will be dynamically populated here -->
-                            </div>
-
-                            <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-                                <button class="btn-secondary" onclick="openEmrModal()">
-                                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    </svg>
-                                    Auto-fill from EMR
-                                </button>
-                                <button class="btn-secondary" onclick="submitData()" style="padding: 0 1.5rem;">
-                                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                        <polyline points="7 3 7 8 15 8"></polyline>
-                                    </svg>
-                                    Submit
-                                </button>
-                            </div>
-                        </div>
+                <div style="max-width: 1120px; margin: 0 auto; animation: fadeIn var(--transition-medium);">
+                    <div class="planner-header">
+                        <h2 style="margin: 0;">Edit Patient Data</h2>
                     </div>
-                </div>
 
-                <div id="staging-container" class="card result-card" style="margin-top: 2rem;">
-                    <div class="card-body">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                            <h3 style="color: var(--text-primary); font-size: calc(1.15rem + 1pt); font-weight: 600; margin: 0;">2. Disease Staging</h3>
-                            <button class="btn-secondary" onclick="toggleSection('staging-content', this)" style="padding: 0 1rem;">Hide</button>
+                    <div class="planner-sections">
+                        <!-- Section 1: Baseline demographics and disease characteristics -->
+                        <div id="result-container" class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 style="margin: 0;">1. Baseline Demographics and Disease-Related Characteristics</h3>
+                                <button class="btn-secondary" onclick="toggleSection('baseline-content', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
+                            </div>
+                            <div id="baseline-content">
+                                <div class="card-body">
+                                    <div class="patient-grid" id="result-grid">
+                                        <!-- Fields are rendered by displayResults() -->
+                                    </div>
+                                </div>
+                                <div class="section-footer">
+                                    <button type="button" class="btn-secondary" onclick="openEmrModal()" style="padding: 0 1rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        Auto-fill from EMR
+                                    </button>
+                                    <button type="button" class="btn-secondary" onclick="submitData()" style="padding: 0 1rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        SUBMIT
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div id="staging-content">
-                            <h4 style="margin-top: 1rem; margin-bottom: 1rem; color: #cbd5e1; font-weight: 600; font-size: 1.05rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">Clinical findings for myeloma staging</h4>
-                            <div id="staging-summary" style="margin-bottom: 1.5rem; padding: 0.5rem 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.8; letter-spacing: 0.2px; display: flex; flex-direction: column; gap: 0.5rem;">
-                                <!-- Unified summary goes here -->
+
+                        <!-- Section 2: Disease staging -->
+                        <div id="staging-container" class="card">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 style="margin: 0;">2. Disease Staging</h3>
+                                <button class="btn-secondary" onclick="toggleSection('staging-content', this)" style="padding: 0 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>Hide</button>
                             </div>
-                            <div class="result-grid" id="staging-grid">
-                                <!-- Disease Staging fields will go here -->
-                            </div>
-                            <div style="display: flex; justify-content: flex-end; margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-                                <button class="btn-secondary" onclick="submitStagingData()" style="padding: 0 1.5rem;">
-                                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                        <polyline points="7 3 7 8 15 8"></polyline>
-                                    </svg>
-                                    Submit
-                                </button>
+                            <div id="staging-content">
+                                <div class="card-body">
+                                    <h4 class="class-title" style="margin-top: 0;">Clinical findings for myeloma staging</h4>
+                                    <div id="staging-summary">
+                                        <!-- Read-only summary rendered by updateStagingSummary() -->
+                                    </div>
+                                    <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border-glass); padding-top: 1.5rem;">
+                                        <h4 class="class-title" style="margin-top: 0;">Stage</h4>
+                                        <div class="patient-grid" id="staging-grid">
+                                            <!-- Stage selects rendered by displayResults() -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="section-footer">
+                                    <button type="button" class="btn-secondary" onclick="recalculateStaging()" style="padding: 0 1rem;" title="Recalculate all stages from the values entered above">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="11" x2="8" y2="11"></line><line x1="12" y1="11" x2="12" y2="11"></line><line x1="16" y1="11" x2="16" y2="11"></line><line x1="8" y1="15" x2="8" y2="15"></line><line x1="12" y1="15" x2="12" y2="15"></line><line x1="16" y1="15" x2="16" y2="18"></line><line x1="8" y1="18" x2="12" y2="18"></line></svg>
+                                        CALCULATE
+                                    </button>
+                                    <button type="button" class="btn-secondary" onclick="submitStagingData()" style="padding: 0 1rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        SUBMIT
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -445,30 +192,34 @@
 
     <!-- EMR Modal -->
     <div id="emr-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Auto-fill from EMR</h3>
-                <button class="close-btn" onclick="closeEmrModal()">&times;</button>
+        <div class="modal-content card">
+            <div class="card-header">
+                <h3 style="margin: 0;">Auto-fill from EMR</h3>
+                <button class="btn-secondary" onclick="closeEmrModal()" style="padding: 0 1rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    Close
+                </button>
             </div>
-            <div class="modal-body">
-                <textarea id="emr-input" class="emr-textarea" placeholder="Enter patient EMR notes, lab results, or clinical summary here..." style="height: 350px;"></textarea>
+            <div class="card-body">
+                <textarea id="emr-input" class="custom-text-input" placeholder="Enter patient EMR notes, lab results, or clinical summary here..."></textarea>
             </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="convertEMRAndClose()">
-                    <svg width="18.6" height="18.6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    Convert & Fill
+            <div class="section-footer">
+                <button type="button" class="btn-secondary" onclick="convertEMRAndClose()" style="padding: 0 1rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Convert &amp; Fill
                 </button>
             </div>
         </div>
     </div>
 
+    <script src="{{ static_url('date-input.js') }}"></script>
     <script>
+        const HIDE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+        const SHOW_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+
         function openEmrModal() {
             document.getElementById('emr-modal').style.display = 'flex';
+            document.getElementById('emr-input').focus();
         }
 
         function closeEmrModal() {
@@ -476,22 +227,32 @@
         }
 
         function convertEMRAndClose() {
-            convertEMR();
-            closeEmrModal();
+            // Keep the modal open when there was nothing to convert
+            if (convertEMR()) closeEmrModal();
         }
 
+        // Close the EMR modal with Esc or a click on the dimmed backdrop
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeEmrModal();
+        });
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'emr-modal') closeEmrModal();
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const upn = urlParams.get('upn');
-            
+            // Load the patient named by ?upn= and fill the form with the saved values
+            const upn = new URLSearchParams(window.location.search).get('upn');
+
             if (upn) {
-                fetch(`/api/patients/${upn}`)
+                fetch(`/api/patients/${encodeURIComponent(upn)}`)
                     .then(res => res.json())
                     .then(row => {
                         if (row.error) {
                             console.error(row.error);
                             displayResults({});
                         } else {
+                            // "a / b" for the combined fields, or '' when every part is empty
+                            const slash = (...parts) => parts.some(v => v) ? parts.map(v => v || '').join(' / ') : '';
                             const data = {
                                 id: row.upn,
                                 name: row.name,
@@ -506,20 +267,26 @@
                                 extramedullary: row.emd_dx,
                                 hg: row.hg_dx,
                                 b2m: row.b2mg_dx,
-                                tpAlb: `${row.tp_dx || ''} / ${row.alb_dx || ''}`,
-                                bunCr: `${row.bun_dx || ''} / ${row.cr_dx || ''}`,
+                                tpAlb: slash(row.tp_dx, row.alb_dx),
+                                bunCr: slash(row.bun_dx, row.cr_dx),
                                 tb: row.tb_dx,
-                                astAlt: `${row.ast_dx || ''} / ${row.alt_dx || ''}`,
+                                astAlt: slash(row.ast_dx, row.alt_dx),
                                 ca: row.ca_dx,
                                 ldh: row.ldh_dx,
-                                igGAM: `${row.ig_g_dx || ''} / ${row.ig_a_dx || ''} / ${row.ig_m_dx || ''}`,
-                                igDE: `${row.ig_d_dx || ''} / ${row.ig_e_dx || ''}`,
+                                igG: row.ig_g_dx,
+                                igA: row.ig_a_dx,
+                                igM: row.ig_m_dx,
+                                igDE: slash(row.ig_d_dx, row.ig_e_dx),
                                 serumKappa: row.kappa_dx,
                                 serumLambda: row.lambda_dx,
                                 heavyChain: row.chain_heavy,
                                 lightChain: row.chain_light,
                                 spep: row.serum_m_dx,
                                 upep: row.urine_m_dx,
+                                dsStage: row.stage_ds,
+                                issStage: row.stage_iss,
+                                rissStage: row['stage_r-iss'],
+                                r2issStage: row['stage-r2-iss'],
                                 bm: {
                                     cellularity: row.cellularity_dx,
                                     plasmaCell: row['plasma-cell_dx'],
@@ -534,13 +301,13 @@
                                     del1p32: row.CDKN2C_dx
                                 },
                                 viral: {
-                                    hbs: `${row.hbsag_dx || ''} / ${row.hbsab_dx || ''}`,
+                                    hbs: slash(row.hbsag_dx, row.hbsab_dx),
                                     hbc: row.hbcab_dx,
-                                    hcv: row.anti_hcv_dx
+                                    hcv: row.anti_hcv_dx,
+                                    hiv: row.hiv_dx
                                 }
                             };
                             displayResults(data);
-                            setTimeout(updateStagingSummary, 100);
                         }
                     })
                     .catch(err => {
@@ -550,19 +317,21 @@
             } else {
                 displayResults({});
             }
-            
-            document.getElementById('result-grid').addEventListener('input', updateStagingSummary);
-            
-            // Listen to input and change events to dynamically update input styles
+
+            // Keep select placeholder colour and the yyyy-mm-dd date overlay in sync with the value
             document.addEventListener('input', (e) => {
-                if (e.target && e.target.classList.contains('result-input')) {
+                if (e.target && e.target.classList.contains('patient-field')) {
                     handleInputElementChange(e.target);
                 }
             });
-            
+
             document.addEventListener('change', (e) => {
-                if (e.target && e.target.classList.contains('result-input')) {
+                if (e.target && e.target.classList.contains('patient-field')) {
                     handleInputElementChange(e.target);
+                    // A stage picked by hand is no longer overwritten by calculateStaging()
+                    if (e.isTrusted && e.target.id.endsWith('_stage')) {
+                        e.target.dataset.locked = e.target.value ? 'true' : '';
+                    }
                 }
             });
         });
@@ -570,147 +339,79 @@
         function toggleSection(containerId, btn) {
             const container = document.getElementById(containerId);
             if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.innerText = 'Hide';
+                container.style.display = '';
+                btn.innerHTML = HIDE_ICON + 'Hide';
             } else {
                 container.style.display = 'none';
-                btn.innerText = 'Show';
+                btn.innerHTML = SHOW_ICON + 'Show';
             }
         }
 
         function displayResults(data) {
             const grid = document.getElementById('result-grid');
-            
+
             grid.innerHTML = '';
-            
+
+            // Labels containing <br> get the two-line alignment from the design rules.
+            const labelHtml = (label, fieldId) =>
+                `<label${fieldId ? ` for="${fieldId}"` : ''} class="patient-label${label.includes('<br>') ? ' two-line' : ''}">${label}</label>`;
+            const itemClass = (colspan) => `patient-item${colspan > 1 ? ' span-2' : ''}`;
+
             const createItem = (label, value, fieldId, colspan = 1, type = 'text') => {
-                let itemStyle = '';
-                let labelStyle = '';
-                let inputStyle = '';
-                
-                if (colspan > 1) {
-                    itemStyle = ` style="grid-column: span ${colspan};"`;
-                    labelStyle = ` style="flex: 0 0 calc(22.5% - 1.3rem + 2px);"`;
-                    inputStyle = ` style="flex: 1; width: auto;"`;
-                }
-
                 const placeholders = {
-                    'input-upn': '12345678',
-                    'input-name': '홍길동',
-                    'input-sex': 'M',
-                    'input-date_birth': '1950-01-01',
-                    'input-height_dx': '170.5',
-                    'input-bwt_dx': '65.2',
-                    'input-date_dx': '2023-05-12',
-                    'input-dp_dx': 'Symptomatic myeloma',
-                    'input-crab': '- / + / - / -',
-                    'input-paraskeletal_dx': '-',
-                    'input-emd_dx': '+',
-                    'input-hg_dx': '10.5',
-                    'input-b2mg_dx': '3.5',
-                    'input-tp_alb': '8.0 / 3.2',
-                    'input-bun_cr': '20 / 1.1',
-                    'input-tb_dx': '0.8',
-                    'input-ast_alt': '25 / 30',
-                    'input-ca_dx': '9.5',
-                    'input-ldh_dx': '250',
-                    'input-ig_gam': '2500 / 100 / 50',
-                    'input-ig_de': '32/14',
-                    'input-kappa_dx': '15.2',
-                    'input-lambda_dx': '1.5',
-                    'input-chain_heavy': 'IgG',
-                    'input-chain_light': 'kappa',
-                    'input-serum_m_dx': '2.5',
-                    'input-urine_m_dx': '150',
-                    'input-bm_cellularity': '80',
-                    'input-bm_plasma_cell': '45',
-                    'input-bm_cytogenetics': '46,XY[20]',
-                    'input-bm_t4_14': '15.5',
-                    'input-bm_t11_14': '0.0',
-                    'input-bm_t14_16': '0.0',
-                    'input-bm_t14_20': '0.0',
-                    'input-bm_del17p13': '25.0',
-                    'input-bm_gain1q21': '80.5',
-                    'input-bm_del13q14': '40.0',
-                    'input-bm_del1p32': '0.0',
-                    'input-hbs_ag_ab': '- / +',
-                    'input-hbcab_dx': '+',
-                    'input-anti_hcv_dx': '-',
-                    'input-hiv_dx': '-'
+                    'input-upn': 'e.g. 12345678',
+                    'input-name': 'e.g. 홍길동',
+                    'input-height_dx': 'e.g. 170.5',
+                    'input-bwt_dx': 'e.g. 65.2',
+                    'input-crab': 'e.g. - / + / - / -',
+                    'input-hg_dx': 'e.g. 10.5',
+                    'input-b2mg_dx': 'e.g. 3.5',
+                    'input-tp_alb': 'e.g. 8.0 / 3.2',
+                    'input-bun_cr': 'e.g. 20 / 1.1',
+                    'input-tb_dx': 'e.g. 0.8',
+                    'input-ast_alt': 'e.g. 25 / 30',
+                    'input-ca_dx': 'e.g. 9.5',
+                    'input-ldh_dx': 'e.g. 250',
+                    'input-ig_g': 'e.g. 2500',
+                    'input-ig_a': 'e.g. 100',
+                    'input-ig_m': 'e.g. 50',
+                    'input-ig_de': 'e.g. 32/14',
+                    'input-kappa_dx': 'e.g. 15.2',
+                    'input-lambda_dx': 'e.g. 1.5',
+                    'input-serum_m_dx': 'e.g. 2.5',
+                    'input-urine_m_dx': 'e.g. 150',
+                    'input-bm_cellularity': 'e.g. 80',
+                    'input-bm_plasma_cell': 'e.g. 45',
+                    'input-bm_cytogenetics': 'e.g. 46,XY[20]',
+                    'input-bm_t4_14': 'e.g. 15.5',
+                    'input-bm_t11_14': 'e.g. 0.0',
+                    'input-bm_t14_16': 'e.g. 0.0',
+                    'input-bm_t14_20': 'e.g. 0.0',
+                    'input-bm_del17p13': 'e.g. 25.0',
+                    'input-bm_gain1q21': 'e.g. 80.5',
+                    'input-bm_del13q14': 'e.g. 40.0',
+                    'input-bm_del1p32': 'e.g. 0.0',
+                    'input-hbs_ag_ab': 'e.g. - / +',
+                    'input-hbcab_dx': 'e.g. +',
+                    'input-anti_hcv_dx': 'e.g. -',
+                    'input-hiv_dx': 'e.g. -'
                 };
-                const placeholderText = placeholders[fieldId] ? `placeholder="${placeholders[fieldId]}"` : '';
-                
-                let isFilled = !!value;
-                let inputElement = '';
-                
-                if (type === 'date') {
-                    inputElement = `
-                        <div style="width: 55%; position: relative; display: flex;" ${inputStyle}>
-                            <input type="${type}" id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : 'empty-date'}" style="width: 100%; flex: 1;" value="${value || ''}">
-                            <span class="date-placeholder" style="position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); color: rgba(255, 255, 255, 0.3); pointer-events: none; font-size: 0.9rem; font-weight: 500; ${isFilled ? 'display: none;' : ''}">yyyy/mm/dd</span>
-                        </div>
-                    `;
-                } else {
-                    inputElement = `<input type="${type}" id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : ''}"${inputStyle ? ' ' + inputStyle : ''} value="${value || ''}" ${placeholderText}>`;
-                }
+                const placeholderText = placeholders[fieldId] ? ` placeholder="${placeholders[fieldId]}"` : '';
+                const dateAttrs = type === 'date' ? ` data-date="${value || ''}"` : '';
 
                 return `
-                    <div class="result-item"${itemStyle}>
-                        <label class="result-label"${labelStyle}>${label}</label>
-                        ${inputElement}
+                    <div class="${itemClass(colspan)}">
+                        ${labelHtml(label, fieldId)}
+                        <input type="${type}" id="${fieldId || ''}" class="patient-field custom-text-input${type === 'date' ? ' custom-date-format' : ''}" value="${value || ''}"${dateAttrs}${placeholderText}>
                     </div>
                 `;
             };
 
-            const createDropdownItem = (label, options, value, fieldId, infoId = null, colspan = 1) => {
-                let itemStyle = 'flex-direction: column; align-items: flex-start; justify-content: flex-end;';
-                let labelStyle = 'width: 100%; margin-bottom: 0.5rem; color: #cbd5e1; font-size: 1.05rem; font-weight: 600; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;';
-                let inputStyle = 'width: 100%;';
-                
-                if (colspan > 1) {
-                    itemStyle += ` grid-column: span ${colspan};`;
-                }
-
-                let optionsHtml = '';
-                options.forEach(opt => {
-                    const selected = (value === opt) ? 'selected' : '';
-                    optionsHtml += `<option value="${opt}" ${selected}>${opt}</option>`;
-                });
-
-                const infoHtml = infoId ? `<div id="${infoId}" style="width: 100%; font-size: 0.75rem; color: #3b82f6; margin-bottom: 0.5rem; min-height: 3.5em; line-height: 1.3;"></div>` : '';
-                let isFilled = !!value;
-
-                return `
-                    <div class="result-item" style="${itemStyle}">
-                        ${infoHtml}
-                        <label class="result-label" style="${labelStyle}">${label}</label>
-                        <select id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : ''}" style="${inputStyle}">
-                            ${optionsHtml}
-                        </select>
-                    </div>
-                `;
-            };
-
-            const createInlineDropdownItem = (label, options, value, fieldId, defaultValue = null, colspan = 1, inputWidth = null) => {
-                let itemStyle = '';
-                let labelStyle = '';
-                let inputStyle = '';
-                
-                let isFilled = !!value;
-                let actualValue = value || defaultValue;
-
-                if (colspan > 1) {
-                    itemStyle = ` style="grid-column: span ${colspan};"`;
-                    if (inputWidth === 'match-1col') {
-                        labelStyle = ` style="flex: 0 0 calc((100% - 2.5rem) / 2 * 0.45);"`;
-                        inputStyle = ` style="flex: 0 0 calc((100% - 2.5rem) / 2 * 0.55); width: auto;"`;
-                    } else {
-                        labelStyle = ` style="flex: 0 0 calc(22.5% - 1.3rem + 2px);"`;
-                        inputStyle = ` style="flex: ${inputWidth ? '0 0 ' + inputWidth : '1'}; width: auto;"`;
-                    }
-                } else if (inputWidth) {
-                    inputStyle = ` style="flex: 0 0 ${inputWidth}; width: auto;"`;
-                }
+            const createInlineDropdownItem = (label, options, value, fieldId, defaultValue = null, colspan = 1) => {
+                // A select still showing its default (not a value from the data) is greyed out
+                // until the user picks something -- see handleInputElementChange().
+                const isFilled = !!value;
+                const actualValue = value || defaultValue;
 
                 let optionsHtml = '';
                 options.forEach(opt => {
@@ -728,9 +429,9 @@
                 });
 
                 return `
-                    <div class="result-item"${itemStyle}>
-                        <label class="result-label"${labelStyle}>${label}</label>
-                        <select id="${fieldId || ''}" class="result-input ${isFilled ? 'filled' : ''}"${inputStyle ? ' ' + inputStyle : ''}>
+                    <div class="${itemClass(colspan)}">
+                        ${labelHtml(label, fieldId)}
+                        <select id="${fieldId || ''}" class="patient-field custom-text-input${isFilled ? '' : ' is-default'}">
                             ${optionsHtml}
                         </select>
                     </div>
@@ -738,7 +439,7 @@
             };
 
             const createSection = (title) => {
-                return `<div style="grid-column: 1 / -1; margin-top: 1rem; margin-bottom: 1rem; font-size: 1.05rem; font-weight: 600; color: #cbd5e1; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">${title}</div>`;
+                return `<h4 class="class-title patient-subsection">${title}</h4>`;
             };
 
             let html = '';
@@ -751,56 +452,58 @@
             html += createItem('Birthdate', data.birthdate, 'input-date_birth', 1, 'date');
             html += createInlineDropdownItem('ECOG', ['0', '1', '2', '3', '4', '5'], data.ecog, 'input-ecog');
             html += createItem('Height (cm)', data.height, 'input-height_dx');
-            html += createItem('Body Weight (kg)', data.weight, 'input-bwt_dx');
+            html += createItem('Body weight<br>(kg)', data.weight, 'input-bwt_dx');
 
             // Clinical Features (Subsection)
             html += createSection('Clinical Features');
-            html += createItem('Date of diagnosis', data.dateDx, 'input-date_dx', 1, 'date');
-            html += createInlineDropdownItem('Disease Phase', ['MGUS (monoclonal gammopathy of undetermined significance)', 'MGCS (monoclonal gammopathy of clinical significance)', 'Smoldering myeloma', 'Symptomatic myeloma', 'Plasma cell leukemia'], data.diseasePhase, 'input-dp_dx', 'Symptomatic myeloma', 2);
-            html += `<div style="grid-column: span 1;"></div>`;
+            html += createItem('Date of<br>diagnosis', data.dateDx, 'input-date_dx', 1, 'date');
+            html += createInlineDropdownItem('Disease phase', ['MGUS (monoclonal gammopathy of undetermined significance)', 'MGCS (monoclonal gammopathy of clinical significance)', 'Smoldering myeloma', 'Symptomatic myeloma', 'Plasma cell leukemia'], data.diseasePhase, 'input-dp_dx', 'Symptomatic myeloma', 2);
+            html += `<div></div>`;
             html += createItem('C/R/A/B', data.crab, 'input-crab');
-            
-            let lyticHtml = createInlineDropdownItem('Number of lytic lesions', ['1', '≥ 2'], data.lyticLesions, 'input-lytic_lesions', '1');
-            lyticHtml = lyticHtml.replace('<div class="result-item"', '<div id="container-lytic_lesions" class="result-item" style="display: none;"');
+
+            let lyticHtml = createInlineDropdownItem('Number of<br>lytic lesions', ['1', '≥ 2'], data.lyticLesions, 'input-lytic_lesions', '1');
+            lyticHtml = lyticHtml.replace('<div class="patient-item"', '<div id="container-lytic_lesions" class="patient-item" style="display: none;"');
             html += lyticHtml;
-            
-            html += createInlineDropdownItem('Paraskeletal Disease', ['Yes', 'No'], data.paraskeletal, 'input-paraskeletal_dx', 'No');
-            html += createInlineDropdownItem('Extramedullary Disease', ['Yes', 'No'], data.extramedullary, 'input-emd_dx', 'No');
+
+            html += createInlineDropdownItem('Paraskeletal<br>disease', ['Yes', 'No'], data.paraskeletal, 'input-paraskeletal_dx', 'No');
+            html += createInlineDropdownItem('Extramedullary<br>disease', ['Yes', 'No'], data.extramedullary, 'input-emd_dx', 'No');
 
             // Cell counts and Blood chemistry
             html += createSection('Cell counts and Blood chemistry');
-            html += createItem('Hemoglobin (g/dL)', data.hg, 'input-hg_dx');
-            html += createItem('β2 microglobulin (mg/L)', data.b2m, 'input-b2mg_dx');
-            html += createItem('TP / Alb (g/dL)', data.tpAlb, 'input-tp_alb');
-            html += createItem('BUN / Cr (mg/dL)', data.bunCr, 'input-bun_cr');
+            html += createItem('Hemoglobin<br>(g/dL)', data.hg, 'input-hg_dx');
+            html += createItem('β2-MG (mg/L)', data.b2m, 'input-b2mg_dx');
+            html += createItem('TP / Alb<br>(g/dL)', data.tpAlb, 'input-tp_alb');
+            html += createItem('BUN / Cr<br>(mg/dL)', data.bunCr, 'input-bun_cr');
             html += createItem('TB (mg/dL)', data.tb, 'input-tb_dx');
-            html += createItem('AST / ALT (U/L)', data.astAlt, 'input-ast_alt');
+            html += createItem('AST / ALT<br>(U/L)', data.astAlt, 'input-ast_alt');
             html += createItem('Ca<sup>2+</sup> (mg/dL)', data.ca, 'input-ca_dx');
             html += createItem('LDH (U/L)', data.ldh, 'input-ldh_dx');
 
             // Serum and urine PEP/IEP
             html += createSection('Serum and urine PEP/IEP');
-            html += createItem('Ig G/A/M', data.igGAM, 'input-ig_gam');
+            html += createItem('IgG', data.igG, 'input-ig_g');
+            html += createItem('IgA', data.igA, 'input-ig_a');
+            html += createItem('IgM', data.igM, 'input-ig_m');
             html += createItem('Ig D/E', data.igDE, 'input-ig_de');
             html += createItem('Serum kappa', data.serumKappa, 'input-kappa_dx');
             html += createItem('Serum lambda', data.serumLambda, 'input-lambda_dx');
-            html += createInlineDropdownItem('Heavy Chain', ['', 'IgG', 'IgA', 'IgM', 'IgD', 'IgE', 'Negative'], data.heavyChain, 'input-chain_heavy');
-            html += createInlineDropdownItem('Light Chain', ['', 'kappa', 'lambda', 'Negative'], data.lightChain, 'input-chain_light');
-            html += createItem('Serum PEP/IEP (g/dL)', data.spep, 'input-serum_m_dx');
-            html += createItem('Urine PEP/IEP (mg/day)', data.upep, 'input-urine_m_dx');
+            html += createInlineDropdownItem('Heavy chain', ['IgG', 'IgA', 'IgM', 'IgD', 'IgE', 'Negative'], data.heavyChain, 'input-chain_heavy', 'IgG');
+            html += createInlineDropdownItem('Light chain', ['kappa', 'lambda', 'Negative'], data.lightChain, 'input-chain_light', 'kappa');
+            html += createItem('Serum PEP/IEP<br>(g/dL)', data.spep, 'input-serum_m_dx');
+            html += createItem('Urine PEP/IEP<br>(mg/day)', data.upep, 'input-urine_m_dx');
 
             // BM aspiration and biopsy
             html += createSection('BM aspiration and biopsy');
             html += createItem('Cellularity (%)', data.bm?.cellularity, 'input-bm_cellularity');
-            html += createItem('Plasma Cell (%)', data.bm?.plasmaCell, 'input-bm_plasma_cell');
+            html += createItem('Plasma cell (%)', data.bm?.plasmaCell, 'input-bm_plasma_cell');
             html += createItem('Cytogenetics', data.bm?.cytogenetics, 'input-bm_cytogenetics', 2);
             html += createItem('IGH::FGFR3/<br>MMSET (%)', data.bm?.t4_14, 'input-bm_t4_14');
-            html += createItem('IGH::CCND1 (%)', data.bm?.t11_14, 'input-bm_t11_14');
+            html += createItem('IGH::CCND1<br>(%)', data.bm?.t11_14, 'input-bm_t11_14');
             html += createItem('IGH::MAF (%)', data.bm?.t14_16, 'input-bm_t14_16');
             html += createItem('IGH::MAFB (%)', data.bm?.t14_20, 'input-bm_t14_20');
             html += createItem('TP53 (%)', data.bm?.del17p13, 'input-bm_del17p13');
             html += createItem('CKS1B (%)', data.bm?.gain1q21, 'input-bm_gain1q21');
-            html += createItem('RB1/D13S319 (%)', data.bm?.del13q14, 'input-bm_del13q14');
+            html += createItem('RB1/D13S319<br>(%)', data.bm?.del13q14, 'input-bm_del13q14');
             html += createItem('CDKN2C (%)', data.bm?.del1p32, 'input-bm_del1p32');
 
             // Viral markers
@@ -827,11 +530,20 @@
 
             const stagingGrid = document.getElementById('staging-grid');
             let stagingHtml = '';
-            stagingHtml += createDropdownItem('Durie-Salmon Stage', ['IA', 'IB', 'IIA', 'IIB', 'IIIA', 'IIIB'], data.dsStage, 'input-ds_stage');
-            stagingHtml += createDropdownItem('ISS Stage', ['I', 'II', 'III'], data.issStage, 'input-iss_stage');
-            stagingHtml += createDropdownItem('R-ISS Stage', ['I', 'II', 'III'], data.rissStage, 'input-riss_stage');
-            stagingHtml += createDropdownItem('R2-ISS Stage', ['I', 'II', 'III', 'IV'], data.r2issStage, 'input-r2iss_stage');
+            stagingHtml += createInlineDropdownItem('Durie-Salmon<br>stage', ['', 'IA', 'IB', 'IIA', 'IIB', 'IIIA', 'IIIB'], data.dsStage, 'input-ds_stage');
+            stagingHtml += createInlineDropdownItem('ISS stage', ['', 'I', 'II', 'III'], data.issStage, 'input-iss_stage');
+            stagingHtml += createInlineDropdownItem('R-ISS stage', ['', 'I', 'II', 'III'], data.rissStage, 'input-riss_stage');
+            stagingHtml += createInlineDropdownItem('R2-ISS stage', ['', 'I', 'II', 'III', 'IV'], data.r2issStage, 'input-r2iss_stage');
             stagingGrid.innerHTML = stagingHtml;
+
+            // Stages written in an EMR chart win over the calculated ones (the chart may know
+            // things the form doesn't, e.g. the number of lytic lesions).
+            if (data.stagesFromChart) {
+                ['input-ds_stage', 'input-iss_stage', 'input-riss_stage', 'input-r2iss_stage'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.value) el.dataset.locked = 'true';
+                });
+            }
 
             updateStagingSummary();
             grid.addEventListener('input', updateStagingSummary);
@@ -839,32 +551,12 @@
         }
 
         function handleInputElementChange(input) {
-            let isFilled = false;
             if (input.tagName === 'SELECT') {
-                isFilled = input.value !== '';
+                // The placeholder grey stays only while an empty option is selected; any real
+                // choice (by the user or by calculateStaging) switches to the normal text colour.
+                input.classList.toggle('is-default', input.value === '');
             } else if (input.type === 'date') {
-                isFilled = input.value !== '';
-                if (isFilled) {
-                    input.classList.remove('empty-date');
-                    const placeholder = input.nextElementSibling;
-                    if (placeholder && placeholder.classList.contains('date-placeholder')) {
-                        placeholder.style.display = 'none';
-                    }
-                } else {
-                    input.classList.add('empty-date');
-                    const placeholder = input.nextElementSibling;
-                    if (placeholder && placeholder.classList.contains('date-placeholder')) {
-                        placeholder.style.display = 'block';
-                    }
-                }
-            } else {
-                isFilled = input.value.trim() !== '';
-            }
-
-            if (isFilled) {
-                input.classList.add('filled');
-            } else {
-                input.classList.remove('filled');
+                input.setAttribute('data-date', input.value);
             }
         }
 
@@ -872,50 +564,56 @@
             const summaryEl = document.getElementById('staging-summary');
             if (!summaryEl) return;
             const val = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : '-'; };
-            
+
             const cr = val('input-bun_cr').split('/')[1] || val('input-bun_cr');
             const bone = val('input-crab').split('/')[3] || val('input-crab');
             const lyticLesions = (bone.trim() === '+') ? val('input-lytic_lesions') : '-';
             const alb = val('input-tp_alb').split('/')[1] || val('input-tp_alb');
-            
-            const createSummaryItem = (label, value, unit='', colspan=1) => {
+
+            const createSummaryItem = (label, value, unit = '') => {
                 const isFilled = value && value !== '-';
-                const inputClass = 'result-input'; // Removed 'filled' class to eliminate the bright border/glow effect
-                const gridSpan = colspan > 1 ? `grid-column: span ${colspan};` : '';
                 const displayValue = isFilled ? (unit ? `${value} ${unit}` : value) : '';
-                const filledStyle = isFilled ? 'color: #ffffff;' : '';
                 return `
-                    <div class="result-item" style="margin-bottom: 0; padding: 0; ${gridSpan}">
-                        <label class="result-label" style="font-size: 0.8rem; margin-right: 0.5rem; flex: 0 0 calc(45% - 0.5rem);">${label}</label>
-                        <div class="${inputClass}" style="flex: 1; display: flex; align-items: center; width: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; ${filledStyle}">${displayValue}</div>
+                    <div class="patient-item">
+                        <label class="patient-label${label.includes('<br>') ? ' two-line' : ''}">${label}</label>
+                        <div class="patient-field custom-text-input patient-readout">${displayValue}</div>
                     </div>
                 `;
             };
 
             summaryEl.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem 1rem; align-items: center; padding: 0.2rem 0;">
+                <div class="patient-grid">
                     ${createSummaryItem('Hb', val('input-hg_dx'), 'g/dL')}
-                    ${createSummaryItem('β2 microglobulin', val('input-b2mg_dx'), 'mg/L')}
+                    ${createSummaryItem('β2-MG', val('input-b2mg_dx'), 'mg/L')}
                     ${createSummaryItem('Alb', alb, 'g/dL')}
                     ${createSummaryItem('Cr', cr, 'mg/dL')}
-                    
+
                     ${createSummaryItem('Ca<sup>2+</sup>', val('input-ca_dx'), 'mg/dL')}
                     ${createSummaryItem('LDH', val('input-ldh_dx'), 'U/L')}
                     <div></div>
                     <div></div>
                     ${createSummaryItem('Heavy chain', val('input-chain_heavy'), '')}
                     ${createSummaryItem('Serum PEP/IEP', val('input-serum_m_dx'), 'g/dL')}
-                    
+
                     ${createSummaryItem('Urine PEP/IEP', val('input-urine_m_dx'), 'mg/day')}
-                    ${createSummaryItem('Number of lytic<br>lesions', lyticLesions, '')}
+                    ${createSummaryItem('Number of<br>lytic lesions', lyticLesions, '')}
                     ${createSummaryItem('IGH::FGFR3/<br>MMSET', val('input-bm_t4_14'), '%')}
-                    
+
                     ${createSummaryItem('IGH::MAF', val('input-bm_t14_16'), '%')}
                     ${createSummaryItem('TP53', val('input-bm_del17p13'), '%')}
                     ${createSummaryItem('CKS1B', val('input-bm_gain1q21'), '%')}
                 </div>
             `;
             calculateStaging();
+        }
+
+        // CALCULATE button: drop chart-provided / hand-picked stages and recompute from the form
+        function recalculateStaging() {
+            ['input-ds_stage', 'input-iss_stage', 'input-riss_stage', 'input-r2iss_stage'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.dataset.locked = '';
+            });
+            updateStagingSummary();
         }
 
         function calculateStaging() {
@@ -942,7 +640,7 @@
 
             const setStage = (id, val) => {
                 const el = document.getElementById(id);
-                if (el && val !== '') {
+                if (el && val !== '' && el.dataset.locked !== 'true') {
                     el.value = val;
                     if (typeof handleInputElementChange === 'function') handleInputElementChange(el);
                 }
@@ -975,9 +673,9 @@
                 else if (b2m >= 5.5) iss = 'III';
                 else iss = 'II';
                 setStage('input-iss_stage', iss);
-            } else {
-                iss = valStr('input-iss_stage');
             }
+            // R-ISS / R2-ISS build on the ISS actually shown (a locked chart value or the calculated one)
+            iss = valStr('input-iss_stage');
 
             // 3. R-ISS
             let riss = '';
@@ -1015,7 +713,7 @@
             const text = document.getElementById('emr-input').value;
             if (!text.trim()) {
                 alert("Please paste EMR data before converting.");
-                return;
+                return false;
             }
             
             // 1. ID, Name, Birthdate, Sex
@@ -1074,8 +772,9 @@
             }
             
             if (!birthdate) {
+                // Only labelled dates or a resident registration number -- a bare YYYY.MM.DD in
+                // a chart is usually an exam or treatment date, not the birthdate.
                 const globalBd = text.match(/(?:DOB|Birth(?:date|day|eday)?|생년월일|Birth|Date of Birth)\s*[:\-]?\s*(\d{4}[-\.\/]\d{2}[-\.\/]\d{2}|\d{6}[-\s]?\d{7}|\d{8}|\d{6})/i)
-                               || text.match(/\b(\d{4}[-\.\/]\d{2}[-\.\/]\d{2})\b/)
                                || text.match(/\b(\d{6}[-\s]?\d{7})\b/);
                 if (globalBd) birthdate = globalBd[1];
             }
@@ -1122,9 +821,9 @@
             }
 
             // Height and Weight
-            const heightMatch = text.match(/(?:Height|Ht|키)\s*[:\-]?\s*([\d\.]+)/i);
+            const heightMatch = text.match(/(?:\bHeight|\bHt\b|키)\s*[:\-]?\s*([\d\.]+)/i);
             const height = heightMatch ? heightMatch[1] : '';
-            const weightMatch = text.match(/(?:Weight|Wt|BW|Body Weight|체중|몸무게)\s*[:\-]?\s*([\d\.]+)/i);
+            const weightMatch = text.match(/(?:\bWeight|\bWt\b|\bBW\b|Body Weight|체중|몸무게)\s*[:\-]?\s*([\d\.]+)/i);
             const weight = weightMatch ? weightMatch[1] : '';
 
             // ECOG
@@ -1162,6 +861,22 @@
             
             diseasePhase = diseasePhase.replace(/\s*\/\s*/g, ' / ');
 
+            // Stages written in the header, e.g. "D-S stage IIA, ISS stage I, R-ISS stage II"
+            const stageOf = (re) => { const m = diseasePhase.match(re); return m ? m[1].toUpperCase() : ''; };
+            const dsStage = stageOf(/(?:\bD-?S|Durie[-\s]?Salmon)\s*stage\s*(I{1,3}[AB])\b/i);
+            const issStage = stageOf(/(?:^|[^-\w])ISS\s*stage\s*(I{1,3})\b/i);
+            const rissStage = stageOf(/\bR-ISS\s*stage\s*(I{1,3})\b/i);
+            const r2issStage = stageOf(/\bR2-ISS\s*stage\s*(IV|I{1,3})\b/i);
+
+            // Map the free-text diagnosis onto the Disease phase options ('' falls back to the default)
+            const phaseText = diseasePhase.toLowerCase();
+            if (/plasma cell leuk|\bpcl\b/.test(phaseText)) diseasePhase = 'Plasma cell leukemia';
+            else if (/smou?ldering/.test(phaseText)) diseasePhase = 'Smoldering myeloma';
+            else if (/\bmgcs\b|clinical significance/.test(phaseText)) diseasePhase = 'MGCS (monoclonal gammopathy of clinical significance)';
+            else if (/\bmgus\b|undetermined significance/.test(phaseText)) diseasePhase = 'MGUS (monoclonal gammopathy of undetermined significance)';
+            else if (/myeloma/.test(phaseText)) diseasePhase = 'Symptomatic myeloma';
+            else diseasePhase = '';
+
             // 3. Hg (g/dL), β2 microglobulin
             const cbcMatch = text.match(/CBC[^-\d]*[\d\.\(\)]+-([\d\.]+)-[\d\.]+/i);
             const hg = cbcMatch ? cbcMatch[1] : '';
@@ -1185,17 +900,17 @@
                 astAlt = parts.slice(1).join(' / ') || '';
             }
             
-            const caMatch = text.match(/Ca\s*([\d\.]+)/i);
+            const caMatch = text.match(/\bCa\s*([\d\.]+)/i);
             const ca = caMatch ? caMatch[1] : '';
             
             const ldhMatch = text.match(/LDH\s*([\d\.]+)/i);
             const ldh = ldhMatch ? ldhMatch[1] : '';
 
             // 5. Serum PEP, Urine PEP
-            const spepMatch = text.match(/Serum PEP\/IEP\s*-\s*([\d\.]+\s*g\/dL)/i) || text.match(/Serum PEP\/IEP\s*-\s*([\d\.]+)/i);
+            const spepMatch = text.match(/Serum PEP\/IEP\s*-?\s*([\d\.]+\s*g\/dL)/i) || text.match(/Serum PEP\/IEP\s*-?\s*([\d\.]+)/i);
             const spep = spepMatch ? spepMatch[1].replace(/\s*g\/dL/i, '').trim() : '';
             
-            const upepMatch = text.match(/Urine PEP\/IEP\s*-\s*([\d\.]*\s*mg\/day)/i) || text.match(/Urine PEP\/IEP\s*-\s*([\d\.]*)/i);
+            const upepMatch = text.match(/Urine PEP\/IEP\s*-?\s*([\d\.]*\s*mg\/day)/i) || text.match(/Urine PEP\/IEP\s*-?\s*([\d\.]*)/i);
             const upep = upepMatch ? upepMatch[1].replace(/\s*mg\/day/i, '').trim() : '';
 
             let serumKappa = '';
@@ -1219,6 +934,7 @@
             // Ig G/A/M, Ig D/E
             const iggamMatch = text.match(/Ig\s*G\/A\/M\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgG\/IgA\/IgM\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgG\/A\/M\s*[:\-]?\s*([\d\.\/]+)/i);
             const igGAM = iggamMatch ? iggamMatch[1].replace(/\s*\/\s*/g, ' / ') : '';
+            const [igG = '', igA = '', igM = ''] = igGAM.split('/').map(s => s.trim());
             const igdeMatch = text.match(/Ig\s*D\/E\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgD\/IgE\s*[:\-]?\s*([\d\.\/]+)/i) || text.match(/IgD\/E\s*[:\-]?\s*([\d\.\/]+)/i);
             const igDE = igdeMatch ? igdeMatch[1].replace(/\s*\/\s*/g, ' / ') : '';
 
@@ -1230,12 +946,13 @@
 
             // BM aspiration and biopsy
             const cellularityMatch = text.match(/(?:Cellularity|\bC\b)\s*(?:[:=]?)\s*([\d.\-]+)/i);
-            const plasmaCellMatch = text.match(/(?:Plasma\s*Cell|\bCD138\b)\s*(?:[:=]?)\s*([\d.\-]+)/i);
+            const plasmaCellMatch = text.match(/\bP\s*[:=]\s*([\d.\-]+)/)
+                                 || text.match(/(?:Plasma\s*Cell|\bCD138\b)\s*(?:[:=]?)\s*([\d.\-]+)/i);
             let cytogeneticsMatch = text.match(/Cytogenetics\s*(?:[:=]?)\s*([^\n,]+)/i);
             let cytogeneticsVal = cytogeneticsMatch ? cytogeneticsMatch[1].trim() : '';
             if (!cytogeneticsVal) {
-                const karyoMatch = text.match(/\b(\d{2}\s*,\s*(?:XX|XY|X|Y)[A-Za-z0-9\+\-\~\[\]\s\/]*)/i);
-                if (karyoMatch) cytogeneticsVal = karyoMatch[1].trim();
+                const karyoMatch = text.match(/\b(\d{2},\s?(?:XX|XY|X|Y)(?![A-Za-z])[^\s]*)/i);
+                if (karyoMatch) cytogeneticsVal = karyoMatch[1].replace(/[,;]+$/, '').trim();
             }
             
             const getFish = (pattern) => {
@@ -1268,18 +985,19 @@
                 if (d.length === 10) dateDx = d;
             }
             if (!dateDx) {
-                const bmLine = text.match(/BM aspiration and biopsy[^(\n]*\((\d{4}[-\.\/]\d{2}[-\.\/]\d{2})\)/i);
+                const bmLine = text.match(/BM aspiration and biopsy[^\n]*\((\d{4}[-\.\/]\d{2}[-\.\/]\d{2})\)/i);
                 if (bmLine) dateDx = bmLine[1].replace(/[\.\/]/g, '-');
             }
 
             const resultObj = {
                 id, name, birthdate, sex, height, weight, ecog, diseasePhase, crab,
                 paraskeletal, extramedullary, dateDx,
+                dsStage, issStage, rissStage, r2issStage, stagesFromChart: true,
                 hg, b2m,
                 tpAlb, bunCr, tb, astAlt, ca, ldh,
                 spep, upep,
                 serumKappa, serumLambda,
-                heavyChain, lightChain, igGAM, igDE,
+                heavyChain, lightChain, igG, igA, igM, igDE,
                 viral: {
                     hbs: hbsMatch ? hbsMatch[1].replace(/\s*\/\s*/g, ' / ') : '',
                     hbc: hbcMatch ? hbcMatch[1].replace(/\s*\/\s*/g, ' / ') : '',
@@ -1302,6 +1020,7 @@
             };
 
             displayResults(resultObj);
+            return true;
         }
 
         async function submitData() {
@@ -1320,7 +1039,6 @@
             const tpAlbParts = splitSlash(val('input-tp_alb'), 2);
             const bunCrParts = splitSlash(val('input-bun_cr'), 2);
             const astAltParts = splitSlash(val('input-ast_alt'), 2);
-            const igGamParts = splitSlash(val('input-ig_gam'), 3);
             const igDeParts = splitSlash(val('input-ig_de'), 2);
             const hbsAgAbParts = splitSlash(val('input-hbs_ag_ab'), 2); // Ag / Ab
 
@@ -1352,9 +1070,9 @@
                 alt_dx: astAltParts[1],
                 ca_dx: val('input-ca_dx'),
                 ldh_dx: val('input-ldh_dx'),
-                ig_g_dx: igGamParts[0],
-                ig_a_dx: igGamParts[1],
-                ig_m_dx: igGamParts[2],
+                ig_g_dx: val('input-ig_g'),
+                ig_a_dx: val('input-ig_a'),
+                ig_m_dx: val('input-ig_m'),
                 ig_d_dx: igDeParts[0],
                 ig_e_dx: igDeParts[1],
                 kappa_dx: val('input-kappa_dx'),
@@ -1384,7 +1102,9 @@
             };
 
             try {
-                const response = await fetch(`/api/patients/` + payload.upn, {
+                // PUT to the UPN the page was opened with, so editing the ID field updates this record
+                const originalUpn = new URLSearchParams(window.location.search).get('upn') || payload.upn;
+                const response = await fetch(`/api/patients/${encodeURIComponent(originalUpn)}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -1397,7 +1117,7 @@
                     alert('Error saving data: ' + err);
                 }
             } catch (e) {
-                alert('Connection to local server failed. Please ensure server.py is running.');
+                alert('Connection to the server failed. Please ensure EP_MMDb.bat is running.');
             }
         }
         async function submitStagingData() {

@@ -1312,6 +1312,7 @@
         <span id="toast-message">Data successfully saved</span>
     </div>
 
+    <script src="{{ static_url('date-input.js') }}"></script>
     <script>
         // Unique ID Generator
         function generateId() {
@@ -2926,7 +2927,9 @@
         }
 
         function initDateInputs() {
-            document.querySelectorAll('input[type="date"].custom-date-format').forEach(input => {
+            // date-input.js turns the date fields into .date-text-input text fields; still match
+            // native ones too in case this runs before that upgrade
+            document.querySelectorAll('input[type="date"].custom-date-format, input.date-text-input').forEach(input => {
                 input.setAttribute('data-date', input.value || '');
                 input.oninput = function () {
                     this.setAttribute('data-date', this.value || '');

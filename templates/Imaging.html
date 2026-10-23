@@ -106,7 +106,7 @@
                                 <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                                         <label for="date-css" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
-                                        <input type="date" data-date="" id="date-css" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                        <input type="date" data-date="" id="date-css" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 132px; font-size: 0.875rem; text-align: center;">
                                     </div>
                                     <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
                                         <input type="radio" id="sec1-not-done" name="sec1-done" value="not-done" style="transform: scale(1.2);"> Not done
@@ -258,7 +258,7 @@
                                 <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                                         <label for="date-petct" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
-                                        <input type="date" data-date="" id="date-petct" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                        <input type="date" data-date="" id="date-petct" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 132px; font-size: 0.875rem; text-align: center;">
                                     </div>
                                     <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
                                         <input type="radio" id="sec2-not-done" name="sec2-done" value="not-done" style="transform: scale(1.2);"> Not done
@@ -413,7 +413,7 @@
                                 <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                                         <label for="date-mri" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
-                                        <input type="date" data-date="" id="date-mri" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                        <input type="date" data-date="" id="date-mri" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 132px; font-size: 0.875rem; text-align: center;">
                                     </div>
                                     <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
                                         <input type="radio" id="sec3-not-done" name="sec3-done" value="not-done" style="transform: scale(1.2);"> Not done
@@ -572,7 +572,7 @@
                                 <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                                         <label for="date-ldct" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
-                                        <input type="date" data-date="" id="date-ldct" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                        <input type="date" data-date="" id="date-ldct" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 132px; font-size: 0.875rem; text-align: center;">
                                     </div>
                                     <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
                                         <input type="radio" id="sec4-not-done" name="sec4-done" value="not-done" style="transform: scale(1.2);"> Not done
@@ -718,7 +718,7 @@
                                 <div style="display: flex; align-items: center; gap: 1rem; transform: translateY(4px);">
                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                                         <label for="date-other" style="font-size: 0.875rem; color: var(--text-secondary);">Date of test</label>
-                                        <input type="date" data-date="" id="date-other" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 118px; font-size: 0.875rem; text-align: center;">
+                                        <input type="date" data-date="" id="date-other" class="custom-text-input date-input custom-date-format" style="margin: 0; padding: 0.4rem; width: 132px; font-size: 0.875rem; text-align: center;">
                                     </div>
                                     <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.9rem; color: var(--text-light); cursor: pointer;">
                                         <input type="radio" id="sec5-not-done" name="sec5-done" value="not-done" style="transform: scale(1.2);"> Not done
@@ -887,6 +887,7 @@
         </main>
     </div>
 
+    <script src="{{ static_url('date-input.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
